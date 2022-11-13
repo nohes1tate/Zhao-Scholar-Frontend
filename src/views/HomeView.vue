@@ -42,7 +42,9 @@
         solo
         label="Search something"
         v-model="search"
-    />
+    >
+    </v-text-field>
+    
           </v-col>
         </v-row>
         </v-col>
@@ -153,6 +155,7 @@
       </v-col>
     </v-row>
   </div>
+  
   </div>
 </template>
 
