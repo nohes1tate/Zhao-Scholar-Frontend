@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import SearchResult from '../views/SearchResult.vue'
 import DocumentDisplay from '../views/DocumentDisplay.vue'
-import InstitutionPortal from '../views/InstitutionPortal.vue'
+import InstitutionPortal from '../views/InstitutionPortal/InstitutionPortal.vue'
 import ScholarPortal from '../views/ScholarPortal.vue'
 import UserCenter from '../views/UserCenter.vue'
 
