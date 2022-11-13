@@ -42,7 +42,9 @@
         solo
         label="Search something"
         v-model="search"
-    />
+    >
+    </v-text-field>
+    
           </v-col>
         </v-row>
         </v-col>
@@ -63,18 +65,25 @@
     tile
   >
     <v-list dense>
-      <v-subheader>Scholars</v-subheader>
+      <v-subheader :style="{'font-size':'20px'}">Scholars</v-subheader>
       <v-list-item-group v-model="item" color="primary">
         <v-list-item
-          v-for="(item, i) in items"
+          v-for="(item, i) in TopAuthors"
           :key="i"
+          :style="{'margin':'10px',}"
         >
-          <v-list-item-icon>
-            <v-icon v-text="item.icon"></v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.text"></v-list-item-title>
-          </v-list-item-content>
+        <v-row>
+          
+        <v-col class="d-flex justify-space-between" :style="{'padding-top':'0px','padding-bottom':'0px'}">
+          <div class="d-flex justify-space-between">{{item.name}}</div>
+          <div class="d-flex justify-end">{{item.progress}} papers</div>
+          </v-col>
+        
+          <v-progress-linear
+      v-model="item.percentage"
+      color="primary"
+    ></v-progress-linear>
+        </v-row>
         </v-list-item>
       </v-list-item-group>
     </v-list>
@@ -88,18 +97,25 @@
     tile
   >
     <v-list dense>
-      <v-subheader>Scholars</v-subheader>
+      <v-subheader :style="{'font-size':'20px'}">Scholars</v-subheader>
       <v-list-item-group v-model="item" color="primary">
         <v-list-item
-          v-for="(item, i) in items"
+          v-for="(item, i) in TopAuthors"
           :key="i"
+          :style="{'margin':'10px',}"
         >
-          <v-list-item-icon>
-            <v-icon v-text="item.icon"></v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.text"></v-list-item-title>
-          </v-list-item-content>
+        <v-row>
+          
+        <v-col class="d-flex justify-space-between" :style="{'padding-top':'0px','padding-bottom':'0px'}">
+          <div class="d-flex justify-space-between">{{item.name}}</div>
+          <div class="d-flex justify-end">{{item.progress}} papers</div>
+          </v-col>
+        
+          <v-progress-linear
+      v-model="item.percentage"
+      color="primary"
+    ></v-progress-linear>
+        </v-row>
         </v-list-item>
       </v-list-item-group>
     </v-list>
@@ -113,18 +129,25 @@
     tile
   >
     <v-list dense>
-      <v-subheader>Scholars</v-subheader>
+      <v-subheader :style="{'font-size':'20px'}">Scholars</v-subheader>
       <v-list-item-group v-model="item" color="primary">
         <v-list-item
-          v-for="(item, i) in items"
+          v-for="(item, i) in TopAuthors"
           :key="i"
+          :style="{'margin':'10px',}"
         >
-          <v-list-item-icon>
-            <v-icon v-text="item.icon"></v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.text"></v-list-item-title>
-          </v-list-item-content>
+        <v-row>
+          
+        <v-col class="d-flex justify-space-between" :style="{'padding-top':'0px','padding-bottom':'0px'}">
+          <div class="d-flex justify-space-between">{{item.name}}</div>
+          <div class="d-flex justify-end">{{item.progress}} papers</div>
+          </v-col>
+        
+          <v-progress-linear
+      v-model="item.percentage"
+      color="primary"
+    ></v-progress-linear>
+        </v-row>
         </v-list-item>
       </v-list-item-group>
     </v-list>
@@ -132,6 +155,7 @@
       </v-col>
     </v-row>
   </div>
+  
   </div>
 </template>
 
@@ -145,6 +169,12 @@ export default {
         { text: 'Real-Time', icon: 'mdi-clock' },
         { text: 'Audience', icon: 'mdi-account' },
         { text: 'Conversions', icon: 'mdi-flag' },
+      ],
+      TopAuthors: [
+        { progress:454,name:"AAA",percentage:100},
+        { progress:453,name:"BBB",percentage:453/4.54},
+        { progress:346,name:"CCC",percentage:346/4.54},
+        { progress:234,name:"DDD",percentage:234/4.54},
       ],
     };
   },
