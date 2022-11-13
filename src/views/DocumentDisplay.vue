@@ -209,8 +209,13 @@
         
       ]
     }),
-    
-
+    created(){
+      var title = this.$route.query.Title
+      var id=this.$route.query.Id
+      console.log("进入详情页")
+      console.log(title)
+      console.log(id)
+    }
   }
 </script>
 
