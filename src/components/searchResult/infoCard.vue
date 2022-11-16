@@ -1,6 +1,9 @@
 <template>
+    <div>
+    
     <v-card
     width="1000px"
+    style="float: left;"
     >
     <v-list-item-group v-model="paperInfo" color="primary">
         <v-list-item
@@ -28,6 +31,7 @@
         </v-list-item>
     </v-list-item-group>
     </v-card>
+</div>
 </template>
 <script>
     export default{
