@@ -34,15 +34,17 @@
           </v-col>
           <v-col cols="12" md="12" sm="1" />
           <v-col cols="12" md="12" sm="5" class="d-flex align-center">
-            <v-text-field
-        append-icon="mdi-heart"
+            <v-text-field class="material-symbols-outlined"
+        append-icon="search"
         @click:append="searchTag"
         @keyup.enter="searchTag"
         hide-details
         solo
         label="Search something"
         v-model="search"
-    />
+    >
+    </v-text-field>
+    
           </v-col>
         </v-row>
         </v-col>
@@ -62,13 +64,14 @@
     max-width="300"
     tile
   >
-    <v-list dense>
+    <v-list dense >
       <v-subheader :style="{'font-size':'20px'}">Scholars</v-subheader>
       <v-list-item-group v-model="item" color="primary">
         <v-list-item
           v-for="(item, i) in TopAuthors"
           :key="i"
           :style="{'margin':'10px',}"
+          inactive
         >
         <v-row>
           
@@ -80,6 +83,9 @@
           <v-progress-linear
       v-model="item.percentage"
       color="primary"
+      rounded
+      height="8"
+      background-opacity="0.1"
     ></v-progress-linear>
         </v-row>
         </v-list-item>
@@ -88,71 +94,14 @@
   </v-card>
       </v-col>
       <v-col cols="12" md="4" sm="12">
-    <v-card
-    :style="{'margin-top':'-50px'}"
-    class="mx-auto"
-    max-width="300"
-    tile
-  >
-    <v-list dense>
-      <v-subheader :style="{'font-size':'20px'}">Scholars</v-subheader>
-      <v-list-item-group v-model="item" color="primary">
-        <v-list-item
-          v-for="(item, i) in TopAuthors"
-          :key="i"
-          :style="{'margin':'10px',}"
-        >
-        <v-row>
-          
-        <v-col class="d-flex justify-space-between" :style="{'padding-top':'0px','padding-bottom':'0px'}">
-          <div class="d-flex justify-space-between">{{item.name}}</div>
-          <div class="d-flex justify-end">{{item.progress}} papers</div>
-          </v-col>
-        
-          <v-progress-linear
-      v-model="item.percentage"
-      color="primary"
-    ></v-progress-linear>
-        </v-row>
-        </v-list-item>
-      </v-list-item-group>
-    </v-list>
-  </v-card>
+    
       </v-col>
       <v-col cols="12" md="4" sm="12">
-    <v-card
-    :style="{'margin-top':'-50px'}"
-    class="mx-auto"
-    max-width="300"
-    tile
-  >
-    <v-list dense>
-      <v-subheader :style="{'font-size':'20px'}">Scholars</v-subheader>
-      <v-list-item-group v-model="item" color="primary">
-        <v-list-item
-          v-for="(item, i) in TopAuthors"
-          :key="i"
-          :style="{'margin':'10px',}"
-        >
-        <v-row>
-          
-        <v-col class="d-flex justify-space-between" :style="{'padding-top':'0px','padding-bottom':'0px'}">
-          <div class="d-flex justify-space-between">{{item.name}}</div>
-          <div class="d-flex justify-end">{{item.progress}} papers</div>
-          </v-col>
-        
-          <v-progress-linear
-      v-model="item.percentage"
-      color="primary"
-    ></v-progress-linear>
-        </v-row>
-        </v-list-item>
-      </v-list-item-group>
-    </v-list>
-  </v-card>
+   
       </v-col>
     </v-row>
   </div>
+  
   </div>
 </template>
 

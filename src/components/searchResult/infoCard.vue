@@ -19,7 +19,7 @@
                 <v-btn style="background-color: transparent;box-shadow: none;" >收藏<v-icon >mdi-star-plus-outline</v-icon></v-btn>
                 <v-btn style="background-color: transparent;box-shadow: none;">引用<v-icon>mdi-format-quote-close-outline</v-icon></v-btn>
                 <v-btn style="background-color: transparent;box-shadow: none;">下载<v-icon>mdi-download</v-icon></v-btn>
-                <v-btn style="background-color: transparent;box-shadow: none;">详情<v-icon>mdi-link-variant</v-icon></v-btn>
+                <v-btn style="background-color: transparent;box-shadow: none;" @click="toDocument(item.Title)">详情<v-icon>mdi-link-variant</v-icon></v-btn>
                 <v-btn style="background-color: transparent;box-shadow: none;">被引用数</v-btn>
                 <v-btn style="background-color: transparent;box-shadow: none;">收藏数</v-btn>
                 <v-btn style="background-color: transparent;box-shadow: none;">发表时间</v-btn>
@@ -61,7 +61,13 @@
             publishTime:2012,//发表时间  
             }
         ]
-        })
+        }),
+        methods:{
+            toDocument(title){
+                console.log(title)
+                this.$router.push({path:"/document", query:{Title:title, Id:123}})
+            }
+        }
     }
 </script>
 <style scoped>
