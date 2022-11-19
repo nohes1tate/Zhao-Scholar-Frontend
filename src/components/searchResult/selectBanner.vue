@@ -1,6 +1,6 @@
 <template>
     <v-card 
-    width="300px"
+    width="250px"
     height="1000px"
     >
     <v-subheader>时间选择</v-subheader>
@@ -29,6 +29,7 @@
                     @click="ChooseType(item.name, item.status)"
                   ></v-checkbox>
                 </v-list-item-action>
+               
         </v-list-item>
 
     <v-divider></v-divider>
@@ -87,7 +88,8 @@ export default {
         ChooseType(name, status){
             console.log("选择类型："+name)
             console.log("状态："+status)
-        }
+        },
+        
     },
     created(){
         this.Conference.forEach((item, index)=> {

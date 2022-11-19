@@ -4,8 +4,8 @@
    <div
    width="100%"
    >
-    <selectBannerVue style="float:left"></selectBannerVue>
-    <infoCardVue style="float:left"></infoCardVue>
+    <selectBannerVue style="float:left;margin-left: 100px;"></selectBannerVue>
+    <infoCardVue style="float:left;margin-left: 20px;"></infoCardVue>
    </div>
   </div>
 </template>
