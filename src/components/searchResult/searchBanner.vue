@@ -5,7 +5,7 @@
         height="120px"
         style="box-shadow: none;"
         >
-        <img src="../../assets/logo.png" style="float: left;height: 80px;margin-left: 50px;margin-top: 10px;">
+        <img src="../../assets/logo.png" style="float: left;height: 80px;margin-left: 100px;margin-top: 10px;">
         <v-text-field
               label="搜索"
               style="margin-top: 20px; float: left;width: 700px;margin-left: 150px;"
