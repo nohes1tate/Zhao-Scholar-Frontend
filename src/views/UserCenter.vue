@@ -1,280 +1,143 @@
 <template>
-  <div class="schLib">
+  <div class="userCenter">
+    <page-header></page-header>
     <div class="main-body">
       <v-row class="header">
-        <span style="float:left; font-size: 22px; color: #2c3e50; cursor: pointer" @click="backToUserCenter">
-          个人图书馆
-        </span>
+        <span @click="backToUserCenter">个人图书馆</span>
       </v-row>
-
-      <div class="content-select-result">
-        <v-row :gutter="0" v-if="articles.length!==0">
-          <v-col :span="7"><div class="grid-content bg-purple" style="margin-right:50px">
-            <span style="display:flex; margin-bottom:24px; margin-top:10px; font-size:16px; color: #A0A0A0">筛选</span>
-            <v-card class="box-card">
-
-              <div class="article-tags sub-block">
-                <div class="check-box-title">
-                  <span>标签</span>
-                </div>
-                <div style="text-align: left; margin-bottom: 50px">
-                  <v-chip
-                      class="ma-2"
-                      color="secondary"
-                      :key="tag"
-                      v-for="tag in tagData"
-                      closable
-                      :disable-transitions="false"
-                      style="margin-top: 10px; cursor: pointer"
-                  >
-                    {{tag.tag_name}}
-                  </v-chip>
-                  <v-chip
-                      class="ma-2"
-                      color="secondary"
-                      closable
-                      :disable-transitions="false"
-                      style="margin-top: 10px; cursor: pointer"
-                  >
-                    <v-button class="button-new-tag" size="small" @click="showInput">+ New Tag</v-button>
-                  </v-chip>
-
-                </div>
-              </div>
-
-              <v-divider></v-divider>
-
-              <div class="publish-year sub-block">
-                <div class="check-box-title">
-                  <span>发表年份</span>
-                </div>
-                <div style="text-align: left; font-size: 13px">
-                  <v-row>
-                    <v-col
-                        cols="12"
-                        sm="6"
-                        md="4"
-                    >
-                      <v-menu
-                          v-model="menu2"
-                          :close-on-content-click="false"
-                          :nudge-right="40"
-                          transition="scale-transition"
-                          offset-y
-                          min-width="auto"
-                      >
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-text-field
-                              v-model="date"
-                              label="Picker without buttons"
-                              prepend-icon="mdi-calendar"
-                              readonly
-                              v-bind="attrs"
-                              v-on="on"
-                          ></v-text-field>
-                        </template>
-                        <v-date-picker
-                            v-model="date"
-                            @input="menu2 = false"
-                        ></v-date-picker>
-                      </v-menu>
-                    </v-col>
-                    <v-spacer></v-spacer>
-                  </v-row>
-                </div>
-              </div>
-
-            </v-card>
-          </div>
-          </v-col>
-
-          <v-col :span="16"><div class="grid-content bg-purple">
-            <div>
-              <v-row>
-                <v-col span="17">
-                  <span style="display:flex; font-size:16px; margin-top:10px;color: #A0A0A0">收藏论文 ({{articles.length}})</span>
-                </v-col>
-              </v-row>
-            </div>
-
-<!--            <ArticleBlocks v-if="userdata.length>0"-->
-<!--                           :articles="userdata"-->
-<!--                           @delArticle="delArticle"-->
-<!--                           flag="schLib"></ArticleBlocks>-->
-
-            <div>
-              <v-row>
-                <v-col :span="5" style="text-align:right">
-                  <div >
-                    <span>每页</span>
-                    <el-input-number style="width:100px; margin: 22px 15px 15px;" el-input-number v-model="size" controls-position="right" @change="handleSizeChange" :min="1" :max="20"></el-input-number>
-                    <!-- height:34px; -->
-                    <span>条</span>
-                  </div>
-                </v-col>
-                <v-col :span="15">
-                  <v-pagination layout="prev, pager, next, jumper"
-                                 background
-                                 :current-page="pageIdx"
-                                 :page-size="size"
-                                 :total="articles.length"
-                                 @size-change="handleSizeChange"
-                                 @current-change="handleCurrentChange"
-                                 style="margin: 20px">
-                  </v-pagination>
-                </v-col>
-              </v-row>
-            </div>
-
-          </div></v-col>
-        </v-row>
+      <div class="title-line">
+        <div style="width: 35%;font-size:16px; margin-top:10px;color: #A0A0A0">筛选</div>
+        <div style="font-size:16px; margin-top:10px;color: #A0A0A0">收藏论文 ({{articles.length}})</div>
       </div>
+      <div class="select-card">
+        <v-card elevation="2">
+          <div class="select-card-item">
+            <span style="display: flex;
+             text-align: left;
+             font-size: 17px;
+             margin-bottom: 20px;
+             margin-left: 30px;margin-top: 40px;">标签</span>
+            <div class="tag-line">
+              <v-chip
+                  class="ma-2"
+                  color=#546E7A
+                  label
+                  text-color="white"
+                  style="display: flex; cursor: pointer"
+                  :key="tag"
+                  v-for="tag in tagData"
+              >
+                {{tag.tag_name}}
+                <v-icon right class="material-symbols-outlined" size="15px">close</v-icon>
+              </v-chip>
+              <v-chip
+                  class="ma-2"
+                  color=#546E7A
+                  label
+                  text-color="white"
+                  style="display: flex;cursor: pointer"
+              >
+                <v-icon class="material-symbols-outlined" size="17px" style="left: -2px">add</v-icon>
+                New Tag
+              </v-chip>
+            </div>
+            <v-divider style="width: 70% ;margin-left: 30px"></v-divider>
+            <span style="display: flex;
+             text-align: left;
+             font-size: 17px;
+             margin-bottom: 20px;
+             margin-left: 30px;margin-top: 40px;">发表年份</span>
+            <div class="date-select">
+              <v-menu
+                  v-model="menu1"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="auto"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                      v-model="from_date"
+                      label="Start Date"
+                      prepend-icon="mdi-calendar"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                  ></v-text-field>
+                </template>
+                <v-date-picker
+                    v-model="from_date"
+                    @input="menu1 = false"
+                ></v-date-picker>
+              </v-menu>
+              <v-menu
+                  v-model="menu2"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="auto"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                      v-model="to_date"
+                      label="End Date"
+                      prepend-icon="mdi-calendar"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                  ></v-text-field>
+                </template>
+                <v-date-picker
+                    v-model="to_date"
+                    @input="menu2 = false"
+                ></v-date-picker>
+              </v-menu>
+            </div>
 
+          </div>
+
+        </v-card>
+      </div>
+      <div class="text-center">
+<!--        <el-pagination layout="prev, pager, next, jumper"-->
+<!--                       background-->
+<!--                       :current-page="pageIdx"-->
+<!--                       :page-size="size"-->
+<!--                       :total="articles.length"-->
+<!--                       @size-change="handleSizeChange"-->
+<!--                       @current-change="handleCurrentChange"-->
+<!--                       style="margin: 20px">-->
+<!--        </el-pagination>-->
+        <v-pagination
+            circle
+            :value="pageIdx"
+            v-model="page"
+            :length="articles.length"
+            :total-visible="6"
+            @input="handleCurrentChange"
+        ></v-pagination>
+      </div>
     </div>
-    <v-row>
-      <v-col
-          cols="12"
-          sm="6"
-          md="4"
-      >
-        <v-menu
-            ref="menu"
-            v-model="menu"
-            :close-on-content-click="false"
-            :return-value.sync="date"
-            transition="scale-transition"
-            offset-y
-            min-width="auto"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-text-field
-                v-model="date"
-                label="Picker in menu"
-                prepend-icon="mdi-calendar"
-                readonly
-                v-bind="attrs"
-                v-on="on"
-            ></v-text-field>
-          </template>
-          <v-date-picker
-              v-model="date"
-              no-title
-              scrollable
-          >
-            <v-spacer></v-spacer>
-            <v-btn
-                text
-                color="primary"
-                @click="menu = false"
-            >
-              Cancel
-            </v-btn>
-            <v-btn
-                text
-                color="primary"
-                @click="$refs.menu.save(date)"
-            >
-              OK
-            </v-btn>
-          </v-date-picker>
-        </v-menu>
-      </v-col>
-      <v-spacer></v-spacer>
-      <v-col
-          cols="12"
-          sm="6"
-          md="4"
-      >
-        <v-dialog
-            ref="dialog"
-            v-model="modal"
-            :return-value.sync="date"
-            persistent
-            width="290px"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-text-field
-                v-model="date"
-                label="Picker in dialog"
-                prepend-icon="mdi-calendar"
-                readonly
-                v-bind="attrs"
-                v-on="on"
-            ></v-text-field>
-          </template>
-          <v-date-picker
-              v-model="date"
-              scrollable
-          >
-            <v-spacer></v-spacer>
-            <v-btn
-                text
-                color="primary"
-                @click="modal = false"
-            >
-              Cancel
-            </v-btn>
-            <v-btn
-                text
-                color="primary"
-                @click="$refs.dialog.save(date)"
-            >
-              OK
-            </v-btn>
-          </v-date-picker>
-        </v-dialog>
-      </v-col>
-      <v-col
-          cols="12"
-          sm="6"
-          md="4"
-      >
-        <v-menu
-            v-model="menu2"
-            :close-on-content-click="false"
-            :nudge-right="40"
-            transition="scale-transition"
-            offset-y
-            min-width="auto"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-text-field
-                v-model="date"
-                label="Picker without buttons"
-                prepend-icon="mdi-calendar"
-                readonly
-                v-bind="attrs"
-                v-on="on"
-            ></v-text-field>
-          </template>
-          <v-date-picker
-              v-model="date"
-              @input="menu2 = false"
-          ></v-date-picker>
-        </v-menu>
-      </v-col>
-      <v-spacer></v-spacer>
-    </v-row>
+
   </div>
-
-
 </template>
 
 <script>
-
+import PageHeader from "@/components/UserCenter/PageHeader";
 
 export default {
   name: "UserCenter",
-  components: { },
+  components: {PageHeader },
   data:() => ({
-
-      date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-      menu: false,
-      modal: false,
+      from_date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+      to_date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+      menu1: false,
       menu2: false,
       pageIdx: 1,
       size: 5,
-
+      page:2,
       queue: ["匹配程度","发表时间","引用次数"],
       value2: "匹配程度",
 
@@ -434,9 +297,20 @@ export default {
         }
       ]
   }),
+  watch: {
+    menu (val) {
+      val && setTimeout(() => (this.activePicker = 'YEAR'))
+    },
+  },
   created() {
   },
   methods: {
+    handleCurrentChange(val) {
+      this.pageIdx = val;
+    },
+    save (date) {
+      this.$refs.menu.save(date)
+    },
     updateTime() {
       let _min_year = 2022, _max_year = 0;
       for (let i = 0; i < this.articles.length; i++) {
@@ -457,9 +331,6 @@ export default {
       this.pageIdx = 1;
       this.size = val;
     },
-    handleCurrentChange(val) {
-      this.pageIdx = val;
-    },
 
     delArticleInLists(paper_id) {
       let i;
@@ -468,7 +339,7 @@ export default {
           break;
       this.articles.splice(i,1);
     },
-    backToSchLib() {
+    backToUserCenter() {
       let routeUrl = this.$router.resolve({
         path: '/user',
       });
@@ -484,84 +355,48 @@ export default {
 </script>
 
 <style scoped>
-
-.schLib .main-body {
+.userCenter{
+  background-color: #fcfcfc;
+}
+.header{
+  margin-top: 20px;
+  width: 20%;
+  text-align: left;
+  margin-left: 0;
+}
+.header span{
+  float:left;
+  font-size: 22px;
+  color: #2c3e50;
+  cursor: pointer;
+}
+.main-body{
   padding: 30px 40px 20px 80px;
 }
-
-.schLib .header {
-  margin-bottom: 30px;
+.select-card{
+  margin-top: 20px;
+  width: 30%;
 }
-
-.schLib >>> .el-pagination .btn-prev .el-icon{
-  font-size: 15px;
-  margin: 15px;
+.select-card-item{
+  display: flex;
+  flex-direction: column;
 }
-
-.schLib >>> .el-pagination__jump{
-  font-size: 15px;
-}
-
-.schLib >>> .el-pagination .btn-next .el-icon{
-  font-size: 15px;
-  margin: 15px;
-}
-
-.schLib >>> .el-pager li{
-  width:40px;
-  height:40px;
-  padding: 7px;
-}
-
-.schLib .box-card {
-  padding: 20px;
-}
-
-.schLib .box-card .sub-block {
-  margin-bottom: 20px;
-}
-
-.schLib .box-card .check-box-title {
+.tag-line{
+  display: flex;
+  flex-direction: row;
   text-align: left;
-  font-size: 17px;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
+  margin-left: 20px;
 }
-
-.schLib >>> .el-pagination__editor.el-input .el-input__inner {
-  height: 40px;
+.title-line{
+  display: flex;
+  flex-direction: row;
+  margin-top:30px;
 }
-
-.schLib .el-tag {
-  margin-right: 10px;
+.date-select{
+  display: flex;
+  flex-direction: row;
+  width: 80%;
+  margin-left: 20px;
 }
-
-.schLib .button-new-tag {
-  height: 32px;
-  line-height: 30px;
-  padding-top: 0;
-  padding-bottom: 0;
-}
-
-.schLib .input-new-tag {
-  margin-top: 10px;
-  width: 90px;
-  vertical-align: bottom;
-}
-
-.schLib .year-input >>> .el-input--mini .el-input__inner {
-  font-size: 13px;
-  color: #0274B3;
-}
-
-.schLib .year-input >>> .el-input__inner {
-  padding-left: 5px;
-  padding-right: 5px;
-  text-align: center;
-}
-
-.schLib .year-input >>> .el-input--mini {
-  width: 45px;
-  text-align: center;
-}
-
 </style>
