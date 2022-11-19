@@ -2,10 +2,19 @@
     <div>
         <v-card
         width=100%
-        height="200px"
+        height="120px"
         style="box-shadow: none;"
         >
-        
+        <img src="../../assets/logo.png" style="float: left;height: 80px;margin-left: 50px;margin-top: 10px;">
+        <v-text-field
+              label="搜索"
+              style="margin-top: 20px; float: left;width: 700px;margin-left: 150px;"
+              filled
+         ></v-text-field>
+         <v-btn icon style="margin-top: 25px;" x-large><v-icon>mdi-magnify</v-icon></v-btn>
+         <v-btn icon style="margin-top: 25px;margin-left: 10px;" x-large><v-icon></v-icon>主页</v-btn>
+         <v-btn icon style="margin-top: 25px;margin-left: 50px;" x-large><v-icon></v-icon>学者门户</v-btn>
+         <v-btn icon style="margin-top: 25px;margin-left: 90px;" x-large><v-icon></v-icon>我的图书馆</v-btn>
         </v-card>
     </div>
 </template>
