@@ -6,7 +6,7 @@
         <span @click="backToUserCenter">个人图书馆</span>
       </v-row>
       <div class="title-line">
-        <div style="width: 31vw;font-size:16px; margin-top:10px;color: #A0A0A0">筛选</div>
+        <div style="width: 28vw;font-size:16px; margin-top:10px;color: #A0A0A0">筛选</div>
         <div style="font-size:16px; margin-top:10px;color: #A0A0A0">收藏论文 ({{articles.length}})</div>
       </div>
       <div class="show-box">
@@ -124,8 +124,8 @@
 </template>
 
 <script>
-import PageHeader from "@/components/UserCenter/PageHeader";
 import ArticleBlocks from "@/components/UserCenter/ArticleBlocks";
+import PageHeader from "@/components/UserCenter/PageHeader";
 
 export default {
   name: "UserCenter",
@@ -137,7 +137,7 @@ export default {
       menu2: false,
       pageIdx: 1,
       size: 5,
-      page:2,
+      page:1,
       queue: ["匹配程度","发表时间","引用次数"],
       value2: "匹配程度",
 

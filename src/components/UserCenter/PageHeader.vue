@@ -7,7 +7,8 @@
       <span>高级检索</span>
     </div>
     <div v-show="isLogin" class="user-box" @mouseenter="hover=true" @mouseleave="hover=false">
-      <v-icon class="material-symbols-outlined" style="font-size: 40px">person</v-icon>
+      <v-icon style="font-size: 40px">mdi-account-outline</v-icon>
+      <span>{{this.username}}</span>
       <div class="expand-more" :class="[hover?'go':'aa']" >
         <v-icon class="material-symbols-outlined" >expand_more</v-icon>
       </div>
@@ -18,7 +19,7 @@
     <div v-show="hover" class="select-box" @mouseenter="hover=true" @mouseleave="hover=false">
       <v-card
           class="mx-auto"
-          max-width="3000"
+          max-width="6000"
           tile
       >
         <v-list dense>
@@ -31,6 +32,9 @@
                 :key="i"
                 @click="goTo(i)"
             >
+              <v-list-item-icon>
+                <v-icon v-text="item.icon"></v-icon>
+              </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title v-text="item.text"></v-list-item-title>
               </v-list-item-content>
@@ -49,12 +53,13 @@ export default {
     return{
       isLogin:true,
       hover:false,
-      selectedItem: 1,
+      selectedItem: -1,
       items: [
-        { text: '个人图书馆',},
-        { text: '我的门户',  },
-        {text: '退出',},
+        { text: '个人图书馆',icon:'mdi-library'},
+        { text: '我的门户', icon:'mdi-folder-account-outline' },
+        {text: '退出',icon:'mdi-location-exit'},
       ],
+      username:'cyw777',
     }
   },
   methods:{
@@ -115,7 +120,7 @@ export default {
   color: dimgrey;
 }
 .user-box{
-  margin-left: 65vw;
+  margin-left: 60vw;
   line-height: 10vh;
   display: flex;
   flex-direction: row;
@@ -133,6 +138,7 @@ export default {
 .select-box{
   position: absolute;
   top:10vh;
-  right: 2vw;
+  right: 1vw;
+  width: 15%;
 }
 </style>

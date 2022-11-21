@@ -15,26 +15,34 @@
               style="width: 100%;margin-bottom: 20px;"
 
           >
-            <v-list-item-content style="margin-left: 10px;">
+            <v-list-item-content style="margin-left: 30px;margin-right: 30px;margin-top: 20px">
 
               <v-list-item-title class="headline mb-2" v-text="item.paper_title">
               </v-list-item-title>
               <div style="display: flex; flex-direction: row">
                 <div v-for="(j,index) in item.authors" :key="j" style="color: #1E88E5;display: flex;flex-direction: row">
-                  <div>{{j.author_name}}</div>
+                  <div style="cursor: pointer">{{j.author_name}}</div>
                   <div v-show="index!==(item.authors.length-1)">,</div>
                 </div>
               </div>
               <div v-text="item.year" style="color: grey;font-size: 14px"></div>
-              <div v-text="item.abstract" class="text-ellipsis-two" style="font-weight: 350;">
+              <div v-text="item.abstract" class="text-ellipsis-two" style="font-weight: 350;margin-bottom: 10px;">
               </div>
               <v-divider></v-divider>
               <div>
-
                 <v-divider></v-divider>
-                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;">引用<v-icon color="#64B5F6"> mdi-format-quote-close-outline</v-icon></v-btn>
-                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;">删除<v-icon color="#64B5F6">mdi-download</v-icon></v-btn>
-
+                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;">
+                  <v-icon color="#64B5F6"> mdi-format-quote-close-outline</v-icon>引用
+                </v-btn>
+                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;">
+                  <v-icon color="#64B5F6" >mdi-trash-can-outline</v-icon>删除
+                </v-btn>
+                <span style="float:right; text-align:right;margin-top: 8px;color: grey;font-size: 15px;">
+                被引次数：
+                <span style="color: #2d94d4;">
+                  {{item.citation_count.toLocaleString()}}
+                </span>
+                </span>
               </div>
 
             </v-list-item-content>
