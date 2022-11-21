@@ -26,7 +26,6 @@ export default {
         ],
         series: [
           {
-            name: 'Les Miserables',
             type: 'graph',
             layout: 'none',
             data: this.graph.nodes,

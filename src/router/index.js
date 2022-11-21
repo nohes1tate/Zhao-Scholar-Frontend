@@ -4,8 +4,9 @@ import HomeView from '../views/HomeView.vue'
 import SearchResult from '../views/SearchResult.vue'
 import DocumentDisplay from '../views/DocumentDisplay.vue'
 import InstitutionPortal from '../views/InstitutionPortal/InstitutionPortal.vue'
-import ScholarPortal from '../views/ScholarPortal.vue'
+import ScholarPortal from '../views/ScholarPortal/ScholarPortal.vue'
 import UserCenter from '../views/UserCenter.vue'
+import adminView from "@/views/Administrator/AdminView";
 
 
 Vue.use(VueRouter)
@@ -49,7 +50,11 @@ const routes = [
     name: 'userCenter',
     component: UserCenter
   },
-
+  {
+    path: '/admin',
+    name: 'adminView',
+    component: adminView
+  }
 ]
 
 const router = new VueRouter({
