@@ -2,7 +2,7 @@
     <div>
     <v-card
         width="800px"
-        style="border: 1px;"
+        style="border-radius: 20px;border:1px solid ;border-color: #01579B;box-shadow: none;"
     >
         <v-card
       width="800px"
@@ -50,9 +50,13 @@
             outlined
             style="float: left;width: 100px;"
           ></v-select>
-          <v-btn class="mx-2" fab dark large style="background: transparent;box-shadow: none;" @click="Delete(i)">
+          <v-btn 
+          v-show="i"
+           class="ma-2" tile large color="red" icon
+           @click="Delete(i)"
+           >
             <v-icon color="black">mdi-minus</v-icon>
-        </v-btn>
+         </v-btn>
           </div>
           
           
@@ -61,14 +65,16 @@
         </v-list-item-group>
     </v-list>
         <v-card-actions>
-            <v-btn @click="addStr" style="box-shadow: none; background: transparent;">添加条件<v-icon>mdi-plus</v-icon></v-btn>
-            <v-btn @click="Search()" style="box-shadow: none; background: transparent;">搜索 <v-icon>mdi-magnify</v-icon></v-btn>
+            <v-btn @click="addStr" 
+            class="ma-2" tile outlined color="indigo"
+            >添加条件<v-icon>mdi-plus</v-icon></v-btn>
+            <v-btn @click="Search()"  class="ma-2" tile outlined color="success">检索 <v-icon>mdi-magnify</v-icon></v-btn>
             
         </v-card-actions>
 
        
         </v-card>
-
+        <v-divider></v-divider>
         <v-card
         width="800px"
         style="margin-top: 0px;box-shadow: none;"
@@ -83,13 +89,14 @@
         <v-chip filter outlined
         v-for="(type, i) in this.TypeCheck"
         :key="i"
+        color="#039BE5"
         >
             {{type.v}}
         </v-chip>
         </v-chip-group>
         </v-card-text>
         </v-card>
-
+        <v-divider></v-divider>
         <v-card
         width="500px"
         style="margin-top: 0px;box-shadow: none;"
@@ -97,7 +104,7 @@
         <v-card-title>时间范围</v-card-title>
         <v-card-text>
             <v-radio-group v-model="TimeSelect" :mandatory="false">
-                <v-radio label="所有时间段" value="0"></v-radio>
+                <v-radio label="所有时间段" value="0" ></v-radio>
                 <v-radio label="过去12个月" value="1"></v-radio>
                 <v-radio label="某一年" value="2"></v-radio>
                 <v-radio label="时间范围" value="3"></v-radio>
@@ -140,6 +147,7 @@ export default{
         TimeSelect:0,
         stratTime:"",
         endTime:"",
+        Form:"高级搜索表单",
     }),
     methods:{
         Search(){
@@ -147,6 +155,7 @@ export default{
             // console.log(this.TypeNum)
             console.log(this.TimeSelect)
             console.log("开始时间"+this.stratTime+"结束时间"+this.endTime)
+            this.$router.push({path:"/search", query:{form:this.Form}})
         },
         addStr(){
             this.SearchRequest.push({select:{value:0, label:"主题"}, str:"",relation:{value:0, label:"AND"}})

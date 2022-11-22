@@ -2,6 +2,7 @@
     <div>
         <v-card
         width="300px"
+        style="background-color: #E3F2FD;"
         >
         <v-card-title>高级检索使用方法</v-card-title>
        
