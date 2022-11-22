@@ -62,7 +62,12 @@ const routes = [
     path: '/admin',
     name: 'adminView',
     component: adminView
-  }
+  },
+  {
+    path: '/searchAdvance',
+    name: 'searchAdvance',
+    component: () => import('../components/searchResult/searchAdvance/AdvanceMain.vue')
+  },
 ]
 
 const router = new VueRouter({
