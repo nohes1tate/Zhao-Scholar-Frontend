@@ -5,6 +5,7 @@ import SearchResult from '../views/SearchResult.vue'
 import DocumentDisplay from '../views/DocumentDisplay.vue'
 import InstitutionPortal from '../views/InstitutionPortal/InstitutionPortal.vue'
 import ScholarPortal from '../views/ScholarPortal/ScholarPortal.vue'
+import ApplySettle from "@/views/ScholarPortal/ApplySettle.vue";
 import UserCenter from '../views/UserCenter.vue'
 import adminView from "@/views/Administrator/AdminView";
 
@@ -52,6 +53,11 @@ const routes = [
     path: '/scholar',
     name: 'scholarPortal',
     component: ScholarPortal
+  },
+  {
+    path: '/apply',
+    name: 'applySettle',
+    component: ApplySettle
   },
   {
     path: '/user',

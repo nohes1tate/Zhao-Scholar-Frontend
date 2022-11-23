@@ -135,8 +135,6 @@
                 </v-col>
               </v-row>
             </v-card>
-            
-            
             <v-card-text class="text--primary">
              <ul v-for="(item, i) in Conference"  :key="i">
                   <li @click="goto(item.url)" style="cursor:pointer" class="span-line" :style="{'margin-bottom':'10px','margin-top':'10px'}">
