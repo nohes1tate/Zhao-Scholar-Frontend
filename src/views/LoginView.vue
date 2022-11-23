@@ -38,7 +38,24 @@
             color="black"
             style="width: 20vw;"
         ></v-text-field>
-        <button>注册</button>
+        <div style="display: flex;flex-direction: row">
+          <v-text-field
+              v-model="confirmCode"
+              label="验证码"
+              outlined
+              dense
+              filled
+              height=10
+              color="black"
+              style="width: 11vw;"
+          ></v-text-field>
+          <v-btn
+              depressed
+              outlined
+              style="margin-left:1vw;height:40px;width:8vw;border-radius: 5px;background-color: #EEEEEE;border: #757575 1px solid;color:#757575 "
+          >获取验证码</v-btn>
+        </div>
+        <button @click="register">注册</button>
       </form>
     </div>
 
@@ -68,7 +85,7 @@
             style="width: 20vw;"
         ></v-text-field>
         <a href="#" class="forget">忘记密码？</a>
-        <button>登录</button>
+        <button @click="login">登录</button>
       </form>
     </div>
 
@@ -107,7 +124,81 @@ export default {
       userName:"",
       email:"",
       password:"",
+      confirmCode:"",
     }
+  },
+  methods:{
+    login() {
+      const formData = new FormData();
+      formData.append("email", this.email);
+      formData.append("password", this.password);
+      this.$axios({
+        method: 'post',
+        url: '/user/login',
+        data: formData,
+      })
+          .then(res => {
+            if (res.data.success) {
+              this.$message.success("登录成功");
+              this.$store.dispatch('saveUserInfo', {
+                user: {
+                  'username': res.data.detail.username,
+                  'Authorization': res.data.Authorization,
+                  'userId': res.data.detail.user_id,
+                  'authorId': res.data.detail.author_id,
+                }
+              });
+              const history_pth = localStorage.getItem('preRoute');
+              setTimeout(() => {
+                if (history_pth == null || history_pth === '/register') {
+                  this.$router.push('/');
+                } else {
+                  this.$router.push({ path: history_pth });
+                }
+              }, 1000);
+            } else {
+              this.$message.error("用户名或密码错误");
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          })
+    },
+    register() {
+      const _formData = new FormData();
+      _formData.append("username", this.username);
+      _formData.append("confirm_number", this.form.confirmCode);
+      this.$axios({
+        method: 'post',
+        url: '/user/confirm',
+        data: _formData,
+      })
+          .then(res => {
+            switch (res.data.status) {
+              case 200:
+                this.$message.success("注册成功！");
+                setTimeout(() => {
+                  this.$router.push("/login");
+                }, 1000);
+                break;
+              case 401:
+                this.$message.warning("请勿重复注册");
+                break;
+              case 402:
+                this.$message.error("验证码错误");
+                break;
+              case 404:
+                this.$message.error("查无注册用户信息，请重新注册");
+                break;
+              case 600:
+                this.$message.error("验证码失效，请重新获取");
+                break;
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          })
+    },
   },
   mounted(){
     const container = document.getElementById('container');
