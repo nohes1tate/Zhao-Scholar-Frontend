@@ -13,7 +13,7 @@
 </div>
     <v-card
     width="1000px"
-    style="float: left;box-shadow: none;background-color: #fcfcfc;"
+    style="float: left;box-shadow: none; background-color: #fcfcfc"
     >
 
         <v-list-item

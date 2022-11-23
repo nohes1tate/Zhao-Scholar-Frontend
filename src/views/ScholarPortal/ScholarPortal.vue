@@ -4,19 +4,22 @@
       <ScholarInfoBox />
       <RelationMap />
     </div>
-    <div class="bottom-paper-info">
-      <PaperInfo />
+    <div class="bottom-paper-and-coworker">
+      <PaperInfo style="width: 60vw; margin-left: -15px"/>
+      <CoWorker style="margin-top: 12vh; width: 20vw"/>
     </div>
+
   </div>
 </template>
 
 <script>
   import ScholarInfoBox from "@/components/ScholarPortal/ScholarInfoBox";
   import RelationMap from "@/components/ScholarPortal/RelationMap";
-  import PaperInfo from "@/components/searchResult/infoCard.vue"
+  import PaperInfo from "@/components/ScholarPortal/scholarArticle"
+  import CoWorker from "@/components/ScholarPortal/CoWorker";
   export default {
     name: 'ScholarPortal',
-    components: {RelationMap, ScholarInfoBox, PaperInfo},
+    components: {CoWorker, RelationMap, ScholarInfoBox, PaperInfo},
   }
 
 </script>
@@ -33,7 +36,8 @@
   display: flex;
   flex-direction: row;
 }
-.bottom-paper-info{
-  margin-top: 10vh;
+.bottom-paper-and-coworker{
+  display: flex;
+  flex-direction: row;
 }
 </style>
