@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app id="app">
     <v-main>
       <router-view/>
     </v-main>
@@ -30,5 +30,9 @@ export default {
 ::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgb(224 223 223 / 30%);
   border-radius: 10px;
+}
+
+#app {
+  background-color: #fcfcfc;
 }
 </style>
