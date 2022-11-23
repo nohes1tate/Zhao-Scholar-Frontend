@@ -23,7 +23,11 @@
     },
     data:()=>({
       
-    })
+    }),
+    created(){
+      var q=this.$route.query
+      console.log(q)
+    }
   }
 
 </script>
