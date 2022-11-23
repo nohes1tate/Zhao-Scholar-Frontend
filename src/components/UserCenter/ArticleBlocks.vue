@@ -17,11 +17,11 @@
           >
             <v-list-item-content style="margin-left: 30px;margin-right: 30px;margin-top: 20px">
 
-              <v-list-item-title class="headline mb-2" v-text="item.paper_title">
+              <v-list-item-title class="headline mb-2" v-text="item.paper_title" style="cursor: pointer" @click="toDocument">
               </v-list-item-title>
               <div style="display: flex; flex-direction: row">
                 <div v-for="(j,index) in item.authors" :key="j" style="color: #1E88E5;display: flex;flex-direction: row">
-                  <div style="cursor: pointer">{{j.author_name}}</div>
+                  <div style="cursor: pointer" @click="toAuthor">{{j.author_name}}</div>
                   <div v-show="index!==(item.authors.length-1)">,</div>
                 </div>
               </div>
@@ -95,10 +95,12 @@ export default {
     }
   },
   methods:{
-    toDocument(title){
-      console.log(title)
-      this.$router.push({path:"/document", query:{Title:title, Id:123}})
+    toDocument(){
+      this.$router.push({path:"/document"} )
     },
+    toAuthor(){
+      this.$router.push({path:"/scholar"})
+    }
   }
 }
 </script>
