@@ -59,43 +59,15 @@
     <v-row>
       <v-col cols="2">
         <v-card elevation="2" class="institution-detail-filter">
-            <h5>默认颜色</h5>
-            <el-menu
-                default-active="2"
-                class="el-menu-vertical-demo"
-                @open="handleOpen"
-                @close="handleClose">
-              <el-submenu index="1">
-                <template slot="title">
-                  <i class="el-icon-location"></i>
-                  <span>导航一</span>
-                </template>
-                <el-menu-item-group>
-                  <template slot="title">分组一</template>
-                  <el-menu-item index="1-1">选项1</el-menu-item>
-                  <el-menu-item index="1-2">选项2</el-menu-item>
-                </el-menu-item-group>
-                <el-menu-item-group title="分组2">
-                  <el-menu-item index="1-3">选项3</el-menu-item>
-                </el-menu-item-group>
-                <el-submenu index="1-4">
-                  <template slot="title">选项4</template>
-                  <el-menu-item index="1-4-1">选项1</el-menu-item>
-                </el-submenu>
-              </el-submenu>
-              <el-menu-item index="2">
-                <i class="el-icon-menu"></i>
-                <span slot="title">导航二</span>
-              </el-menu-item>
-              <el-menu-item index="3" disabled>
-                <i class="el-icon-document"></i>
-                <span slot="title">导航三</span>
-              </el-menu-item>
-              <el-menu-item index="4">
-                <i class="el-icon-setting"></i>
-                <span slot="title">导航四</span>
-              </el-menu-item>
-            </el-menu>
+          <el-tree :data="achievements"
+                   show-checkbox
+                   ref="tree"
+                   @check="handleCheck"
+                   default-expand-all>
+            <span class="custom-tree-node" slot-scope="{ node, data }">
+        <span>[{{data.num}}]{{ node.label }}</span>
+      </span>
+          </el-tree>
         </v-card>
       </v-col>
       <v-col>
@@ -131,6 +103,45 @@ export default {
   data: () => ({
     chartDialog: false,
     chartTitle: "",
+    achievements:[
+      {
+        id: 0,
+        label: "ALL",
+        num: 60,
+        children: [
+          {
+            id: 1,
+            label: "AI",
+            num: 30,
+            children: [{
+              id: 2,
+              label: "NLP",
+              num: 17,
+            },
+              {
+                id: 3,
+                label: "Deep Learning",
+                num: 13,
+              }]
+          },
+          {
+            id: 4,
+            label: "SE",
+            num: 30,
+            children: [{
+              id: 5,
+              label: "BUAA",
+              num: 21,
+            },
+              {
+                id: 6,
+                label: "THU",
+                num: 9,
+              }]
+          }
+        ]
+      }
+    ],
     charts: [{
       id: 1,
       value: 2,
@@ -1912,6 +1923,7 @@ export default {
           ]
         }
       }],
+    selectedData: [],
     institutionLogo: "../../assets/InstitutionLogo/SESC.jpeg",
     institutionDescription: "中国科学院（英文名称：Chinese Academy of Sciences，简称中科院）成立于1949年11月，为中国自然科学最高学术机构、科学技术最高咨询机构、自然科学与高技术综合研究发展中心。 中国科学院提出了建设国家创新体系的构想，先后实施知识创新工程、“创新2020”、《“率先行动”计划暨全面深化改革纲要》，提出了《迎接知识经济时代，建设国家创新体系》《创新促进发展，科技引领未来》《创新2050：科学技术与中国的未来》《科技发展新态势与面向2020年的战略选择》等战略研究报告。 据2021年11月中国科学院官网显示，全院共拥有11个分院、100多家科研院所、3所大学（中国科学院大学、中国科学技术大学，与上海市共建上海科技大学）、130多个国家级重点实验室和工程中心、68个国家野外观测研究站、20个国家科技资源共享服务平台，承担30余项国家重大科技基础设施的建设与运行，正式职工6.9万余人，在学研究生7.9万余人；建成了完整的自然科学学科体系，物理、化学、材料科学、数学、环境与生态学、地球科学等学科整体水平已进入世界先进行列，一些领域方向也具备了进入世界第一方阵的良好态势。在解决关系国家全局和长远发展的重大问题上，已成为不可替代的国家战略科技力量。一批科学家在国家重大科技任务中发挥了关键和中坚作用，并作为我国科技界的代表活跃在国际科技前沿。 [1]  2019年9月，经党中央批准，十九届中央第四轮巡视将对中国科学院党组织开展常规巡视。 [2]",
     papersNum: 114,
@@ -1919,6 +1931,12 @@ export default {
     citationsNum: 1919
   }),
   methods: {
+
+    handleCheck(data, checked) {
+      var data1 = this.$refs.tree.getCheckedNodes(true);
+      this.selectedData = data1
+      console.log(this.selectedData)
+    },
     closeDialog(model) {
       console.log("closed4", model)
       let chartDom = document.getElementById('showchart');
@@ -1943,7 +1961,10 @@ export default {
 
       option && myChart.setOption(option);
     },
-
+    handleData(data, node) {
+      console.log("data:",data)
+      console.log("node:",node)
+    },
     displayChart(chartXAxis, chartData, title) {
       this.chartDialog = true
       this.chartTitle = title
@@ -2043,5 +2064,14 @@ export default {
 
 .institution-info-card {
   height: 50vh;
+}
+
+.custom-tree-node {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  padding-right: 8px;
 }
 </style>
