@@ -3,7 +3,7 @@
     <div class="logo-box">
       <img src="../../assets/logo.png" class="logo-img">
     </div>
-    <div class="search-btn">
+    <div class="search-btn" @click="advanceSearch">
       <span>高级检索</span>
     </div>
     <div v-show="isLogin" class="user-box" @mouseenter="hover=true" @mouseleave="hover=false">
@@ -59,10 +59,13 @@ export default {
         { text: '我的门户', icon:'mdi-folder-account-outline' },
         {text: '退出',icon:'mdi-location-exit'},
       ],
-      username:'cyw777',
+      username:'username',
     }
   },
   methods:{
+    advanceSearch(){
+      this.$router.push('/searchAdvance')
+    },
     goTo(i){
       if(i===0)
         this.$router.push('/user')
