@@ -15,7 +15,7 @@
     width="1000px"
     style="float: left;box-shadow: none;"
     >
-    <v-list-item-group v-model="paperInfo" color="primary">
+   
         <v-list-item
         v-for="(item, i) in this.CurrentPageData"
         :key="i"
@@ -35,23 +35,25 @@
             </div>
             <v-divider></v-divider>
             <div>
-               
-                <v-btn style="background-color: transparent;box-shadow: none;">被引用数</v-btn>
-                <v-btn style="background-color: transparent;box-shadow: none;">收藏数</v-btn>
-                <v-btn style="background-color: transparent;box-shadow: none;">发表时间</v-btn>
-                <v-divider></v-divider>
+            <div style="margin-top: 10px;float: left;">
+                <h5 style="float: left;">被引用数:{{item.cites}}</h5>
+                <h5 style="float: left;margin-left: 30px;">收藏数:{{item.collections}}</h5>
+                <h5 style="float: left; margin-left: 30px;">发表时间:{{item.publishTime}}</h5>
+            </div>
+            <div style="float: right;">
+                
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" >收藏<v-icon color="#64B5F6">mdi-star-plus-outline</v-icon></v-btn>
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;">引用<v-icon color="#64B5F6"> mdi-format-quote-close-outline</v-icon></v-btn>
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;">下载<v-icon color="#64B5F6">mdi-download</v-icon></v-btn>
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" @click="toDocument(item.Title)">详情<v-icon color="#64B5F6">mdi-link-variant</v-icon></v-btn>
                
             </div>
-          
+            </div>
         </v-list-item-content>
     </v-card>
         </v-list-item>
       
-    </v-list-item-group>
+    
     <v-pagination
         v-model="page"
         :length="this.pageNum"
@@ -64,7 +66,7 @@
     export default{
         data:()=>({
             page: 1,
-            pageSize:4,
+            pageSize:5,
             pageNum:1,
             Num:1,
             CurrentPageData:[],
