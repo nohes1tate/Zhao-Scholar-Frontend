@@ -28,9 +28,7 @@
               <div v-text="item.year" style="color: grey;font-size: 14px"></div>
               <div v-text="item.abstract" class="text-ellipsis-two" style="font-weight: 350;margin-bottom: 10px;">
               </div>
-              <v-divider></v-divider>
               <div>
-                <v-divider></v-divider>
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;">
                   <v-icon color="#64B5F6"> mdi-format-quote-close-outline</v-icon>引用
                 </v-btn>

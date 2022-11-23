@@ -59,7 +59,7 @@ export default {
         { text: '我的门户', icon:'mdi-folder-account-outline' },
         {text: '退出',icon:'mdi-location-exit'},
       ],
-      username:'cyw777',
+      username:'username',
     }
   },
   methods:{
