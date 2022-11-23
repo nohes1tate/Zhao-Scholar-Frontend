@@ -11,7 +11,7 @@
     >
     <v-card-title>高级检索</v-card-title>
     <v-list>
-        <v-list-item-group  color="primary">
+       
           <v-list-item
             v-for="(searchItem, i) in SearchRequest"
             :key="i"
@@ -62,7 +62,7 @@
           
           
           </v-list-item>
-        </v-list-item-group>
+        
     </v-list>
         <v-card-actions>
             <v-btn @click="addStr" 
@@ -106,7 +106,6 @@
             <v-radio-group v-model="TimeSelect" :mandatory="false">
                 <v-radio label="所有时间段" value="0" ></v-radio>
                 <v-radio label="过去12个月" value="1"></v-radio>
-                <v-radio label="某一年" value="2"></v-radio>
                 <v-radio label="时间范围" value="3"></v-radio>
                 <v-row>
                     <v-col cols="12" sm="6">

@@ -25,7 +25,7 @@
                 <v-list-item-action>
                   <v-checkbox
                     v-model="item.status"
-                    color="deep-purple accent-4"
+                    color="#039BE5"
                     @click="ChooseType(item.name, item.status)"
                   ></v-checkbox>
                 </v-list-item-action>
@@ -45,7 +45,7 @@
                 <v-list-item-action>
                   <v-checkbox
                     v-model="item.status"
-                    color="deep-purple accent-4"
+                    color="#039BE5"
                     @click="ChooseConference(item.name, item.status)"
                   ></v-checkbox>
                 </v-list-item-action>
@@ -63,7 +63,7 @@
                 <v-list-item-action>
                   <v-checkbox
                     v-model="item.status"
-                    color="deep-purple accent-4"
+                    color="#039BE5"
                     @click="ChooseType(item.name, item.status)"
                   ></v-checkbox>
                 </v-list-item-action>
