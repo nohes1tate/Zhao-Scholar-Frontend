@@ -268,7 +268,7 @@
 
 }
 #allcontent{
-  width: 60%;
+  width: 80%;
   margin: auto;
 }
 </style>
