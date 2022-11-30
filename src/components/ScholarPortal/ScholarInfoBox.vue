@@ -21,7 +21,7 @@
         </div>
       </div>
       <div>
-        <v-icon large>mdi-heart-plus-outline</v-icon>
+        <v-btn outlined color="primary" v-if="!isMine">认领门户</v-btn>
       </div>
     </div>
     <div class="scholar-bottom">
@@ -44,6 +44,9 @@
 <script>
 export default {
   name: 'ScholarInfoBox',
+  props:{
+    isMine:{default: false},
+  }
 }
 </script>
 
