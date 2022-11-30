@@ -31,14 +31,14 @@
       <div class="top-right">
         <v-card class="institution-info-card" elevation="2">
           <div style="margin-left: 1vw">
-            <v-row>
-              论文数:<span class="institution-statistic">{{ papersNum }}</span>
+            <v-row >
+              <span class="institution-statistic">论文数:{{ papersNum }}</span>
             </v-row>
             <v-row>
-              学者数:{{ authorsNum }}
+              <span class="institution-statistic">学者数:{{ authorsNum }}</span>
             </v-row>
             <v-row>
-              被引数:{{ citationsNum }}
+              <span class="institution-statistic">被引数:{{ citationsNum }}</span>
             </v-row>
           </div>
         </v-card>
@@ -62,6 +62,8 @@
           <el-tree :data="achievements"
                    show-checkbox
                    ref="tree"
+                   node-key="id"
+                   :default-checked-keys="[0]"
                    @check="handleCheck"
                    default-expand-all>
             <span class="custom-tree-node" slot-scope="{ node, data }">
@@ -72,7 +74,52 @@
       </v-col>
       <v-col>
         <v-card elevation="2" class="institution-detail-info">
-          1919
+          <div>
+            <v-data-table
+                :headers="headers"
+                :items="institutionData"
+                hide-default-footer
+            >
+              <template v-slot:[`header.name`]="{ header }">
+                <div style="font-size: 20px">{{ header.text }}</div>
+              </template>
+              <template v-slot:[`header.papers`]="{ header }">
+                <div style="font-size: 20px">{{ header.text }}</div>
+              </template>
+              <template v-slot:[`header.citation`]="{ header }">
+                <div style="font-size: 20px">{{ header.text }}</div>
+              </template>
+              <template v-slot:[`header.H_index`]="{ header }">
+                <div style="font-size: 20px">{{ header.text }}</div>
+              </template>
+              <template v-slot:[`item.name`]="{ item }">
+                <div style="font-size: 18px;font-weight: bold">{{ item.name }}</div>
+              </template>
+              <template v-slot:[`item.papers`]="{ item }">
+                <div style="font-size: 18px">{{ item.papers }}</div>
+              </template>
+              <template v-slot:[`item.citation`]="{ item }">
+                <div style="font-size: 18px">{{ item.citation }}</div>
+              </template>
+              <template v-slot:[`item.H_index`]="{ item }">
+                <div style="font-size: 18px">{{ item.H_index }}</div>
+              </template>
+            </v-data-table>
+          </div>
+          <div>
+            <v-row>
+              <v-col >
+                <div id="paperInfo">
+
+                </div>
+              </v-col>
+              <v-col>
+                <div id="achievementInfo">
+
+                </div>
+              </v-col>
+            </v-row>
+          </div>
         </v-card>
       </v-col>
     </v-row>
@@ -103,6 +150,27 @@ export default {
   data: () => ({
     chartDialog: false,
     chartTitle: "",
+    selectedArea: [
+        {
+      id: 2,
+      label: "NLP",
+      num: 17,
+    },
+      {
+        id: 3,
+        label: "Deep Learning",
+        num: 13,
+      },
+      {
+        id: 5,
+        label: "BUAA",
+        num: 21,
+      },
+      {
+        id: 6,
+        label: "THU",
+        num: 9,
+      }],
     achievements:[
       {
         id: 0,
@@ -142,7 +210,8 @@ export default {
         ]
       }
     ],
-    charts: [{
+    charts: [
+        {
       id: 1,
       value: 2,
       type: 1,
@@ -1923,17 +1992,36 @@ export default {
           ]
         }
       }],
-    selectedData: [],
     institutionLogo: "../../assets/InstitutionLogo/SESC.jpeg",
     institutionDescription: "中国科学院（英文名称：Chinese Academy of Sciences，简称中科院）成立于1949年11月，为中国自然科学最高学术机构、科学技术最高咨询机构、自然科学与高技术综合研究发展中心。 中国科学院提出了建设国家创新体系的构想，先后实施知识创新工程、“创新2020”、《“率先行动”计划暨全面深化改革纲要》，提出了《迎接知识经济时代，建设国家创新体系》《创新促进发展，科技引领未来》《创新2050：科学技术与中国的未来》《科技发展新态势与面向2020年的战略选择》等战略研究报告。 据2021年11月中国科学院官网显示，全院共拥有11个分院、100多家科研院所、3所大学（中国科学院大学、中国科学技术大学，与上海市共建上海科技大学）、130多个国家级重点实验室和工程中心、68个国家野外观测研究站、20个国家科技资源共享服务平台，承担30余项国家重大科技基础设施的建设与运行，正式职工6.9万余人，在学研究生7.9万余人；建成了完整的自然科学学科体系，物理、化学、材料科学、数学、环境与生态学、地球科学等学科整体水平已进入世界先进行列，一些领域方向也具备了进入世界第一方阵的良好态势。在解决关系国家全局和长远发展的重大问题上，已成为不可替代的国家战略科技力量。一批科学家在国家重大科技任务中发挥了关键和中坚作用，并作为我国科技界的代表活跃在国际科技前沿。 [1]  2019年9月，经党中央批准，十九届中央第四轮巡视将对中国科学院党组织开展常规巡视。 [2]",
     papersNum: 114,
     authorsNum: 514,
-    citationsNum: 1919
+    citationsNum: 1919,
+    headers: [
+      {
+        text: '科研机构',
+        align: 'start',
+        sortable: false,
+        value: 'name',
+      },
+      { text: '论文数', sortable: false, value: 'papers' },
+      { text: '被引数', sortable: false, value: 'citation' },
+      { text: 'H-index', sortable: false, value: 'H_index' },
+    ],
+    institutionData: [
+      {
+        name: '中国科学院',
+        papers: 159,
+        citation: 6.0,
+        H_index: 24,
+      },
+    ],
   }),
   methods: {
 
     handleCheck(data, checked) {
       var data1 = this.$refs.tree.getCheckedNodes(true);
+      console.log(this.$refs.tree)
       this.selectedData = data1
       console.log(this.selectedData)
     },
@@ -2060,6 +2148,12 @@ export default {
   width: 45vw;
   max-height: 30vh;
   overflow-y: auto;
+}
+
+.institution-statistic {
+  margin-top: 8vh;
+  font-weight: bold;
+  font-size: 24px;
 }
 
 .institution-info-card {
