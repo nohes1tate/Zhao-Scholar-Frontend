@@ -17,14 +17,14 @@
           <p class="blue--text text--lighten-2 mt-0">{{author}}
           </p>
         
-            <v-btn color="primary" dark >阅读<v-icon class="ml-2">mdi-eye</v-icon></v-btn>
+            <v-btn color="primary" dark @click="read">阅读<v-icon class="ml-2">mdi-eye</v-icon></v-btn>
           
-            <v-btn color="primary" dark outlined class="ml-4">收藏<v-icon class="ml-2">mdi-star-plus-outline</v-icon></v-btn>
+            <v-btn color="primary" dark outlined class="ml-4" @click="addStar">收藏<v-icon class="ml-2">mdi-star-plus-outline</v-icon></v-btn>
 
-            <v-btn color="primary" dark text class="ml-4">引用</v-btn>
+            <v-btn color="primary" dark text class="ml-4" @click="cite">引用</v-btn>
             <!-- 找一个引号图标放到引用后面 -->
 
-            <v-btn color="primary" dark text class="ml-4">分享<v-icon>mdi-arrow-top-right-bold-box-outline</v-icon></v-btn>
+            <v-btn color="primary" dark text class="ml-4" @click="share">分享<v-icon>mdi-arrow-top-right-bold-box-outline</v-icon></v-btn>
             
 
          
@@ -41,7 +41,6 @@
           <p class="card-title" >
            摘要
           </p>
-          <p>abstract</p>
           <div class="text--primary" id="abstract">
             {{abstract}}
            </div>
@@ -188,6 +187,7 @@
       title:"TimeTraveler: Reinforcement Learning for Temporal Knowledge Graph Forecasting",
       paperConference:"CCF-A",
       author:"Haofan WangZifan WangMengnan DuFan YangZijian ZhangSirui DingPiotr MardzielXia Hu",
+      url:"https://www.runoob.com",
       items: [
         {
           text: 'Dashboard',
@@ -249,7 +249,20 @@
       },
       get_paper_info(){
         console.log("get paper info")
-      }
+      },
+      read(){
+        console.log("read this paper");
+        window.location.replace(this.url);
+      },
+      addStar(){
+        console.log("star this paper")
+      },
+      share(){
+        console.log("share this paper")
+      },
+      cite(){
+        console.log("cite this paper")
+      },
     }
   }
 </script>
