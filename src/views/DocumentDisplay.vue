@@ -97,21 +97,42 @@
         width = "full"
       >
         <v-card-text>
-          <p class="display-1 text--primary">
+          <!-- <p class="display-1 text--primary">
             参考文献
-          </p>
-          <div class="text--primary">
-            <v-item-group>
-            <v-item
-              v-for="[
-                text
-              ] in references"
-              :key="text"
+          </p> -->
+          <v-tabs>
+            <v-tab>引用文献</v-tab>
+            <v-tab>参考文献</v-tab>
+            <v-tab>相似文献</v-tab>
+
+            <v-tab-item
+              v-for="i in tabs"
+              :key="i"
+              :value="'tab-' + i"
             >
-            <p>[1] {{text}}</p>
-            </v-item>
-          </v-item-group>
-          </div>
+              <v-card
+                flat
+                tile
+              >
+                <v-card-text>
+                  <div class="text--primary">
+                    <v-item-group>
+                      <v-item
+                        v-for="[
+                          text
+                        ] in references"
+                        :key="text"
+                      >
+                      <p>[1] {{text}}</p>
+                      </v-item>
+                    </v-item-group>
+                  </div>
+                </v-card-text>
+              </v-card>
+            </v-tab-item>
+          </v-tabs>
+
+          
         </v-card-text>
        
       </v-card>
@@ -215,13 +236,13 @@
       console.log("进入详情页")
       console.log(title)
       console.log(id)
-    }
+    },
   }
 </script>
 
 <style>
 .root{
-  background-color:azure;
+  background-color:#fcfcfc;
 }
 #article{
   width: 66.7%;
@@ -247,7 +268,7 @@
 
 }
 #allcontent{
-  width: 60%;
+  width: 80%;
   margin: auto;
 }
 </style>
