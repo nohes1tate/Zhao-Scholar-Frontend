@@ -1,6 +1,16 @@
 <template>
   <div class="relation-map-box">
-    <div ref="myChart" style="width: 100%; height: 100%"></div>
+    <div ref="myChart" style="width: 100%; height: 100%" @click="displayChart"></div>
+    <v-dialog
+        v-model="showDialog"
+        width="60vw"
+        height="90vh"
+        style="overflow: hidden"
+    >
+      <v-card style="height: 80vh">
+        <div ref="bigChart" style="height: 75vh; width: 55vw; cursor: pointer"></div>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -14,8 +24,8 @@ export default {
   },
   methods: {
     setChart() {
-      var myChart = this.$echarts.init(this.$refs.myChart)
-      var option = {
+      let myChart = this.$echarts.init(this.$refs.myChart)
+      let option = {
         tooltip: {},
         legend: [
           {
@@ -52,7 +62,49 @@ export default {
         ]
       };
       myChart.setOption(option);
-    }
+    },
+    displayChart() {
+      this.showDialog = true
+      let bigChart = this.$echarts.init(this.$refs.bigChart)
+      let option = {
+        tooltip: {},
+        legend: [
+          {
+            data: this.graph.categories.map(function (a) {
+              return a.name;
+            })
+          }
+        ],
+        series: [
+          {
+            type: 'graph',
+            layout: 'none',
+            data: this.graph.nodes,
+            links: this.graph.links,
+            categories: this.graph.categories,
+            roam: true,
+            label: {
+              show: true,
+              position: 'right',
+              formatter: '{b}'
+            },
+            labelLayout: {
+              hideOverlap: true
+            },
+            scaleLimit: {
+              min: 0.4,
+              max: 2
+            },
+            lineStyle: {
+              color: 'source',
+              curveness: 0.3
+            }
+          }
+        ]
+      };
+      bigChart.setOption(option)
+      this.showDialog = true
+    },
   },
   data() {
     return {
@@ -1799,7 +1851,8 @@ export default {
             "name": "I"
           }
         ]
-      }
+      },
+      showDialog: false,
     };
   },
 }
