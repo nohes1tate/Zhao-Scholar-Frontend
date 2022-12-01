@@ -2,17 +2,17 @@
   <div class="scholar-info-box box">
     <div class="scholar-top">
       <div class="scholar-img">
-        <v-avatar color="grey" size="60">
-          <v-icon dark large>mdi-account-circle</v-icon>
+        <v-avatar size="80">
+          <img src="@/assets/scholar-avatar.png" alt="scholar avatar">
         </v-avatar>
       </div>
       <div class="scholar-mid-info">
         <div style="font-size: 30px">
-          Scholar Name
+          {{ scholarInfo.name }}
         </div>
         <div>
           <v-icon>mdi-home-outline</v-icon>
-          Beihang University
+          {{ scholarInfo.affiliation }}
         </div>
         <div class="field-tag-box">
           <div class="field-tag">python</div>
@@ -27,15 +27,21 @@
     <div class="scholar-bottom">
       <div class="scholar-bottom-statistics">
         <div style="font-size: 40px">
-          1200
+          {{ scholarInfo.paperCount }}
         </div>
-        <div>papers</div>
+        <div>文献数</div>
       </div>
       <div class="scholar-bottom-statistics">
         <div style="font-size: 40px">
-          10000
+          {{ scholarInfo.citationCount }}
         </div>
-        <div>citations</div>
+        <div>被引数</div>
+      </div>
+      <div class="scholar-bottom-statistics">
+        <div style="font-size: 40px">
+          {{ scholarInfo.hIndex }}
+        </div>
+        <div>影响力指数</div>
       </div>
     </div>
   </div>
@@ -46,7 +52,19 @@ export default {
   name: 'ScholarInfoBox',
   props:{
     isMine:{default: false},
-  }
+  },
+  data() {
+    return {
+      scholarInfo: {
+        name: 'Scholar Name',
+        affiliation: 'Beihang University',
+        field: ['python', 'java', 'c++'],
+        paperCount: 1200,
+        citationCount: 10000,
+        hIndex: 10000,
+      }
+    }
+  },
 }
 </script>
 
@@ -75,7 +93,7 @@ export default {
 }
 .scholar-img {
   width: 15vh;
-  padding-left: 3vh;
+  padding-left: 2vh;
 }
 .scholar-mid-info {
   display: flex;
@@ -99,7 +117,7 @@ export default {
   flex-direction: column;
   align-items: center;
   margin-top: 4vh;
-  margin-left: 15vh;
-  margin-right: 15vh;
+  margin-left: 9vh;
+  margin-right: 9vh;
 }
 </style>

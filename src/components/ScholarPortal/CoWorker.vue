@@ -14,7 +14,7 @@
         @click="toCoworkers"
     >
       <v-list-item-avatar>
-        <v-img :src="item.avatar"></v-img>
+        <v-img src="@/assets/scholar-avatar.png"></v-img>
       </v-list-item-avatar>
 
       <v-list-item-content>
