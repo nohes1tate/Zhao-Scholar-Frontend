@@ -1,6 +1,6 @@
 <template>
   <div class="userCenter">
-    <page-header></page-header>
+    <page-header :show-search="true" :is-login="isLogin"></page-header>
     <div class="main-body">
       <v-row class="header">
         <span @click="backToUserCenter">个人图书馆</span>
@@ -131,6 +131,7 @@ export default {
   name: "UserCenter",
   components: {PageHeader ,ArticleBlocks},
   data:() => ({
+      isLogin:true,
       from_date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       to_date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       menu1: false,
