@@ -105,20 +105,32 @@
                 <div style="font-size: 18px">{{ item.H_index }}</div>
               </template>
             </v-data-table>
-          </div>
-          <div>
-            <v-row>
-              <v-col >
-                <div id="paperInfo">
-
-                </div>
-              </v-col>
-              <v-col>
-                <div id="achievementInfo">
-
-                </div>
-              </v-col>
-            </v-row>
+              <v-row>
+                <v-col >
+                  <div id="paperInfo" style="width: 100%;height: 40vh">
+                  </div>
+                </v-col>
+                <v-col >
+                  <div id="achievementInfo" style="width: 100%;height: 40vh">
+                  </div>
+                </v-col>
+              </v-row>
+                <v-data-table
+                    :headers="authorHeaders"
+                    :items="authorData"
+                    hide-default-footer
+                    class="author-table"
+                >
+                  <template v-slot:[`item.name`]="{ item }">
+                    <v-btn
+                        class="ma-1"
+                        plain
+                        @click="toAuthorCenter(item.id)"
+                    >
+                      {{item.name}}
+                    </v-btn>
+                  </template>
+                </v-data-table>
           </div>
         </v-card>
       </v-col>
@@ -1991,12 +2003,27 @@ export default {
             }
           ]
         }
-      }],
+      }
+      ],
     institutionLogo: "../../assets/InstitutionLogo/SESC.jpeg",
     institutionDescription: "中国科学院（英文名称：Chinese Academy of Sciences，简称中科院）成立于1949年11月，为中国自然科学最高学术机构、科学技术最高咨询机构、自然科学与高技术综合研究发展中心。 中国科学院提出了建设国家创新体系的构想，先后实施知识创新工程、“创新2020”、《“率先行动”计划暨全面深化改革纲要》，提出了《迎接知识经济时代，建设国家创新体系》《创新促进发展，科技引领未来》《创新2050：科学技术与中国的未来》《科技发展新态势与面向2020年的战略选择》等战略研究报告。 据2021年11月中国科学院官网显示，全院共拥有11个分院、100多家科研院所、3所大学（中国科学院大学、中国科学技术大学，与上海市共建上海科技大学）、130多个国家级重点实验室和工程中心、68个国家野外观测研究站、20个国家科技资源共享服务平台，承担30余项国家重大科技基础设施的建设与运行，正式职工6.9万余人，在学研究生7.9万余人；建成了完整的自然科学学科体系，物理、化学、材料科学、数学、环境与生态学、地球科学等学科整体水平已进入世界先进行列，一些领域方向也具备了进入世界第一方阵的良好态势。在解决关系国家全局和长远发展的重大问题上，已成为不可替代的国家战略科技力量。一批科学家在国家重大科技任务中发挥了关键和中坚作用，并作为我国科技界的代表活跃在国际科技前沿。 [1]  2019年9月，经党中央批准，十九届中央第四轮巡视将对中国科学院党组织开展常规巡视。 [2]",
     papersNum: 114,
     authorsNum: 514,
     citationsNum: 1919,
+    paperInfoXAxis: [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022],
+    paperInfoData: [1100, 1200, 1250, 1255, 1276, 1305, 1350, 1358, 1422, 1530, 108],
+    selectedData: [],
+    authorHeaders: [
+      {text: '作者',
+      align: 'start',
+          sortable: false,
+    value: 'name'},
+      { text: '论文数', value: 'papers' },
+      { text: '被引数',  value: 'citation' },
+      { text: 'H-index',  value: 'H_index' },
+      { text: '第一作者发文数', value: 'firstPapers' },
+      { text: '第一作者被引数', value: 'firstCitation' },
+    ],
     headers: [
       {
         text: '科研机构',
@@ -2016,14 +2043,59 @@ export default {
         H_index: 24,
       },
     ],
+    authorData: [
+      {
+        id: 1,
+        name: 'HZH1',
+        papers: 514,
+        firstPapers: 114,
+        citation: 1919,
+        firstCitation: 810,
+        H_index: 6
+      },
+      {
+        id: 2,
+        name: 'HZH2',
+        papers: 514,
+        firstPapers: 115,
+        citation: 1919,
+        firstCitation: 810,
+        H_index: 6
+      },
+      {
+        id: 3,
+        name: 'HZH3',
+        papers: 514,
+        firstPapers: 116,
+        citation: 1919,
+        firstCitation: 810,
+        H_index: 6
+      },
+      {
+        id: 4,
+        name: 'HZH4',
+        papers: 514,
+        firstPapers: 117,
+        citation: 1919,
+        firstCitation: 810,
+        H_index: 6
+      },
+    ]
   }),
+  mounted() {
+    this.initPaperInfo()
+    this.handleCheck()
+    this.updateAchievementInfo()
+  },
   methods: {
-
     handleCheck(data, checked) {
       var data1 = this.$refs.tree.getCheckedNodes(true);
       console.log(this.$refs.tree)
       this.selectedData = data1
       console.log(this.selectedData)
+    },
+    toAuthorCenter(id) {
+      this.$message.success(id)
     },
     closeDialog(model) {
       console.log("closed4", model)
@@ -2031,6 +2103,10 @@ export default {
       let myChart = echarts.init(chartDom);
 
       let option = {
+        title: {
+          text: '已报名门店行政分布',
+          x: 'center'
+        },
         xAxis: {
           type: 'category',
           data: []
@@ -2044,7 +2120,6 @@ export default {
             type: 'bar'
           }
         ],
-
       };
 
       option && myChart.setOption(option);
@@ -2052,6 +2127,80 @@ export default {
     handleData(data, node) {
       console.log("data:",data)
       console.log("node:",node)
+    },
+    updateAchievementInfo() {
+      let chartDom = document.getElementById('achievementInfo');
+      let myChart = echarts.init(chartDom);
+      let AData = []
+      let i
+      for (i=0; i<this.selectedData.length; i++) {
+        let tmp = {value: 0,name: ''}
+        tmp.value = this.selectedData[i].num
+        tmp.name = this.selectedData[i].label
+        AData.push(tmp)
+      }
+      let option = {
+        title: {
+          text: '研究领域分布',
+          left: 'center'
+        },
+        series: [
+          {
+            name: 'Access From',
+            type: 'pie',
+            radius: '50%',
+            data: AData,
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            }
+          }
+        ]
+      };
+      option && myChart.setOption(option);
+    },
+    initPaperInfo() {
+      let chartDom = document.getElementById('paperInfo');
+      let myChart = echarts.init(chartDom);
+      let option;
+      let x = this.paperInfoXAxis
+      let d = this.paperInfoData
+
+      option = {
+        title: {
+          text: '论文数统计',
+          x: 'center'
+        },
+        xAxis: {
+          type: 'category',
+          data: x
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            data: d,
+            type: 'bar'
+          }
+        ],
+        tooltip: { // 鼠标悬浮提示框显示 X和Y 轴数据
+          trigger: 'axis',
+          backgroundColor: 'rgba(32, 33, 36,.7)',
+          borderColor: 'rgba(32, 33, 36,0.20)',
+          borderWidth: 1,
+          textStyle: { // 文字提示样式
+            color: '#fff',
+            fontSize: '12'
+          },
+
+        }
+      };
+
+      option && myChart.setOption(option);
     },
     displayChart(chartXAxis, chartData, title) {
       this.chartDialog = true
@@ -2087,7 +2236,6 @@ export default {
               color: '#fff',
               fontSize: '12'
             },
-
           }
         };
 
@@ -2142,6 +2290,7 @@ export default {
 
 .institution-detail-info {
   min-height: 60vh;
+  margin-right: 3vw;
 }
 
 .institution-description {
@@ -2167,5 +2316,10 @@ export default {
   justify-content: space-between;
   font-size: 14px;
   padding-right: 8px;
+}
+
+.author-table {
+  max-height: 50vh;
+  overflow: scroll;
 }
 </style>
