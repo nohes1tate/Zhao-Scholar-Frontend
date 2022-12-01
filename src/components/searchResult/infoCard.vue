@@ -8,7 +8,6 @@
             :items="selects"
             label="排序方式"
             v-model="selectMethod"
-
           ></v-select></div>
 </div>
     <v-card
@@ -46,7 +45,7 @@
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;">引用<v-icon color="#64B5F6"> mdi-format-quote-close-outline</v-icon></v-btn>
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;">下载<v-icon color="#64B5F6">mdi-download</v-icon></v-btn>
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" @click="toDocument(item.Title)">详情<v-icon color="#64B5F6">mdi-link-variant</v-icon></v-btn>
-
+3
             </div>
             </div>
         </v-list-item-content>

@@ -74,6 +74,11 @@ const routes = [
     name: 'searchAdvance',
     component: () => import('../components/searchResult/searchAdvance/AdvanceMain.vue')
   },
+  {
+    path: '/login',
+    name: 'loginView',
+    component: () => import('../views/LoginView')
+  },
 ]
 
 const router = new VueRouter({
