@@ -31,16 +31,50 @@
                   {{tag.tag_name}}
                   <v-icon right class="material-symbols-outlined" size="15px">close</v-icon>
                 </v-chip>
-                <v-chip
-                    class="ma-2"
-                    color=#546E7A
-                    label
-                    text-color="white"
-                    style="display: flex;cursor: pointer"
+                <v-dialog
+                    transition="dialog-top-transition"
+                    max-width="600"
                 >
-                  <v-icon class="material-symbols-outlined" size="17px" style="left: -2px">add</v-icon>
-                  New Tag
-                </v-chip>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-chip
+                        class="ma-2"
+                        color=#546E7A
+                        label
+                        text-color="white"
+                        style="display: flex;cursor: pointer"
+                        v-bind="attrs"
+                        v-on="on"
+                    >
+                      <v-icon class="material-symbols-outlined" size="17px" style="left: -2px">add</v-icon>
+                      New Tag
+                    </v-chip>
+                  </template>
+                  <template v-slot:default="dialog">
+                    <v-card>
+                      <v-toolbar
+                          color="primary"
+                          dark
+                      >创建新的标签</v-toolbar>
+                      <v-card-text>
+                        <v-text-field
+                            label="标签名"
+                            v-model="newTagName"
+                            style="margin-top: 30px"
+                        ></v-text-field>
+                      </v-card-text>
+                      <v-card-actions class="justify-end">
+                        <v-btn
+                            text
+                            @click="handleNewTag"
+                        >确定</v-btn>
+                        <v-btn
+                            text
+                            @click="dialog.value = false"
+                        >关闭</v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </template>
+                </v-dialog>
               </div>
               <v-divider style="width: 70% ;margin-left: 30px"></v-divider>
               <span style="display: flex;
@@ -295,6 +329,20 @@ export default {
           user_id: 2,
           username: "",
           create_time: "2021-11-18T17:22:27+08:00"
+        },
+        {
+          tag_id: 1,
+          tag_name: "默认",
+          user_id: 2,
+          username: "",
+          create_time: "2021-11-18T17:22:27+08:00"
+        },
+        {
+          tag_id: 2,
+          tag_name: "CV",
+          user_id: 2,
+          username: "",
+          create_time: "2021-11-18T17:22:27+08:00"
         }
       ]
   }),
@@ -346,6 +394,9 @@ export default {
       });
       window.open(routeUrl .href, "_self");
     },
+    handleNewTag(){
+      location.reload();
+    },
   },
   computed: {
     pageLength: function (){
@@ -388,7 +439,7 @@ export default {
 }
 .tag-line{
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
   text-align: left;
   margin-bottom: 50px;
   margin-left: 20px;

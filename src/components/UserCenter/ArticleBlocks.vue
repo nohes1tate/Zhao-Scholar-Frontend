@@ -29,9 +29,57 @@
               <div v-text="item.abstract" class="text-ellipsis-two" style="font-weight: 350;margin-bottom: 10px;">
               </div>
               <div>
-                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;">
-                  <v-icon color="#64B5F6"> mdi-format-quote-close-outline</v-icon>引用
-                </v-btn>
+                <v-dialog
+                    transition="dialog-top-transition"
+                    max-width="600"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn v-bind="attrs" v-on="on" style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click="quote(item)">
+                      <v-icon color="#64B5F6"> mdi-format-quote-close-outline</v-icon>引用
+                    </v-btn>
+                  </template>
+                  <template v-slot:default="dialog">
+                    <v-card>
+                      <v-toolbar
+                          color="primary"
+                          dark
+                      >
+                        <v-toolbar-title>引用</v-toolbar-title>
+                        <template v-slot:extension>
+                          <v-tabs
+                              v-model="tab"
+                              align-with-title
+                          >
+                            <v-tabs-slider color="yellow"></v-tabs-slider>
+
+                            <v-tab
+                                v-for="item in citation_msg"
+                                :key="item.id"
+                            >
+                              {{ item.name }}
+                            </v-tab>
+                          </v-tabs>
+                        </template>
+                      </v-toolbar>
+                      <v-tabs-items v-model="tab">
+                        <v-tab-item
+                            v-for="item in citation_msg"
+                            :key="item.id"
+                        >
+                          <v-card flat>
+                            <v-card-text v-text="item.content"></v-card-text>
+                          </v-card>
+                        </v-tab-item>
+                      </v-tabs-items>
+                      <v-card-actions class="justify-end">
+                        <v-btn
+                            text
+                            @click="dialog.value = false"
+                        >关闭</v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </template>
+                </v-dialog>
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;">
                   <v-icon color="#64B5F6" >mdi-trash-can-outline</v-icon>删除
                 </v-btn>
@@ -48,6 +96,10 @@
         </v-list-item>
 
     </div>
+      <CiteDialog
+          :paper_id="quote_paperId"
+          :showQuote="showQuote"
+          @closeChildDialog="closeChildDialog"></CiteDialog>
   </div>
   </div>
 </template>
@@ -58,10 +110,12 @@ export default {
   props: ['articles'],
   data() {
     return {
+
+      tab:null,
       articlesItems:1,
       // 引用
       quote_paperId: "1231",
-      showQuote: false,
+      showQuote: true,
       showCollect: false,
 
       isShowTip: false,
@@ -89,10 +143,30 @@ export default {
         //   create_time: "2021-11-18T17:22:27+08:00",
         //   tagState:"plain",
         // }
+      ],
+      citation_msg: [
+        {
+          id: 1,
+          name: "GB/T 7714",
+          content: "Victoriano Perruca AlbadalejoLos peligros de atentado relativos al tráfico bélico rodado[M].Consejo General del Poder Judicial,2006:417-440."
+        },
+        {
+          id: 2,
+          name: "APA",
+          content: "Victoriano Perruca AlbadalejoLos peligros de atentado relativos al tráfico bélico rodado[M].Consejo General del Poder Judicial,2006:417-440."
+        }
       ]
     }
   },
   methods:{
+    quote(item) {
+      this.quote_paperId = item.paper_id;
+      this.showQuote = true;
+    },
+    closeChildDialog() {
+      this.showQuote = false;
+      this.showCollect = false;
+    },
     toDocument(){
       this.$router.push({path:"/document"} )
     },
