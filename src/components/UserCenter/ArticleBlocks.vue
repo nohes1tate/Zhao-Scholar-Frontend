@@ -34,7 +34,7 @@
                     max-width="600"
                 >
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn v-bind="attrs" v-on="on" style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click="quote(item)">
+                    <v-btn v-bind="attrs" v-on="on" style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click="changePaperID(item)">
                       <v-icon color="#64B5F6"> mdi-format-quote-close-outline</v-icon>引用
                     </v-btn>
                   </template>
@@ -53,21 +53,21 @@
                             <v-tabs-slider color="yellow"></v-tabs-slider>
 
                             <v-tab
-                                v-for="item in citation_msg"
-                                :key="item.id"
+                                v-for="cite in citation_msg"
+                                :key="cite.id"
                             >
-                              {{ item.name }}
+                              {{ cite.name }}
                             </v-tab>
                           </v-tabs>
                         </template>
                       </v-toolbar>
                       <v-tabs-items v-model="tab">
                         <v-tab-item
-                            v-for="item in citation_msg"
-                            :key="item.id"
+                            v-for="citeContent in citation_msg"
+                            :key="citeContent.id"
                         >
                           <v-card flat>
-                            <v-card-text v-text="item.content"></v-card-text>
+                            <v-card-text v-text="citeContent.content"></v-card-text>
                           </v-card>
                         </v-tab-item>
                       </v-tabs-items>
@@ -159,9 +159,10 @@ export default {
     }
   },
   methods:{
-    quote(item) {
+    changePaperID(item) {
       this.quote_paperId = item.paper_id;
-      this.showQuote = true;
+      // console.log(this.quote_paperId);
+      this.getCita();
     },
     closeChildDialog() {
       this.showQuote = false;
@@ -172,6 +173,27 @@ export default {
     },
     toAuthor(){
       this.$router.push({path:"/scholar"})
+    },
+    getCita() {
+      this.$axios({
+        method: 'post',
+        url: '/scholar/cite_paper',
+        // data: qs.stringify({
+        //   paper_id: this.a
+        // })
+
+      })
+          .then(res => {
+            if (res.data.success) {
+              this.citation_msg = res.data.detail;
+            } else {
+              this.$message.error("获取失败！");
+              this.dialogVisible = false;
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          })
     }
   }
 }
