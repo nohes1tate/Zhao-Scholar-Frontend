@@ -11,7 +11,7 @@
     <v-list-item
         v-for="item in items"
         :key="item.title"
-        @click="toCoworkers"
+        @click="toCoworkers(item.id)"
     >
       <v-list-item-avatar>
         <v-img src="@/assets/scholar-avatar.png"></v-img>
@@ -35,15 +35,15 @@ export default {
   name: "CoWorker",
   data: () => ({
     items: [
-      { active: true, title: 'Jason Oner', avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg' },
-      { active: true, title: 'Ranee Carlson', avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg' },
-      { title: 'Cindy Baker', avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg' },
-      { title: 'Ali Connors', avatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg' },
+      { title: 'Jason Oner', id: 1 },
+      { title: 'Ranee Carlson', id: 2 },
+      { title: 'Cindy Baker', id: 3 },
+      { title: 'Ali Connors', id: 4 },
     ],
   }),
   methods: {
-    toCoworkers(){
-      console.log("click")
+    toCoworkers(ID){
+      this.$router.push({path:'/scholar', query: {id: ID}})
     }
   }
 }

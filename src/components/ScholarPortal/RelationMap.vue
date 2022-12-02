@@ -106,7 +106,6 @@ export default {
         };
         bigChart.setOption(option)
       },50)
-      this.showDialog = true
     },
   },
   data() {
