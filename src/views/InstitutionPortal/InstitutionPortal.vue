@@ -5,14 +5,14 @@
         <v-card class="institution-info-card" elevation="2">
           <v-row>
             <v-col cols="2" style="margin-left: 2vw">
-              <v-img width="20vh" height="20vh" src="../../assets/InstitutionLogo/SESC.jpeg">
+              <v-img width="20vh" height="20vh" :src="institutionLogo">
 
               </v-img>
             </v-col>
             <v-col style="margin-left: 2vw">
               <v-row>
                 <div class="institution-name">
-                  中国科学院
+                  {{ institutionName }}
                 </div>
               </v-row>
               <v-row>
@@ -31,7 +31,7 @@
       <div class="top-right">
         <v-card class="institution-info-card" elevation="2">
           <div style="margin-left: 1vw">
-            <v-row >
+            <v-row>
               <span class="institution-statistic">论文数:{{ papersNum }}</span>
             </v-row>
             <v-row>
@@ -45,96 +45,97 @@
       </div>
     </div>
     <div class="institution-charts">
-      <div v-for="item in charts" v-bind:key="item.id">
+      <div v-for="(item, index) in charts" v-bind:key="index">
         <ChartsCard :title="item.title"
-                    :id="item.id"
+                    :id="index"
                     :x-axis="item.xAxis"
                     :y-data="item.data"
                     :chart-type="item.type"
-                    :graph = "item.graph"
+                    :graph="item.graph"
+                    @showGraph="displayGraph"
                     @showChart="displayChart"></ChartsCard>
       </div>
     </div>
     <div class="institution-detail">
-    <v-row>
-      <v-col cols="2">
-        <v-card elevation="2" class="institution-detail-filter">
-          <el-tree :data="achievements"
-                   show-checkbox
-                   ref="tree"
-                   node-key="id"
-                   :default-checked-keys="[0]"
-                   @check="handleCheck"
-                   default-expand-all>
+      <v-row>
+        <v-col cols="2">
+          <v-card elevation="2" class="institution-detail-filter">
+            <el-tree :data="achievements"
+                     show-checkbox
+                     ref="tree"
+                     node-key="id"
+                     :default-checked-keys="[0]"
+                     @check="handleCheck"
+                     default-expand-all>
             <span class="custom-tree-node" slot-scope="{ node, data }">
-        <span>[{{data.num}}]{{ node.label }}</span>
+        <span>[{{ data.num }}]{{ node.label }}</span>
       </span>
-          </el-tree>
-        </v-card>
-      </v-col>
-      <v-col>
-        <v-card elevation="2" class="institution-detail-info">
-          <div>
-            <v-data-table
-                :headers="headers"
-                :items="institutionData"
-                hide-default-footer
-            >
-              <template v-slot:[`header.name`]="{ header }">
-                <div style="font-size: 20px">{{ header.text }}</div>
-              </template>
-              <template v-slot:[`header.papers`]="{ header }">
-                <div style="font-size: 20px">{{ header.text }}</div>
-              </template>
-              <template v-slot:[`header.citation`]="{ header }">
-                <div style="font-size: 20px">{{ header.text }}</div>
-              </template>
-              <template v-slot:[`header.H_index`]="{ header }">
-                <div style="font-size: 20px">{{ header.text }}</div>
-              </template>
-              <template v-slot:[`item.name`]="{ item }">
-                <div style="font-size: 18px;font-weight: bold">{{ item.name }}</div>
-              </template>
-              <template v-slot:[`item.papers`]="{ item }">
-                <div style="font-size: 18px">{{ item.papers }}</div>
-              </template>
-              <template v-slot:[`item.citation`]="{ item }">
-                <div style="font-size: 18px">{{ item.citation }}</div>
-              </template>
-              <template v-slot:[`item.H_index`]="{ item }">
-                <div style="font-size: 18px">{{ item.H_index }}</div>
-              </template>
-            </v-data-table>
+            </el-tree>
+          </v-card>
+        </v-col>
+        <v-col>
+          <v-card elevation="2" class="institution-detail-info">
+            <div>
+              <v-data-table
+                  :headers="headers"
+                  :items="institutionData"
+                  hide-default-footer
+              >
+                <template v-slot:[`header.name`]="{ header }">
+                  <div style="font-size: 20px">{{ header.text }}</div>
+                </template>
+                <template v-slot:[`header.papers`]="{ header }">
+                  <div style="font-size: 20px">{{ header.text }}</div>
+                </template>
+                <template v-slot:[`header.citation`]="{ header }">
+                  <div style="font-size: 20px">{{ header.text }}</div>
+                </template>
+                <template v-slot:[`header.H_index`]="{ header }">
+                  <div style="font-size: 20px">{{ header.text }}</div>
+                </template>
+                <template v-slot:[`item.name`]="{ item }">
+                  <div style="font-size: 18px;font-weight: bold">{{ item.name }}</div>
+                </template>
+                <template v-slot:[`item.papers`]="{ item }">
+                  <div style="font-size: 18px">{{ item.papers }}</div>
+                </template>
+                <template v-slot:[`item.citation`]="{ item }">
+                  <div style="font-size: 18px">{{ item.citation }}</div>
+                </template>
+                <template v-slot:[`item.H_index`]="{ item }">
+                  <div style="font-size: 18px">{{ item.H_index }}</div>
+                </template>
+              </v-data-table>
               <v-row>
-                <v-col >
+                <v-col>
                   <div id="paperInfo" style="width: 100%;height: 40vh">
                   </div>
                 </v-col>
-                <v-col >
+                <v-col>
                   <div id="achievementInfo" style="width: 100%;height: 40vh">
                   </div>
                 </v-col>
               </v-row>
-                <v-data-table
-                    :headers="authorHeaders"
-                    :items="authorData"
-                    hide-default-footer
-                    class="author-table"
-                >
-                  <template v-slot:[`item.name`]="{ item }">
-                    <v-btn
-                        class="ma-1"
-                        plain
-                        @click="toAuthorCenter(item.id)"
-                    >
-                      {{item.name}}
-                    </v-btn>
-                  </template>
-                </v-data-table>
-          </div>
-        </v-card>
-      </v-col>
-    </v-row>
+              <v-data-table
+                  :headers="authorHeaders"
+                  :items="authorData"
+                  hide-default-footer
+                  class="author-table"
+              >
+                <template v-slot:[`item.name`]="{ item }">
+                  <v-btn
+                      class="ma-1"
+                      plain
+                      @click="toAuthorCenter(item.id)"
+                  >
+                    {{ item.name }}
+                  </v-btn>
+                </template>
+              </v-data-table>
+            </div>
+          </v-card>
+        </v-col>
+      </v-row>
     </div>
     <v-dialog
         v-model="chartDialog"
@@ -149,6 +150,19 @@
         <div id="showchart" style="height: 75vh; width: 55vw; cursor: pointer"></div>
       </v-card>
     </v-dialog>
+    <v-dialog
+        v-model="graphDialog"
+        width="60vw"
+        height="90vh"
+        @input="closeGraphDialog"
+        style="overflow: hidden"
+    >
+
+      <v-card style="height: 80vh">
+        <div>{{ chartTitle }}</div>
+        <div ref="graphchart" style="height: 75vh; width: 55vw; cursor: pointer"></div>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -161,13 +175,14 @@ export default {
   components: {ChartsCard},
   data: () => ({
     chartDialog: false,
+    graphDialog: false,
     chartTitle: "",
     selectedArea: [
-        {
-      id: 2,
-      label: "NLP",
-      num: 17,
-    },
+      {
+        id: 2,
+        label: "NLP",
+        num: 17,
+      },
       {
         id: 3,
         label: "Deep Learning",
@@ -183,7 +198,7 @@ export default {
         label: "THU",
         num: 9,
       }],
-    achievements:[
+    achievements: [
       {
         id: 0,
         label: "ALL",
@@ -206,7 +221,7 @@ export default {
           },
           {
             id: 4,
-            label: "SE",
+            label: "Software Engine",
             num: 30,
             children: [{
               id: 5,
@@ -223,43 +238,34 @@ export default {
       }
     ],
     charts: [
-        {
-      id: 1,
-      value: 2,
-      type: 1,
-      title: "H-index Statistics",
-      xAxis: [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022],
-      data: [1100, 1200, 1250, 1255, 1276, 1305, 1350, 1358, 1422, 1530, 108]
-    },
       {
-        id: 2,
-        value: 6,
+        type: 1,
+        title: "H-index Statistics",
+        xAxis: [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022],
+        data: [1100, 1200, 1250, 1255, 1276, 1305, 1350, 1358, 1422, 1530, 108]
+      },
+      {
         type: 1,
         title: "Paper Amount Statistics",
         xAxis: [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022],
         data: [1000, 1100, 1150, 1255, 1276, 1605, 1350, 1358, 1947, 1422, 408]
       },
       {
-        id: 3,
-        value: 4,
         type: 1,
         title: "New Citation Amount Statistics",
         xAxis: [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022],
         data: [2000, 1300, 1250, 1255, 1576, 1305, 1350, 2258, 1422, 1597, 108]
       },
       {
-        id: 4,
-        value: 1,
         type: 1,
         title: "New Citation from Top 30 Scholar Statistics",
         xAxis: [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022],
         data: [1100, 1200, 1250, 1255, 1276, 1305, 2350, 1358, 3422, 4321, 108]
       },
       {
-        id: 114,
         type: 2,
         title: "学者关系网络",
-        graph:{
+        graph: {
           "nodes": [
             {
               "id": "0",
@@ -2004,8 +2010,9 @@ export default {
           ]
         }
       }
-      ],
-    institutionLogo: "../../assets/InstitutionLogo/SESC.jpeg",
+    ],
+    institutionName: "中国科学院",
+    institutionLogo: "http://www.zsdlw.com/uploadfiles/dxlogo/bj/zgkxydx.jpg",
     institutionDescription: "中国科学院（英文名称：Chinese Academy of Sciences，简称中科院）成立于1949年11月，为中国自然科学最高学术机构、科学技术最高咨询机构、自然科学与高技术综合研究发展中心。 中国科学院提出了建设国家创新体系的构想，先后实施知识创新工程、“创新2020”、《“率先行动”计划暨全面深化改革纲要》，提出了《迎接知识经济时代，建设国家创新体系》《创新促进发展，科技引领未来》《创新2050：科学技术与中国的未来》《科技发展新态势与面向2020年的战略选择》等战略研究报告。 据2021年11月中国科学院官网显示，全院共拥有11个分院、100多家科研院所、3所大学（中国科学院大学、中国科学技术大学，与上海市共建上海科技大学）、130多个国家级重点实验室和工程中心、68个国家野外观测研究站、20个国家科技资源共享服务平台，承担30余项国家重大科技基础设施的建设与运行，正式职工6.9万余人，在学研究生7.9万余人；建成了完整的自然科学学科体系，物理、化学、材料科学、数学、环境与生态学、地球科学等学科整体水平已进入世界先进行列，一些领域方向也具备了进入世界第一方阵的良好态势。在解决关系国家全局和长远发展的重大问题上，已成为不可替代的国家战略科技力量。一批科学家在国家重大科技任务中发挥了关键和中坚作用，并作为我国科技界的代表活跃在国际科技前沿。 [1]  2019年9月，经党中央批准，十九届中央第四轮巡视将对中国科学院党组织开展常规巡视。 [2]",
     papersNum: 114,
     authorsNum: 514,
@@ -2014,15 +2021,17 @@ export default {
     paperInfoData: [1100, 1200, 1250, 1255, 1276, 1305, 1350, 1358, 1422, 1530, 108],
     selectedData: [],
     authorHeaders: [
-      {text: '作者',
-      align: 'start',
-          sortable: false,
-    value: 'name'},
-      { text: '论文数', value: 'papers' },
-      { text: '被引数',  value: 'citation' },
-      { text: 'H-index',  value: 'H_index' },
-      { text: '第一作者发文数', value: 'firstPapers' },
-      { text: '第一作者被引数', value: 'firstCitation' },
+      {
+        text: '作者',
+        align: 'start',
+        sortable: false,
+        value: 'name'
+      },
+      {text: '论文数', value: 'papers'},
+      {text: '被引数', value: 'citation'},
+      {text: 'H-index', value: 'H_index'},
+      {text: '第一作者发文数', value: 'firstPapers'},
+      {text: '第一作者被引数', value: 'firstCitation'},
     ],
     headers: [
       {
@@ -2031,55 +2040,64 @@ export default {
         sortable: false,
         value: 'name',
       },
-      { text: '论文数', sortable: false, value: 'papers' },
-      { text: '被引数', sortable: false, value: 'citation' },
-      { text: 'H-index', sortable: false, value: 'H_index' },
+      {text: '论文数', sortable: false, value: 'papers'},
+      {text: '被引数', sortable: false, value: 'citation'},
+      {text: 'H-index', sortable: false, value: 'H_index'},
     ],
     institutionData: [
       {
         name: '中国科学院',
         papers: 159,
-        citation: 6.0,
+        citation: 610,
         H_index: 24,
       },
     ],
     authorData: [
       {
-        id: 1,
-        name: 'HZH1',
-        papers: 514,
-        firstPapers: 114,
-        citation: 1919,
-        firstCitation: 810,
-        H_index: 6
+        "id": 15,
+        "name": "准说东入",
+        "papers": 87,
+        "firstPapers": 74,
+        "citation": 83,
+        "firstCitation": 2,
+        "H_index": 73
       },
       {
-        id: 2,
-        name: 'HZH2',
-        papers: 514,
-        firstPapers: 115,
-        citation: 1919,
-        firstCitation: 810,
-        H_index: 6
+        "id": 35,
+        "name": "事术界小",
+        "papers": 44,
+        "firstPapers": 18,
+        "citation": 93,
+        "firstCitation": 70,
+        "H_index": 93
       },
       {
-        id: 3,
-        name: 'HZH3',
-        papers: 514,
-        firstPapers: 116,
-        citation: 1919,
-        firstCitation: 810,
-        H_index: 6
+        "id": 97,
+        "name": "到直置花严律",
+        "papers": 45,
+        "firstPapers": 86,
+        "citation": 73,
+        "firstCitation": 53,
+        "H_index": 95
       },
       {
-        id: 4,
-        name: 'HZH4',
-        papers: 514,
-        firstPapers: 117,
-        citation: 1919,
-        firstCitation: 810,
-        H_index: 6
+        "id": 11,
+        "name": "问然要事成和利",
+        "papers": 87,
+        "firstPapers": 48,
+        "citation": 84,
+        "firstCitation": 74,
+        "H_index": 67
       },
+      {
+        "id": 22,
+        "name": "他它可",
+        "papers": 36,
+        "firstPapers": 15,
+        "citation": 63,
+        "firstCitation": 84,
+        "H_index": 71
+      }
     ]
   }),
   mounted() {
@@ -2088,7 +2106,7 @@ export default {
     this.updateAchievementInfo()
   },
   methods: {
-    handleCheck(data, checked) {
+    handleCheck() {
       var data1 = this.$refs.tree.getCheckedNodes(true);
       console.log(this.$refs.tree)
       this.selectedData = data1
@@ -2097,8 +2115,10 @@ export default {
     toAuthorCenter(id) {
       this.$message.success(id)
     },
-    closeDialog(model) {
-      console.log("closed4", model)
+    closeGraphDialog() {
+
+    },
+    closeDialog() {
       let chartDom = document.getElementById('showchart');
       let myChart = echarts.init(chartDom);
 
@@ -2125,16 +2145,16 @@ export default {
       option && myChart.setOption(option);
     },
     handleData(data, node) {
-      console.log("data:",data)
-      console.log("node:",node)
+      console.log("data:", data)
+      console.log("node:", node)
     },
     updateAchievementInfo() {
       let chartDom = document.getElementById('achievementInfo');
       let myChart = echarts.init(chartDom);
       let AData = []
       let i
-      for (i=0; i<this.selectedData.length; i++) {
-        let tmp = {value: 0,name: ''}
+      for (i = 0; i < this.selectedData.length; i++) {
+        let tmp = {value: 0, name: ''}
         tmp.value = this.selectedData[i].num
         tmp.name = this.selectedData[i].label
         AData.push(tmp)
@@ -2202,6 +2222,50 @@ export default {
 
       option && myChart.setOption(option);
     },
+    displayGraph(graph) {
+      console.log(graph)
+      this.graphDialog = true
+      setTimeout(() => {
+        var myChart = this.$echarts.init(this.$refs.graphchart)
+        var option = {
+          tooltip: {},
+          legend: [
+            {
+              data: graph.categories.map(function (a) {
+                return a.name;
+              })
+            }
+          ],
+          series: [
+            {
+              type: 'graph',
+              layout: 'none',
+              data: graph.nodes,
+              links: graph.links,
+              categories: graph.categories,
+              roam: true,
+              label: {
+                show: true,
+                position: 'right',
+                formatter: '{b}'
+              },
+              labelLayout: {
+                hideOverlap: true
+              },
+              scaleLimit: {
+                min: 0.4,
+                max: 2
+              },
+              lineStyle: {
+                color: 'source',
+                curveness: 0.3
+              }
+            }
+          ]
+        };
+        myChart.setOption(option);
+      }, 50)
+    },
     displayChart(chartXAxis, chartData, title) {
       this.chartDialog = true
       this.chartTitle = title
@@ -2210,20 +2274,17 @@ export default {
         let chartDom = document.getElementById('showchart');
         let myChart = echarts.init(chartDom);
         let option;
-        let x = chartXAxis
-        let d = chartData
-
         option = {
           xAxis: {
             type: 'category',
-            data: x
+            data: chartXAxis
           },
           yAxis: {
             type: 'value'
           },
           series: [
             {
-              data: d,
+              data: chartData,
               type: 'bar'
             }
           ],

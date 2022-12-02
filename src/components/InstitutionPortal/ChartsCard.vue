@@ -4,7 +4,7 @@
       <div>{{ title }}</div>
       <div :id='"charts-"+ id' style="height: 100%; width: 100%; cursor: pointer"></div>
     </v-card>
-    <v-card height="45vh" width="30vw" elevation="2" v-else>
+    <v-card height="45vh" width="30vw" elevation="2" @click="showGraph" v-else>
       <div>{{ title }}</div>
       <div ref="insRelation" style="width: 100%; height: 40vh; cursor: pointer"></div>
     </v-card>
@@ -59,6 +59,9 @@ export default {
   },
 
   methods: {
+    showGraph() {
+      this.$emit("showGraph",this.graph)
+    },
     showChart() {
       this.$emit("showChart",this.xAxis, this.yData, this.title)
     },
