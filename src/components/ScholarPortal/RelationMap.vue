@@ -65,45 +65,47 @@ export default {
     },
     displayChart() {
       this.showDialog = true
-      let bigChart = this.$echarts.init(this.$refs.bigChart)
-      let option = {
-        tooltip: {},
-        legend: [
-          {
-            data: this.graph.categories.map(function (a) {
-              return a.name;
-            })
-          }
-        ],
-        series: [
-          {
-            type: 'graph',
-            layout: 'none',
-            data: this.graph.nodes,
-            links: this.graph.links,
-            categories: this.graph.categories,
-            roam: true,
-            label: {
-              show: true,
-              position: 'right',
-              formatter: '{b}'
-            },
-            labelLayout: {
-              hideOverlap: true
-            },
-            scaleLimit: {
-              min: 0.4,
-              max: 2
-            },
-            lineStyle: {
-              color: 'source',
-              curveness: 0.3
+      let bigChart
+      setTimeout(() => {
+        bigChart = this.$echarts.init(this.$refs.bigChart)
+        let option = {
+          tooltip: {},
+          legend: [
+            {
+              data: this.graph.categories.map(function (a) {
+                return a.name;
+              })
             }
-          }
-        ]
-      };
-      bigChart.setOption(option)
-      this.showDialog = true
+          ],
+          series: [
+            {
+              type: 'graph',
+              layout: 'none',
+              data: this.graph.nodes,
+              links: this.graph.links,
+              categories: this.graph.categories,
+              roam: true,
+              label: {
+                show: true,
+                position: 'right',
+                formatter: '{b}'
+              },
+              labelLayout: {
+                hideOverlap: true
+              },
+              scaleLimit: {
+                min: 0.4,
+                max: 2
+              },
+              lineStyle: {
+                color: 'source',
+                curveness: 0.3
+              }
+            }
+          ]
+        };
+        bigChart.setOption(option)
+      },50)
     },
   },
   data() {

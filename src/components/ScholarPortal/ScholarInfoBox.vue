@@ -20,8 +20,8 @@
           <div class="field-tag">c++</div>
         </div>
       </div>
-      <div>
-        <v-btn outlined color="primary" v-if="!isMine">认领门户</v-btn>
+      <div style="margin-left: 3vw">
+        <v-btn outlined color="primary" v-if="!isMine" @click="toApply">认领门户</v-btn>
       </div>
     </div>
     <div class="scholar-bottom">
@@ -52,6 +52,11 @@ export default {
   name: 'ScholarInfoBox',
   props:{
     isMine:{default: false},
+  },
+  methods: {
+    toApply(){
+      this.$router.push({path:'/apply'})
+    }
   },
   data() {
     return {
