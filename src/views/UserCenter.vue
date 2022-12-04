@@ -24,12 +24,14 @@
                     color=#546E7A
                     label
                     text-color="white"
-                    style="display: flex; cursor: pointer"
+                    style="display: flex; cursor: pointer;"
                     :key="tag"
                     v-for="tag in tagData"
                 >
                   {{tag.tag_name}}
-                  <v-icon right class="material-symbols-outlined" size="15px">close</v-icon>
+                  <div class="close-btn-style" @click="handleClose(tag)">
+                    <v-icon class="material-symbols-outlined" size="15px" style="margin-left: 2px">close</v-icon>
+                  </div>
                 </v-chip>
                 <v-dialog
                     transition="dialog-top-transition"
@@ -397,6 +399,42 @@ export default {
     handleNewTag(){
       location.reload();
     },
+    handleClose(tag) {
+      let tagName = tag.tag_name;
+      if (tagName === '默认') {
+        this.$message.error("无法删除默认收藏夹！");
+        return;
+      }
+      if (tagName) {
+        this.$axios({
+          method: 'post',
+          url: '/social/delete/tag',
+          // data: qs.stringify({
+          //   user_id: userInfo.user.userId,
+          //   tag_name: tagName,
+          // })
+        })
+            .then(res => {
+              switch (res.data.status) {
+                case 200:
+                  this.tagData.splice(this.tagData.indexOf(tag), 1);
+                  break;
+                case 400:
+                  this.$userNotFound();
+                  break;
+                case 403:
+                  this.$message.error("标签不存在！");
+                  break;
+                case 404:
+                  this.$userNotFound();
+                  break;
+              }
+            })
+            .catch(err => {
+              console.log(err);
+            })
+      }
+    },
   },
   computed: {
     pageLength: function (){
@@ -466,5 +504,14 @@ export default {
   flex-direction: column;
   margin-left: 2vw;
   width: 60vw;
+}
+.close-btn-style{
+  border-radius:100px;
+  float: right;
+  width: 20px;
+  margin-left: 10px;
+}
+.close-btn-style:hover{
+  background-color: black;
 }
 </style>

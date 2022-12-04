@@ -11,6 +11,9 @@ export default new Vuex.Store({
   mutations: {
   },
   actions: {
+    clear({ commit }) {
+      commit("$_removeStorage");
+    }
   },
   modules: {
   }

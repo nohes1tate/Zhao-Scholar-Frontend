@@ -12,6 +12,8 @@ Vue.config.productionTip = false
 Vue.prototype.$axios = axios;
 Vue.prototype.$echarts = echarts;
 
+import user from "./store/user";
+
 import AMap from 'vue-amap';
 Vue.use(AMap);
 
@@ -24,6 +26,19 @@ AMap.initAMapApiLoader({
 });
 
 Vue.use(ElementUI);
+
+axios.interceptors.request.use(
+    config => {
+      const userInfo = user.getters.getUser(user.state);
+      if (userInfo) {
+        config.headers.Authorization = userInfo.user.Authorization;
+      }
+      return config;
+    },
+    error => {
+      return Promise.reject(error);
+    }
+)
 
 new Vue({
   router,
