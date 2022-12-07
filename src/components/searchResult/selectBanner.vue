@@ -9,7 +9,7 @@
                 :key="item"
             >
             <v-list-item-action>
-                <v-btn style="background-color: transparent;">{{item}}</v-btn>
+                <v-btn style="background-color: transparent;" @click="TimeSelect(item)">{{item}}</v-btn>
             </v-list-item-action>
     </v-list-item>
     <v-divider></v-divider>
@@ -17,6 +17,7 @@
     <v-list-item
                 v-for="item in Author"
                 :key="item.name"
+               
             >
             <v-list-item-content>
                   <v-list-item-title >{{item.name}}  ({{item.num}})</v-list-item-title>
@@ -25,8 +26,8 @@
                 <v-list-item-action>
                   <v-checkbox
                     v-model="item.status"
-                    color="deep-purple accent-4"
-                    @click="ChooseType(item.name, item.status)"
+                    color="#039BE5"
+                    @click="ChooseAuthor(item.name, item.status)"
                   ></v-checkbox>
                 </v-list-item-action>
                
@@ -45,7 +46,7 @@
                 <v-list-item-action>
                   <v-checkbox
                     v-model="item.status"
-                    color="deep-purple accent-4"
+                    color="#039BE5"
                     @click="ChooseConference(item.name, item.status)"
                   ></v-checkbox>
                 </v-list-item-action>
@@ -63,7 +64,7 @@
                 <v-list-item-action>
                   <v-checkbox
                     v-model="item.status"
-                    color="deep-purple accent-4"
+                    color="#039BE5"
                     @click="ChooseType(item.name, item.status)"
                   ></v-checkbox>
                 </v-list-item-action>
@@ -75,20 +76,32 @@
 import Vue from 'vue'
 export default {
     data:()=>({
-        Time:["2022以来", "2021以来", "2018以来", "自定义范围"],
+        Time:["2022以来", "2021以来", "2018以来"],
         Author:[{name:"K K Gan", num:"3944"}, {name:"H Kagan", num:"1234"}, {name:"G Eigen", time:"4567"}],
         Conference:[{name:"CLEO", num:123},{name:"CVPR", num:123},{name:"CLEO", num:123},{name:"DRC", num:123} ],
         Type:[{name:"All", num:123},{name:"Journal", num:123},{name:"Book", num:123},{name:"Other", num:123} ],
     }),
     methods:{
+      //会议选择
         ChooseConference(name, status){
             console.log("选择会议："+name)
             console.log('状态：'+status)//每点击一次 该item的status会发生改变
         },
+        //类型选择
         ChooseType(name, status){
             console.log("选择类型："+name)
             console.log("状态："+status)
         },
+        //时间选择
+        TimeSelect(time){
+          console.log("时间选择："+time)
+        },
+        //作者选择
+        ChooseAuthor(name, status){
+          console.log("选择作者："+name)
+          console.log("状态："+status)
+        }
+        
         
     },
     created(){

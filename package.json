@@ -14,6 +14,7 @@
     "element-ui": "^2.15.12",
     "material-icons": "^1.11.4",
     "vue": "^2.6.14",
+    "vue-amap": "^0.5.10",
     "vue-router": "^3.5.1",
     "vuetify": "^2.6.0",
     "vuex": "^3.6.2"

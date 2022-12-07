@@ -1,6 +1,6 @@
 <template>
   <div class="userCenter">
-    <page-header></page-header>
+    <page-header :show-search="true" :is-login="isLogin"></page-header>
     <div class="main-body">
       <v-row class="header">
         <span @click="backToUserCenter">个人图书馆</span>
@@ -24,23 +24,59 @@
                     color=#546E7A
                     label
                     text-color="white"
-                    style="display: flex; cursor: pointer"
+                    style="display: flex; cursor: pointer;"
                     :key="tag"
                     v-for="tag in tagData"
                 >
                   {{tag.tag_name}}
-                  <v-icon right class="material-symbols-outlined" size="15px">close</v-icon>
+                  <div class="close-btn-style" @click="handleClose(tag)">
+                    <v-icon class="material-symbols-outlined" size="15px" style="margin-left: 2px">close</v-icon>
+                  </div>
                 </v-chip>
-                <v-chip
-                    class="ma-2"
-                    color=#546E7A
-                    label
-                    text-color="white"
-                    style="display: flex;cursor: pointer"
+                <v-dialog
+                    transition="dialog-top-transition"
+                    max-width="600"
                 >
-                  <v-icon class="material-symbols-outlined" size="17px" style="left: -2px">add</v-icon>
-                  New Tag
-                </v-chip>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-chip
+                        class="ma-2"
+                        color=#546E7A
+                        label
+                        text-color="white"
+                        style="display: flex;cursor: pointer"
+                        v-bind="attrs"
+                        v-on="on"
+                    >
+                      <v-icon class="material-symbols-outlined" size="17px" style="left: -2px">add</v-icon>
+                      New Tag
+                    </v-chip>
+                  </template>
+                  <template v-slot:default="dialog">
+                    <v-card>
+                      <v-toolbar
+                          color="primary"
+                          dark
+                      >创建新的标签</v-toolbar>
+                      <v-card-text>
+                        <v-text-field
+                            label="标签名"
+                            v-model="newTagName"
+                            style="margin-top: 30px"
+                        ></v-text-field>
+                      </v-card-text>
+                      <v-card-actions class="justify-end">
+                        <v-btn
+                            text
+                            @click="handleNewTag"
+                        >确定</v-btn>
+                        <v-btn
+                            text
+                            @click="dialog.value = false"
+                        >关闭</v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </template>
+                </v-dialog>
               </div>
               <v-divider style="width: 70% ;margin-left: 30px"></v-divider>
               <span style="display: flex;
@@ -131,6 +167,7 @@ export default {
   name: "UserCenter",
   components: {PageHeader ,ArticleBlocks},
   data:() => ({
+      isLogin:true,
       from_date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       to_date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       menu1: false,
@@ -294,6 +331,20 @@ export default {
           user_id: 2,
           username: "",
           create_time: "2021-11-18T17:22:27+08:00"
+        },
+        {
+          tag_id: 1,
+          tag_name: "默认",
+          user_id: 2,
+          username: "",
+          create_time: "2021-11-18T17:22:27+08:00"
+        },
+        {
+          tag_id: 2,
+          tag_name: "CV",
+          user_id: 2,
+          username: "",
+          create_time: "2021-11-18T17:22:27+08:00"
         }
       ]
   }),
@@ -345,6 +396,45 @@ export default {
       });
       window.open(routeUrl .href, "_self");
     },
+    handleNewTag(){
+      location.reload();
+    },
+    handleClose(tag) {
+      let tagName = tag.tag_name;
+      if (tagName === '默认') {
+        this.$message.error("无法删除默认收藏夹！");
+        return;
+      }
+      if (tagName) {
+        this.$axios({
+          method: 'post',
+          url: '/social/delete/tag',
+          // data: qs.stringify({
+          //   user_id: userInfo.user.userId,
+          //   tag_name: tagName,
+          // })
+        })
+            .then(res => {
+              switch (res.data.status) {
+                case 200:
+                  this.tagData.splice(this.tagData.indexOf(tag), 1);
+                  break;
+                case 400:
+                  this.$userNotFound();
+                  break;
+                case 403:
+                  this.$message.error("标签不存在！");
+                  break;
+                case 404:
+                  this.$userNotFound();
+                  break;
+              }
+            })
+            .catch(err => {
+              console.log(err);
+            })
+      }
+    },
   },
   computed: {
     pageLength: function (){
@@ -387,7 +477,7 @@ export default {
 }
 .tag-line{
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
   text-align: left;
   margin-bottom: 50px;
   margin-left: 20px;
@@ -414,5 +504,14 @@ export default {
   flex-direction: column;
   margin-left: 2vw;
   width: 60vw;
+}
+.close-btn-style{
+  border-radius:100px;
+  float: right;
+  width: 20px;
+  margin-left: 10px;
+}
+.close-btn-style:hover{
+  background-color: black;
 }
 </style>

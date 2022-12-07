@@ -1,10 +1,25 @@
 <template>
   <div class="pageHeader">
-    <div class="logo-box">
+    <div class="logo-box" @click="goToHome">
       <img src="../../assets/logo.png" class="logo-img">
     </div>
-    <div class="search-btn">
+    <div class="search-btn" @click="advanceSearch">
       <span>高级检索</span>
+    </div>
+    <div class="search-box">
+      <v-text-field
+          class="material-symbols-outlined"
+          append-icon="search"
+          @click:append="searchTag"
+          @keyup.enter="searchTag"
+          hide-details
+          filled
+          label="Search something"
+          v-model="search"
+          v-show="showSearch"
+          style="margin-top: 1.5vh;"
+      >
+      </v-text-field>
     </div>
     <div v-show="isLogin" class="user-box" @mouseenter="hover=true" @mouseleave="hover=false">
       <v-icon style="font-size: 40px">mdi-account-outline</v-icon>
@@ -14,7 +29,7 @@
       </div>
     </div>
     <div class="login-btn" v-show="!isLogin">
-      <span>登录</span>
+      <span @click="goToLogin">登录</span>
     </div>
     <div v-show="hover" class="select-box" @mouseenter="hover=true" @mouseleave="hover=false">
       <v-card
@@ -49,9 +64,10 @@
 <script>
 export default {
   name: "PageHeader",
+  props: ['showSearch','isLogin'],
   data(){
     return{
-      isLogin:true,
+      search: "",
       hover:false,
       selectedItem: -1,
       items: [
@@ -59,17 +75,29 @@ export default {
         { text: '我的门户', icon:'mdi-folder-account-outline' },
         {text: '退出',icon:'mdi-location-exit'},
       ],
-      username:'cyw777',
+      username:'username',
     }
   },
   methods:{
+    goToHome(){
+      this.$router.push('/')
+    },
+    searchTag() {
+      if (this.search === "") return false;
+      console.log(this.search);
+    },
+    goToLogin(){
+      this.$router.push('/login')
+    },
+    advanceSearch(){
+      this.$router.push('/searchAdvance')
+    },
     goTo(i){
       if(i===0)
         this.$router.push('/user')
       else if(i===1)
         this.$router.push('/scholar')
-      else if(i==2){
-        this.isLogin=false;
+      else if(i===2){
         this.$router.push('/login')
       }
 
@@ -92,11 +120,13 @@ export default {
 .logo-box{
   margin-left: 5vw;
   display: flex;
+  margin-right: 7vw;
+  cursor: pointer;
 }
 .search-btn{
-  margin-left: 10vw;
   text-align: center;
   line-height: 10vh;
+  margin-right: 5vw;
 }
 .search-btn span{
   cursor: pointer;
@@ -107,9 +137,11 @@ export default {
   color: dimgrey;
 }
 .login-btn{
-  margin-left: 65vw;
-  cursor: pointer;
+  margin-left: 10vw;
   line-height: 10vh;
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
 }
 .login-btn span{
   cursor: pointer;
@@ -120,7 +152,7 @@ export default {
   color: dimgrey;
 }
 .user-box{
-  margin-left: 60vw;
+  margin-left: 7vw;
   line-height: 10vh;
   display: flex;
   flex-direction: row;
@@ -140,5 +172,10 @@ export default {
   top:10vh;
   right: 1vw;
   width: 15%;
+}
+.search-box{
+  margin-left: 7vw;
+  margin-right: 5vw;
+  width: 40%;
 }
 </style>

@@ -3,47 +3,45 @@
   <div class="root">
    
       <!-- <v-input persistant-hint="输入你想了解的论文" absolute right>input</v-input> -->
-      <v-btn  tile color="indigo" dark absolute right>登录/注册</v-btn>
+      <v-btn  @click="jump2login" tile color="indigo" dark absolute right>登录/注册</v-btn>
  
       <div id="allcontent">
 
   
-      <v-breadcrumbs :items="items" large></v-breadcrumbs>
+      <!-- <v-breadcrumbs :items="items" large></v-breadcrumbs> -->
 
-      <div id="article">
-          <p>DOI: 10.1109/cvprw50498.2020.00020（期刊号）</p>
-          <h2>School of Software(文章标题)</h2>
-          <p>CCF-A(会议)</p>
-          <p>Haofan WangZifan WangMengnan DuFan YangZijian ZhangSirui DingPiotr MardzielXia Hu
-          computer vision and pattern recognition Jun 2020
+      <div id="article" class="mt-4">
+          <p >DOI:<span class="blue--text text--lighten-2">{{DOI}}</span></p>
+          <h2>{{title}}</h2>
+          <p class="mt-2">{{paperConference}}</p>
+          <p class="blue--text text--lighten-2 mt-0">{{author}}
           </p>
         
-            <v-btn color="primary" dark >阅读<v-icon class="ml-2">mdi-eye</v-icon></v-btn>
+            <v-btn color="primary" dark @click="read">阅读<v-icon class="ml-2">mdi-eye</v-icon></v-btn>
           
-            <v-btn color="primary" dark outlined class="ml-4">收藏<v-icon class="ml-2">mdi-star-plus-outline</v-icon></v-btn>
+            <v-btn color="primary" dark outlined class="ml-4" @click="addStar">收藏<v-icon class="ml-2">mdi-star-plus-outline</v-icon></v-btn>
 
-            <v-btn color="primary" dark text class="ml-4">引用</v-btn>
+            <v-btn color="primary" dark text class="ml-4" @click="cite">引用</v-btn>
             <!-- 找一个引号图标放到引用后面 -->
 
-            <v-btn color="primary" dark text class="ml-4">分享<v-icon>mdi-arrow-top-right-bold-box-outline</v-icon></v-btn>
+            <v-btn color="primary" dark text class="ml-4" @click="share">分享<v-icon>mdi-arrow-top-right-bold-box-outline</v-icon></v-btn>
             
 
          
 
       </div>
      
-      <div id="cards-left">
+      <div id="cards-left" class="mt-8">
         <v-card
         class="mx=auto"
         float:left
         width = "full"
       >
         <v-card-text>
-          <p class="display-1 text--primary">
+          <p class="card-title" >
            摘要
           </p>
-          <p>abstract</p>
-          <div class="text--primary">
+          <div class="text--primary" id="abstract">
             {{abstract}}
            </div>
         </v-card-text>
@@ -56,7 +54,7 @@
         width = "full"
       >
         <v-card-text>
-          <p class="display-1 text--primary">
+          <p class="card-title">
            图表提取
           </p>
 
@@ -97,21 +95,42 @@
         width = "full"
       >
         <v-card-text>
-          <p class="display-1 text--primary">
+          <!-- <p class="display-1 text--primary">
             参考文献
-          </p>
-          <div class="text--primary">
-            <v-item-group>
-            <v-item
-              v-for="[
-                text
-              ] in references"
-              :key="text"
+          </p> -->
+          <v-tabs>
+            <v-tab>引用文献</v-tab>
+            <v-tab>参考文献</v-tab>
+            <v-tab>相似文献</v-tab>
+
+            <v-tab-item
+              v-for="i in tabs"
+              :key="i"
+              :value="'tab-' + i"
             >
-            <p>[1] {{text}}</p>
-            </v-item>
-          </v-item-group>
-          </div>
+              <v-card
+                flat
+                tile
+              >
+                <v-card-text>
+                  <div class="text--primary">
+                    <v-item-group>
+                      <v-item
+                        v-for="[
+                          text
+                        ] in references"
+                        :key="text"
+                      >
+                      <p>[1] {{text}}</p>
+                      </v-item>
+                    </v-item-group>
+                  </div>
+                </v-card-text>
+              </v-card>
+            </v-tab-item>
+          </v-tabs>
+
+          
         </v-card-text>
        
       </v-card>
@@ -119,33 +138,33 @@
 
       <div id="cards-right">
         <v-card
-        class="ml-10"
+        class="ml-10 mt-8"
         float:right    
         padding:10px
         >
           <v-card-text>
-            <p class="display-1 text--primary">
+            <p class="card-title">
               相关信息
             </p>
             <div class="d-inline-block">
                 <div  class="d-inline-block ">
-                  <div class="text-h4 blue--text text--darken-2 font-weight-medium">{{quotes}}</div><div class="ml-0">引用数</div>
+                  <div class="text-h4 green--text text--darken-2 font-weight-medium">{{stars}}</div><div class="ml-0">收藏量</div>
                 </div>
                 <div  class="d-inline-block ml-5">
-                  <div class="text-h4 blue--text text--darken-2 font-weight-medium" >{{reads}}</div><div class="ml-2">阅读数</div>
+                  <div class="text-h4 amber--text text--darken-4 font-weight-medium" >{{reads}}</div><div class="ml-2">阅读数</div>
                 </div>
             </div>
           </v-card-text>
 
           <v-card-text>
-            <p class="display-1 text--primary">
-              领域
+            <p class="card-title">
+              关键词
             </p>
           <v-item-group>
             <v-item
               v-for="[
                 text
-              ] in areas"
+              ] in keywords"
               :key="text"
             >
             <p>- {{text}}</p>
@@ -164,6 +183,11 @@
   export default {
     name: 'DocumentDisplay',
     data: () => ({
+      DOI:"10.1109/cvprw50498.2020.0002",
+      title:"TimeTraveler: Reinforcement Learning for Temporal Knowledge Graph Forecasting",
+      paperConference:"CCF-A",
+      author:"Haofan WangZifan WangMengnan DuFan YangZijian ZhangSirui DingPiotr MardzielXia Hu",
+      url:"https://www.runoob.com",
       items: [
         {
           text: 'Dashboard',
@@ -181,9 +205,9 @@
           href: 'breadcrumbs_link_2',
         },
       ],
-      quotes:"36",
+      stars:"36",
       reads:"108",
-      areas:[
+      keywords:[
         ['computer science'],
         ['cv'],
         ['Object Detection'],
@@ -215,17 +239,45 @@
       console.log("进入详情页")
       console.log(title)
       console.log(id)
+
+      this.get_paper_info()
+
+    },
+    methods:{
+      jump2login(){
+        this.$router.push('/login');
+      },
+      get_paper_info(){
+        console.log("get paper info")
+      },
+      read(){
+        console.log("read this paper");
+        window.location.replace(this.url);
+      },
+      addStar(){
+        console.log("star this paper")
+      },
+      share(){
+        console.log("share this paper")
+      },
+      cite(){
+        console.log("cite this paper")
+      },
     }
   }
 </script>
 
 <style>
 .root{
-  background-color:azure;
+  background-color:#fcfcfc;
+}
+.p{
+  font-family: Tahoma,fantasy;
 }
 #article{
   width: 66.7%;
- 
+  font-family: Tahoma,fantasy;
+  font-size: large;
 
 }
 #cards-left{
@@ -239,7 +291,7 @@
 #cards-right{
   position:absolute;
 /* 设置了绝对位置以后，宽度就是相对于根节点 */
-  width:20%;
+  width:25%;
   /* float:left;
   padding: 20%; */
   display:inline-block;
@@ -247,7 +299,20 @@
 
 }
 #allcontent{
-  width: 60%;
+  width: 80%;
   margin: auto;
+}
+.card-title{
+  font-family: Tahoma,fantasy;
+  font-weight: bolder;
+  font-size:1.5em;
+  color: #000;
+}
+#abstract{
+  text-align: justify;
+  /* padding: 16px 16px 6px 16px;
+  font-size: 15px;
+  line-height: 24px; */
+  font-family: Georgia, fantasy;
 }
 </style>
