@@ -174,21 +174,15 @@
                   :value="n.name"
                 ></v-checkbox>
                 <div v-for="(s,index) in n.content" :key="index">
-                    <v-row>
-                      {{s.title}}
-
-                    </v-row>
-                    <v-row>
-                      {{s.abstract}}
-                      
-                    </v-row>
-                     <v-row>
-                      {{s.team}}
-                      
+                    <v-row :style="{'margin-left':'50px'}">
+                      <v-col cols="12" md="12" sm="12">
+                      <h2>{{s.title}}</h2>
+                      <h4>{{s.abstract}}</h4>
+                      <h4>{{s.team}}</h4>
+                      </v-col>
                     </v-row>
                 </div>
               </v-container>
-              <v-btn @click="test()"></v-btn>
             </v-card>
 
             <v-card
@@ -197,10 +191,14 @@
               min-height="300px"
               elevation="0"
             >
-            </v-card>
+            
+            <v-container>
+            <h1>添加成功！</h1>
+            </v-container>
+             </v-card>
           </v-stepper-content>
         </v-stepper-items>
-        <div :style="{ margin: '20px' }">
+        <div :style="{ margin: '20px' }" class="d-flex justify-space-between">
           <div class="d-flex justify-start">
             <v-btn
               color="primary"
@@ -208,7 +206,7 @@
               @click="lastStep(now)"
               class="align-left"
             >
-              Undo
+              上一步
             </v-btn>
           </div>
           <div class="d-flex justify-end">
@@ -218,7 +216,15 @@
               @click="nextStep(now)"
               class="align-right"
             >
-              Continue
+              下一步
+            </v-btn>
+            <v-btn
+              color="primary"
+              v-show="now == 3"
+              @click="finish()"
+              class="align-right"
+            >
+              下一步
             </v-btn>
           </div>
         </div>
@@ -280,7 +286,8 @@ export default {
     },
     test(){
       console.log(this.selectedAchievements)
-    }
+    },
+    finish(){}
   },
 
   mounted() {},
