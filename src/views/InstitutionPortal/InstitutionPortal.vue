@@ -1,5 +1,6 @@
 <template>
   <div>
+    <page-header :show-search="false" :is-login="isLogin"></page-header>
     <div class="institution-top">
       <div class="top-left">
         <v-card class="institution-info-card" elevation="2">
@@ -167,13 +168,15 @@
 </template>
 
 <script>
+import PageHeader from "@/components/UserCenter/PageHeader";
 import ChartsCard from "@/components/InstitutionPortal/ChartsCard";
 import * as echarts from 'echarts'
 
 export default {
   name: 'SearchResult',
-  components: {ChartsCard},
+  components: {ChartsCard,PageHeader },
   data: () => ({
+    isLogin:false,
     chartDialog: false,
     graphDialog: false,
     chartTitle: "",

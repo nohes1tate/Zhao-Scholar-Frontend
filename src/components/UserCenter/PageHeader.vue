@@ -1,7 +1,7 @@
 <template>
   <div class="pageHeader">
     <div class="logo-box" @click="goToHome">
-      <img src="../../assets/logo.png" class="logo-img">
+      <img src="../../assets/HatchfulExport-All/logo_transparent.png" class="logo-img">
     </div>
     <div class="search-btn" @click="advanceSearch">
       <span>高级检索</span>
@@ -108,8 +108,8 @@ export default {
 
 <style scoped>
 .logo-img{
-  height: 80%;
-  margin: auto;
+  height: 100%;
+  margin-top:auto;
 }
 .pageHeader{
   background-color: white;
@@ -120,13 +120,13 @@ export default {
 .logo-box{
   margin-left: 5vw;
   display: flex;
-  margin-right: 7vw;
+  margin-right: 5vw;
   cursor: pointer;
 }
 .search-btn{
   text-align: center;
   line-height: 10vh;
-  margin-right: 5vw;
+  margin-right: 3vw;
 }
 .search-btn span{
   cursor: pointer;
@@ -174,7 +174,7 @@ export default {
   width: 15%;
 }
 .search-box{
-  margin-left: 7vw;
+  margin-left: 5vw;
   margin-right: 5vw;
   width: 40%;
 }

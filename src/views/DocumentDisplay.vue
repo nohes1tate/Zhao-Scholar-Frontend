@@ -1,13 +1,13 @@
 <template>
   <!-- <h1>文献展示页面</h1> -->
   <div class="root">
-   
+    <page-header :show-search="false" :is-login="isLogin"></page-header>
       <!-- <v-input persistant-hint="输入你想了解的论文" absolute right>input</v-input> -->
-      <v-btn  @click="jump2login" tile color="indigo" dark absolute right>登录/注册</v-btn>
- 
+<!--      <v-btn  @click="jump2login" tile color="indigo" dark absolute right>登录/注册</v-btn>-->
+
       <div id="allcontent">
 
-  
+
       <!-- <v-breadcrumbs :items="items" large></v-breadcrumbs> -->
 
       <div id="article" class="mt-4">
@@ -16,21 +16,21 @@
           <p class="mt-2">{{paperConference}}</p>
           <p class="blue--text text--lighten-2 mt-0">{{author}}
           </p>
-        
+
             <v-btn color="primary" dark @click="read">阅读<v-icon class="ml-2">mdi-eye</v-icon></v-btn>
-          
+
             <v-btn color="primary" dark outlined class="ml-4" @click="addStar">收藏<v-icon class="ml-2">mdi-star-plus-outline</v-icon></v-btn>
 
             <v-btn color="primary" dark text class="ml-4" @click="cite">引用</v-btn>
             <!-- 找一个引号图标放到引用后面 -->
 
             <v-btn color="primary" dark text class="ml-4" @click="share">分享<v-icon>mdi-arrow-top-right-bold-box-outline</v-icon></v-btn>
-            
 
-         
+
+
 
       </div>
-     
+
       <div id="cards-left" class="mt-8">
         <v-card
         class="mx=auto"
@@ -45,9 +45,9 @@
             {{abstract}}
            </div>
         </v-card-text>
-       
+
       </v-card>
-      
+
       <v-card
         class="mt-8"
         float:left
@@ -75,7 +75,7 @@
                     :src="src"
                   ></v-img>
                 </v-col>
-                     
+
               </v-row>
             </v-container>
             <v-card-text class="text--primary">
@@ -86,7 +86,7 @@
         </v-item-group>
 
         </v-card-text>
-       
+
       </v-card>
 
       <v-card
@@ -130,16 +130,16 @@
             </v-tab-item>
           </v-tabs>
 
-          
+
         </v-card-text>
-       
+
       </v-card>
       </div>
 
       <div id="cards-right">
         <v-card
         class="ml-10 mt-8"
-        float:right    
+        float:right
         padding:10px
         >
           <v-card-text>
@@ -171,7 +171,7 @@
             </v-item>
           </v-item-group>
           </v-card-text>
-        
+
         </v-card>
       </div>
     </div>
@@ -180,9 +180,12 @@
 
 <script>
 
+  import PageHeader from "@/components/UserCenter/PageHeader";
   export default {
     name: 'DocumentDisplay',
+    components: {PageHeader},
     data: () => ({
+      isLogin:false,
       DOI:"10.1109/cvprw50498.2020.0002",
       title:"TimeTraveler: Reinforcement Learning for Temporal Knowledge Graph Forecasting",
       paperConference:"CCF-A",
@@ -221,7 +224,7 @@
         ['c3v'],
         ['Object Detectionrrrr'],['computer science1'],
         ['c2v'],
-        
+
         ['cv34'],
         ['Object Detection'],
       ],
@@ -230,7 +233,7 @@
         [2,'https://cdn.vuetifyjs.com/images/cards/store.jpg'],
         [3,'https://cdn.vuetifyjs.com/images/cards/store.jpg'],
         [4,'https://cdn.vuetifyjs.com/images/cards/store.jpg'],
-        
+
       ]
     }),
     created(){
