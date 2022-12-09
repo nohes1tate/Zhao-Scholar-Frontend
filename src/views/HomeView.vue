@@ -39,17 +39,27 @@
                 </v-col>
                 <v-col cols="12" md="12" sm="1" />
                 <v-col cols="12" md="12" sm="5" class="d-flex align-center">
+                 <v-menu offset-y> 
+                  <template v-slot:activator="{ on }">
                   <v-text-field
                     class="material-symbols-outlined"
                     append-icon="search"
-                    @click:append="searchTag"
-                    @keyup.enter="searchTag"
+                    @click:append="searchTag(search)"
+                    @keyup.enter="searchTag(search)"
                     hide-details
                     solo
                     label="Search something"
                     v-model="search"
+                    v-on="on"
                   >
                   </v-text-field>
+                  </template>
+                  <v-list v-if="items.length > 0" class="border-list" dense>
+                    <v-list-item v-for="(i, index) in items" :key="index" @click="searchTag(i.key)">
+                      <v-list-item-title>{{ i.name }}</v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                  </v-menu>
                 </v-col>
               </v-row>
             </v-col>
@@ -158,7 +168,8 @@ export default {
   data() {
     return {
       search: "",
-      
+      showSelect:false,
+      items:[{key: '1234',name: '1234'},],
       TopAuthors: [
         { progress: 454, name: "AAA", percentage: 100 },
         { progress: 453, name: "BBB", percentage: 453 / 4.54 },
@@ -183,13 +194,34 @@ export default {
     };
   },
   methods: {
-    searchTag() {
-      if (this.search == "") return false;
-      console.log(this.search);
+    searchTag(search) {
+      this.search=search
+      if (search == "") return;
+      console.log(search);
     },
     goto(url) {
       console.log("url: "+url);
     },
+    inputHandle (search) {
+      if (search.trim() !== '') {
+        this.showSelect = true
+        setTimeout(() => {
+          this.getEntity()
+        }, 300)
+      }
+    },
+    getEntity () {
+      this.items = [
+        {key: '1234',name: '1234'},
+        {key: 'abc',name: 'abc'},
+        {key: 'def',name: 'def'},
+        {key: 'ccc',name: 'ccc'},
+        {key: 'ccc',name: 'ccc'},
+        {key: 'ccc',name: 'ccc'}]
+    },
+  },
+  watch: {
+    search:'inputHandle'
   },
 };
 </script>
