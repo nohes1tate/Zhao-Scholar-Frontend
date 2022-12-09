@@ -10,130 +10,178 @@
         <div style="font-size:16px; margin-top:10px;color: #A0A0A0">收藏论文 ({{articles.length}})</div>
       </div>
       <div class="show-box">
-        <div class="select-card">
-          <v-card elevation="2">
-            <div class="select-card-item">
+        <div class="left-side">
+          <div class="select-card">
+            <v-card elevation="2">
+              <div class="select-card-item">
             <span style="display: flex;
              text-align: left;
              font-size: 17px;
              margin-bottom: 20px;
              margin-left: 30px;margin-top: 40px;">标签</span>
-              <div class="tag-line">
-                <v-chip
-                    class="ma-2"
-                    color=#546E7A
-                    label
-                    text-color="white"
-                    style="display: flex; cursor: pointer;"
-                    :key="tag"
-                    v-for="tag in tagData"
-                >
-                  {{tag.tag_name}}
-                  <div class="close-btn-style" @click="handleClose(tag)">
-                    <v-icon class="material-symbols-outlined" size="15px" style="margin-left: 2px">close</v-icon>
-                  </div>
-                </v-chip>
-                <v-dialog
-                    transition="dialog-top-transition"
-                    max-width="600"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-chip
-                        class="ma-2"
-                        color=#546E7A
-                        label
-                        text-color="white"
-                        style="display: flex;cursor: pointer"
-                        v-bind="attrs"
-                        v-on="on"
-                    >
-                      <v-icon class="material-symbols-outlined" size="17px" style="left: -2px">add</v-icon>
-                      New Tag
-                    </v-chip>
-                  </template>
-                  <template v-slot:default="dialog">
-                    <v-card>
-                      <v-toolbar
-                          color="primary"
-                          dark
-                      >创建新的标签</v-toolbar>
-                      <v-card-text>
-                        <v-text-field
-                            label="标签名"
-                            v-model="newTagName"
-                            style="margin-top: 30px"
-                        ></v-text-field>
-                      </v-card-text>
-                      <v-card-actions class="justify-end">
-                        <v-btn
-                            text
-                            @click="handleNewTag"
-                        >确定</v-btn>
-                        <v-btn
-                            text
-                            @click="dialog.value = false"
-                        >关闭</v-btn>
-                      </v-card-actions>
-                    </v-card>
-                  </template>
-                </v-dialog>
-              </div>
-              <v-divider style="width: 70% ;margin-left: 30px"></v-divider>
-              <span style="display: flex;
+                <div class="tag-line">
+                  <v-chip
+                      class="ma-2"
+                      color=#546E7A
+                      label
+                      text-color="white"
+                      style="display: flex; cursor: pointer;"
+                      :key="tag"
+                      v-for="tag in tagData"
+                  >
+                    {{tag.tag_name}}
+                    <div class="close-btn-style" @click="handleClose(tag)">
+                      <v-icon class="material-symbols-outlined" size="15px" style="margin-left: 2px">close</v-icon>
+                    </div>
+                  </v-chip>
+                  <v-dialog
+                      transition="dialog-top-transition"
+                      max-width="600"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-chip
+                          class="ma-2"
+                          color=#546E7A
+                          label
+                          text-color="white"
+                          style="display: flex;cursor: pointer"
+                          v-bind="attrs"
+                          v-on="on"
+                      >
+                        <v-icon class="material-symbols-outlined" size="17px" style="left: -2px">add</v-icon>
+                        New Tag
+                      </v-chip>
+                    </template>
+                    <template v-slot:default="dialog">
+                      <v-card>
+                        <v-toolbar
+                            color="primary"
+                            dark
+                        >创建新的标签</v-toolbar>
+                        <v-card-text>
+                          <v-text-field
+                              label="标签名"
+                              v-model="newTagName"
+                              style="margin-top: 30px"
+                          ></v-text-field>
+                        </v-card-text>
+                        <v-card-actions class="justify-end">
+                          <v-btn
+                              text
+                              @click="handleNewTag"
+                          >确定</v-btn>
+                          <v-btn
+                              text
+                              @click="dialog.value = false"
+                          >关闭</v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </template>
+                  </v-dialog>
+                </div>
+                <v-divider style="width: 70% ;margin-left: 30px"></v-divider>
+                <span style="display: flex;
              text-align: left;
              font-size: 17px;
              margin-bottom: 20px;
              margin-left: 30px;margin-top: 40px;">发表年份</span>
-              <div class="date-select">
-                <v-menu
-                    v-model="menu1"
-                    :close-on-content-click="false"
-                    :nudge-right="40"
-                    transition="scale-transition"
-                    offset-y
-                    min-width="auto"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
+                <div class="date-select">
+                  <v-menu
+                      v-model="menu1"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      transition="scale-transition"
+                      offset-y
+                      min-width="auto"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                          v-model="from_date"
+                          label="Start Date"
+                          prepend-icon="mdi-calendar"
+                          readonly
+                          v-bind="attrs"
+                          v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
                         v-model="from_date"
-                        label="Start Date"
-                        prepend-icon="mdi-calendar"
-                        readonly
-                        v-bind="attrs"
-                        v-on="on"
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker
-                      v-model="from_date"
-                      @input="menu1 = false"
-                  ></v-date-picker>
-                </v-menu>
-                <v-menu
-                    v-model="menu2"
-                    :close-on-content-click="false"
-                    :nudge-right="40"
-                    transition="scale-transition"
-                    offset-y
-                    min-width="auto"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
+                        @input="menu1 = false"
+                    ></v-date-picker>
+                  </v-menu>
+                  <v-menu
+                      v-model="menu2"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      transition="scale-transition"
+                      offset-y
+                      min-width="auto"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                          v-model="to_date"
+                          label="End Date"
+                          prepend-icon="mdi-calendar"
+                          readonly
+                          v-bind="attrs"
+                          v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
                         v-model="to_date"
-                        label="End Date"
-                        prepend-icon="mdi-calendar"
-                        readonly
-                        v-bind="attrs"
-                        v-on="on"
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker
-                      v-model="to_date"
-                      @input="menu2 = false"
-                  ></v-date-picker>
-                </v-menu>
+                        @input="menu2 = false"
+                    ></v-date-picker>
+                  </v-menu>
+                </div>
               </div>
-            </div>
-          </v-card>
+            </v-card>
+          </div>
+          <div class="follow-user">
+            <v-card
+                class="mx-auto"
+                max-width="400"
+            >
+              <v-toolbar>
+                <v-toolbar-title>关注学者</v-toolbar-title>
+                <v-spacer></v-spacer>
+              </v-toolbar>
+              <v-list>
+                <v-list-item
+                    v-for="item in follow_list"
+                    :key="item.id"
+                    @contextmenu="show"
+                >
+                  <v-list-item-avatar>
+                    <v-img src="@/assets/scholar-avatar.png"></v-img>
+                  </v-list-item-avatar>
+
+                  <v-list-item-content>
+                    <v-list-item-title v-text="item.name"></v-list-item-title>
+                  </v-list-item-content>
+
+                  <v-list-item-icon>
+                    <v-btn fab small>
+                      <v-icon>mdi-arrow-right</v-icon>
+                    </v-btn>
+                  </v-list-item-icon>
+                </v-list-item>
+              </v-list>
+            </v-card>
+            <v-menu
+                v-model="showMenu"
+                :position-x="x"
+                :position-y="y"
+                absolute
+                offset-y
+            >
+              <v-btn
+                  depressed
+                  color="primary"
+              >
+                取消关注
+              </v-btn>
+            </v-menu>
+          </div>
         </div>
         <div class="page-select-box">
           <ArticleBlocks v-if="userdata.length>0"
@@ -167,6 +215,9 @@ export default {
   name: "UserCenter",
   components: {PageHeader ,ArticleBlocks},
   data:() => ({
+      showMenu: false,
+      x: 0,
+      y: 0,
       isLogin:true,
       from_date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       to_date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
@@ -177,6 +228,12 @@ export default {
       page:1,
       queue: ["匹配程度","发表时间","引用次数"],
       value2: "匹配程度",
+      follow_list: [
+      { name: 'Jason Oner', id: 1 },
+      { name: 'Ranee Carlson', id: 2 },
+      { name: 'Cindy Baker', id: 3 },
+      { name: 'Ali Connors', id: 4 },
+      ],
 
       articles: [
         {
@@ -356,6 +413,15 @@ export default {
   created() {
   },
   methods: {
+    show (e) {
+      e.preventDefault()
+      this.showMenu = false
+      this.x = e.clientX
+      this.y = e.clientY
+      this.$nextTick(() => {
+        this.showMenu = true
+      })
+    },
     handleCurrentChange(val) {
       this.pageIdx = val;
     },
@@ -467,9 +533,14 @@ export default {
 .main-body{
   padding: 30px 40px 20px 80px;
 }
-.select-card{
+.left-side{
   margin-top: 20px;
   width: 24vw;
+  display: flex;
+  flex-direction: column;
+}
+.follow-user{
+  margin-top: 40px;
 }
 .select-card-item{
   display: flex;
