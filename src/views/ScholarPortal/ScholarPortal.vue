@@ -1,5 +1,6 @@
 <template>
   <div class="scholar-page">
+    <page-header :show-search="false" :is-login="isLogin"></page-header>
     <div class="top-info-and-map">
       <ScholarInfoBox />
       <RelationMap />
@@ -17,9 +18,13 @@
   import RelationMap from "@/components/ScholarPortal/RelationMap";
   import PaperInfo from "@/components/ScholarPortal/scholarArticle"
   import CoWorker from "@/components/ScholarPortal/CoWorker";
+  import PageHeader from "@/components/UserCenter/PageHeader";
   export default {
     name: 'ScholarPortal',
-    components: {CoWorker, RelationMap, ScholarInfoBox, PaperInfo},
+    components: {CoWorker, RelationMap, ScholarInfoBox, PaperInfo,PageHeader},
+    data:()=>({
+      isLogin:false
+    }),
   }
 
 </script>
@@ -29,15 +34,16 @@
   width: 100%;
   height: 100%;
   background-color: #fcfcfc;
-  padding-left: 10vh;
-  padding-top: 10vh;
 }
 .top-info-and-map{
   display: flex;
   flex-direction: row;
+  padding-top:5vh;
+  padding-left: 10vh;
 }
 .bottom-paper-and-coworker{
   display: flex;
   flex-direction: row;
+  padding-left: 10vh;
 }
 </style>
