@@ -17,7 +17,6 @@
 <script>
 
 
-import request from "@/store/request";
 
 export default {
   name: "RelationMap",
