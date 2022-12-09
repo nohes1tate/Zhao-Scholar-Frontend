@@ -9,7 +9,7 @@
         <h1>注册</h1>
         <!-- 公共组件 -->
         <v-text-field
-            v-model="userName"
+            v-model="username"
             label="用户名"
             outlined
             dense
@@ -29,7 +29,7 @@
             style="width: 20vw;"
         ></v-text-field>
         <v-text-field
-            v-model="password"
+            v-model="password1"
             label="密码"
             outlined
             dense
@@ -40,20 +40,15 @@
         ></v-text-field>
         <div style="display: flex;flex-direction: row">
           <v-text-field
-              v-model="confirmCode"
-              label="验证码"
+              v-model="password2"
+              label="确认密码"
               outlined
               dense
               filled
               height=10
               color="black"
-              style="width: 11vw;"
+              style="width: 20vw;"
           ></v-text-field>
-          <v-btn
-              depressed
-              outlined
-              style="margin-left:1vw;height:40px;width:8vw;border-radius: 5px;background-color: #EEEEEE;border: #757575 1px solid;color:#757575 "
-          >获取验证码</v-btn>
         </div>
         <button @click="register">注册</button>
       </form>
@@ -65,8 +60,8 @@
         <h1>登录</h1>
         <!-- 公共组件 -->
         <v-text-field
-            v-model="email"
-            label="邮箱"
+            v-model="username"
+            label="用户名"
             outlined
             dense
             filled
@@ -121,31 +116,35 @@ export default {
   name: "LoginView",
   data(){
     return{
-      userName:"",
+      username:"",
       email:"",
       password:"",
+      password1:"",
+      password2:"",
       confirmCode:"",
     }
   },
   methods:{
     login() {
       const formData = new FormData();
-      formData.append("email", this.email);
+      formData.append("username", this.username);
       formData.append("password", this.password);
       this.$axios({
         method: 'post',
-        url: '/user/login',
+        url: 'UserManager/login/',
         data: formData,
       })
           .then(res => {
-            if (res.data.success) {
+            console.log(res.data.error);
+            if (res.data.error==="0") {
               this.$message.success("登录成功");
               this.$store.dispatch('saveUserInfo', {
                 user: {
-                  'username': res.data.detail.username,
-                  'Authorization': res.data.Authorization,
-                  'userId': res.data.detail.user_id,
-                  'authorId': res.data.detail.author_id,
+                  'username': res.data.username,
+                  'Authorization': res.data.authorization,
+                  'userId': res.data.userID,
+                  'email':res.data.email,
+                  'authorId': res.data.authorID,
                 }
               });
               const history_pth = localStorage.getItem('preRoute');
@@ -167,10 +166,12 @@ export default {
     register() {
       const _formData = new FormData();
       _formData.append("username", this.username);
-      _formData.append("confirm_number", this.form.confirmCode);
+      _formData.append("password1", this.password1);
+      _formData.append("password2", this.password2);
+      _formData.append("email", this.email);
       this.$axios({
         method: 'post',
-        url: '/user/confirm',
+        url: 'UserManager/register/',
         data: _formData,
       })
           .then(res => {
