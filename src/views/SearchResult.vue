@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PageHeaderVue :show-search="true" :is-login="isLogin"></PageHeaderVue>
+    <PageHeaderVue :show-search="true"></PageHeaderVue>
    <!-- <searchBannerVue></searchBannerVue> -->
    <div
    style="margin-top: 50px;"
@@ -23,7 +23,6 @@
       PageHeaderVue
     },
     data:()=>({
-      isLogin:false
     }),
     created(){
       var q=this.$route.query

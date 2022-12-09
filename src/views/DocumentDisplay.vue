@@ -1,7 +1,7 @@
 <template>
   <!-- <h1>文献展示页面</h1> -->
   <div class="root">
-    <page-header :show-search="false" :is-login="isLogin"></page-header>
+    <page-header :show-search="false"></page-header>
       <!-- <v-input persistant-hint="输入你想了解的论文" absolute right>input</v-input> -->
 <!--      <v-btn  @click="jump2login" tile color="indigo" dark absolute right>登录/注册</v-btn>-->
 
@@ -185,7 +185,6 @@
     name: 'DocumentDisplay',
     components: {PageHeader},
     data: () => ({
-      isLogin:false,
       DOI:"10.1109/cvprw50498.2020.0002",
       title:"TimeTraveler: Reinforcement Learning for Temporal Knowledge Graph Forecasting",
       paperConference:"CCF-A",

@@ -11,8 +11,9 @@ import material from 'material-icons/iconfont/material-icons.css';
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios;
 Vue.prototype.$echarts = echarts;
-axios.defaults.baseURL = "http://124.70.62.18/"
+axios.defaults.baseURL = "http://124.70.62.18/api/"
 
+import user from "./store/user";
 import AMap from 'vue-amap';
 Vue.use(AMap);
 
@@ -26,6 +27,14 @@ AMap.initAMapApiLoader({
 
 Vue.use(ElementUI);
 
+router.beforeEach((to, from, next) => {
+  const userInfo = user.getters.getUser(user.state());
+  // Record the router address of page accessed before login
+  if (to.path === '/login') {
+    localStorage.setItem("preRoute", router.currentRoute.fullPath);
+  }
+  next()
+})
 
 new Vue({
   router,

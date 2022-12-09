@@ -62,11 +62,14 @@
 </template>
 
 <script>
+import user from "@/store/user";
+
 export default {
   name: "PageHeader",
-  props: ['showSearch','isLogin'],
+  props: ['showSearch'],
   data(){
     return{
+      isLogin:false,
       search: "",
       hover:false,
       selectedItem: -1,
@@ -98,11 +101,22 @@ export default {
       else if(i===1)
         this.$router.push('/scholar')
       else if(i===2){
-        this.$router.push('/login')
+          this.$store.dispatch('clear');
+          this.$message.success("退出成功！");
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
       }
-
     }
-  }
+  },
+  created() {
+    const userInfo = user.getters.getUser(user.state());
+    if (userInfo)
+    {
+      this.isLogin = true;
+      this.username = userInfo.user.username;
+    }
+  },
 }
 </script>
 

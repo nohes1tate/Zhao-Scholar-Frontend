@@ -8,6 +8,7 @@ import ScholarPortal from '../views/ScholarPortal/ScholarPortal.vue'
 import ApplySettle from "@/views/ScholarPortal/ApplySettle.vue";
 import UserCenter from '../views/UserCenter.vue'
 import adminView from "@/views/Administrator/AdminView";
+import LoginView from "@/views/LoginView";
 
 
 Vue.use(VueRouter)
@@ -21,10 +22,7 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/LoginView')
+    component: LoginView
   },
   {
     path: '/about',
@@ -81,5 +79,6 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
 
 export default router

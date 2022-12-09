@@ -1,6 +1,6 @@
 <template>
   <div class="userCenter">
-    <page-header :show-search="false" :is-login="isLogin"></page-header>
+    <page-header :show-search="false"></page-header>
     <div class="main-body">
       <v-row class="header">
         <span @click="backToUserCenter">个人图书馆</span>
@@ -210,6 +210,7 @@
 <script>
 import ArticleBlocks from "@/components/UserCenter/ArticleBlocks";
 import PageHeader from "@/components/UserCenter/PageHeader";
+import user from "@/store/user";
 
 export default {
   name: "UserCenter",
@@ -220,7 +221,7 @@ export default {
       showMenu: false,
       x: 0,
       y: 0,
-      isLogin:true,
+      isLogin:false,
       from_date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       to_date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       menu1: false,
@@ -415,6 +416,12 @@ export default {
     },
   },
   created() {
+    const userInfo = user.getters.getUser(user.state());
+    console.log(userInfo);
+    if (userInfo)
+    {
+      this.isLogin = true;
+    }
   },
   methods: {
     handleNotFollow(){
@@ -522,7 +529,7 @@ export default {
     userdata: function(){
       return this.articles.slice((this.pageIdx-1)*this.size,this.pageIdx*this.size);
     }
-  }
+  },
 }
 </script>
 

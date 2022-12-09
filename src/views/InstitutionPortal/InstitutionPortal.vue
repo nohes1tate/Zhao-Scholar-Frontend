@@ -1,6 +1,6 @@
 <template>
   <div>
-    <page-header :show-search="false" :is-login="isLogin"></page-header>
+    <page-header :show-search="false"></page-header>
     <div class="institution-top">
       <div class="top-left">
         <v-card class="institution-info-card" elevation="2">
@@ -176,7 +176,6 @@ export default {
   name: 'SearchResult',
   components: {ChartsCard,PageHeader },
   data: () => ({
-    isLogin:false,
     chartDialog: false,
     graphDialog: false,
     chartTitle: "",

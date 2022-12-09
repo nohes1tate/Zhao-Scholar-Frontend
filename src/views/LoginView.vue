@@ -5,7 +5,7 @@
 
     <!-- 注册页面 -->
     <div class="form-container sign-up-container">
-      <form action="#">
+      <form>
         <h1>注册</h1>
         <!-- 公共组件 -->
         <v-text-field
@@ -50,13 +50,13 @@
               style="width: 20vw;"
           ></v-text-field>
         </div>
-        <button @click="register">注册</button>
+        <button @click.prevent="register">注册</button>
       </form>
     </div>
 
     <!-- 登录页面 -->
     <div class="form-container sign-in-container">
-      <form action="#">
+      <form>
         <h1>登录</h1>
         <!-- 公共组件 -->
         <v-text-field
@@ -79,8 +79,8 @@
             color="black"
             style="width: 20vw;"
         ></v-text-field>
-        <a href="#" class="forget">忘记密码？</a>
-        <button @click="login">登录</button>
+        <a class="forget">忘记密码？</a>
+        <button @click.prevent="login">登录</button>
       </form>
     </div>
 
@@ -112,6 +112,7 @@
 </template>
 
 <script>
+
 export default {
   name: "LoginView",
   data(){
@@ -125,6 +126,9 @@ export default {
     }
   },
   methods:{
+    test(){
+      console.log("login");
+    },
     login() {
       const formData = new FormData();
       formData.append("username", this.username);
@@ -135,8 +139,8 @@ export default {
         data: formData,
       })
           .then(res => {
-            console.log(res.data.error);
-            if (res.data.error==="0") {
+            console.log(res.data);
+            if (res.data.error===0) {
               this.$message.success("登录成功");
               this.$store.dispatch('saveUserInfo', {
                 user: {
@@ -148,8 +152,9 @@ export default {
                 }
               });
               const history_pth = localStorage.getItem('preRoute');
+              console.log(history_pth)
               setTimeout(() => {
-                if (history_pth == null || history_pth === '/register') {
+                if (history_pth == null || history_pth === '/login') {
                   this.$router.push('/');
                 } else {
                   this.$router.push({ path: history_pth });
