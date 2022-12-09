@@ -11,7 +11,7 @@ import material from 'material-icons/iconfont/material-icons.css';
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios;
 Vue.prototype.$echarts = echarts;
-axios.defaults.baseURL = "http://124.70.62.18/api/"
+axios.defaults.baseURL = "http://124.70.62.18/"
 
 import AMap from 'vue-amap';
 Vue.use(AMap);
