@@ -84,59 +84,29 @@
              text-align: left;
              font-size: 17px;
              margin-bottom: 20px;
-             margin-left: 30px;margin-top: 40px;">发表年份</span>
-                <div class="date-select">
-                  <v-menu
-                      v-model="menu1"
-                      :close-on-content-click="false"
-                      :nudge-right="40"
-                      transition="scale-transition"
-                      offset-y
-                      min-width="auto"
-                  >
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-text-field
-                          v-model="from_date"
-                          label="Start Date"
-                          prepend-icon="mdi-calendar"
-                          readonly
-                          v-bind="attrs"
-                          v-on="on"
-                      ></v-text-field>
-                    </template>
-                    <v-date-picker
-                        v-model="from_date"
-                        @input="menu1 = false"
-                    ></v-date-picker>
-                  </v-menu>
-                  <v-menu
-                      v-model="menu2"
-                      :close-on-content-click="false"
-                      :nudge-right="40"
-                      transition="scale-transition"
-                      offset-y
-                      min-width="auto"
-                  >
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-text-field
-                          v-model="to_date"
-                          label="End Date"
-                          prepend-icon="mdi-calendar"
-                          readonly
-                          v-bind="attrs"
-                          v-on="on"
-                      ></v-text-field>
-                    </template>
-                    <v-date-picker
-                        v-model="to_date"
-                        @input="menu2 = false"
-                    ></v-date-picker>
-                  </v-menu>
-                </div>
+             margin-left: 30px;margin-top: 40px;">设置发表年份范围</span>
+                <v-row class="date-select">
+                  <v-col cols="12" sm="6">
+                    <v-text-field
+                        label="开始年份"
+                        v-model="start_year"
+                        clearable
+                    ></v-text-field>
+                  </v-col>
+
+                  <v-col cols="12" sm="6">
+                    <v-text-field
+                        label="结束年份"
+                        v-model="end_year"
+                        clearable
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
               </div>
             </v-card>
           </div>
           <div class="follow-user">
+
             <v-card
                 class="mx-auto"
                 max-width="400"
@@ -149,7 +119,7 @@
                 <v-list-item
                     v-for="item in follow_list"
                     :key="item.id"
-                    @contextmenu="show"
+                    @click="show(item.id,$event);"
                 >
                   <v-list-item-avatar>
                     <v-img src="@/assets/scholar-avatar.png"></v-img>
@@ -158,12 +128,6 @@
                   <v-list-item-content>
                     <v-list-item-title v-text="item.name"></v-list-item-title>
                   </v-list-item-content>
-
-                  <v-list-item-icon>
-                    <v-btn fab small>
-                      <v-icon>mdi-arrow-right</v-icon>
-                    </v-btn>
-                  </v-list-item-icon>
                 </v-list-item>
               </v-list>
             </v-card>
@@ -174,12 +138,48 @@
                 absolute
                 offset-y
             >
-              <v-btn
-                  depressed
-                  color="primary"
-              >
-                取消关注
-              </v-btn>
+<!--              <v-list>-->
+<!--                <v-list-item @click="toScholar">-->
+<!--                  <div>前往门户</div>-->
+<!--                </v-list-item>-->
+<!--                <v-list-item>-->
+                <v-dialog
+                    v-model="not_follow"
+                    persistent
+                    max-width="290"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-list>
+                      <v-list-item @click="toScholar">前往门户</v-list-item>
+                      <v-list-item v-bind="attrs" v-on="on">取消关注</v-list-item>
+                    </v-list>
+                  </template>
+                  <v-card>
+                    <v-card-title class="text-h5">
+                      确定不再关注？
+                    </v-card-title>
+                    <v-card-text>取消关注后，此学者将从您关注的学者列表中移除。</v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn
+                          color="green darken-1"
+                          text
+                          @click="not_follow = false;showMenu = false"
+                      >
+                        我再想想
+                      </v-btn>
+                      <v-btn
+                          color="red darken-1"
+                          text
+                          @click="handleNotFollow"
+                      >
+                        取消关注
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+<!--                </v-list-item>-->
+<!--              </v-list>-->
             </v-menu>
           </div>
         </div>
@@ -215,6 +215,8 @@ export default {
   name: "UserCenter",
   components: {PageHeader ,ArticleBlocks},
   data:() => ({
+      not_follow:false,
+      current_follow_id:0,
       showMenu: false,
       x: 0,
       y: 0,
@@ -403,7 +405,9 @@ export default {
           username: "",
           create_time: "2021-11-18T17:22:27+08:00"
         }
-      ]
+      ],
+      start_year:"",
+      end_year:"",
   }),
   watch: {
     menu (val) {
@@ -413,7 +417,16 @@ export default {
   created() {
   },
   methods: {
-    show (e) {
+    handleNotFollow(){
+      this.not_follow=false
+      console.log("not follow")
+    },
+    toScholar(){
+      let ID=this.current_follow_id
+      this.$router.push({path:'/scholar', query: {id: ID}})
+    },
+    show (ID,e) {
+      this.current_follow_id=ID
       e.preventDefault()
       this.showMenu = false
       this.x = e.clientX
