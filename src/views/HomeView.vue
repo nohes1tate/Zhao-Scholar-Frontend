@@ -212,12 +212,12 @@ export default {
     },
     getEntity () {
       this.items = [
-        {key: '1234',name: '1234'},
-        {key: 'abc',name: 'abc'},
-        {key: 'def',name: 'def'},
-        {key: 'ccc',name: 'ccc'},
-        {key: 'ccc',name: 'ccc'},
-        {key: 'ccc',name: 'ccc'}]
+        {key: '1234',name: '1234',type:''},
+        {key: 'abc',name: 'abc',type:''},
+        {key: 'def',name: 'def',type:''},
+        {key: 'ccc',name: 'ccc',type:''},
+        {key: 'ccc',name: 'ccc',type:''},
+        {key: 'ccc',name: 'ccc',type:''}]
     },
   },
   watch: {
