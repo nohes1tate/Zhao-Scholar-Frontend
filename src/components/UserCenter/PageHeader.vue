@@ -86,12 +86,8 @@ export default {
       this.$router.push('/')
     },
     searchTag() {
-     
       if (this.search === "") return false;
-      console.log("搜索："+this.search);
-      // this.$router.push('/search')
-      this.$router.push({path:'/search', query:{keyword:this.search}}, ()=>{})
-
+      console.log(this.search);
     },
     goToLogin(){
       this.$router.push('/login')
