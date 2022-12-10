@@ -15,11 +15,40 @@
     style="float: left;box-shadow: none; background-color: #fcfcfc"
     >
 
+    <v-overlay
+            :absolute="absolute"
+            :value="overlay"
+            :opacity="opacity"
+          >
+          <v-card style="width: 700px;background-color: white;margin-top: 150px;">
+            
+            <v-toolbar
+        color="blue darken-1"
+        dark
+      >
+       <v-toolbar-title>引用格式</v-toolbar-title>
+       <v-spacer>
+       </v-spacer>
+       <v-btn icon
+       @click="overlay = false"
+       >
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </v-toolbar>
+           <v-card v-for="item in citeStyle" :key="item.name" style="color: black;background: transparent;box-shadow: none;">
+            <v-card-title>{{item.name}}</v-card-title>
+            <v-card-text style="color: black;background-color:#fcfcfc">{{item.text}}</v-card-text>
+           </v-card>
+           
+        </v-card>
+          </v-overlay>
+
         <v-list-item
         v-for="(item, i) in this.CurrentPageData"
         :key="i"
         three-line
         >
+        
         <v-card
         style="width: 100%;margin-bottom: 20px;"
 
@@ -42,10 +71,10 @@
             <div style="float: right;">
 
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" >收藏<v-icon color="#64B5F6">mdi-star-plus-outline</v-icon></v-btn>
-                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;">引用<v-icon color="#64B5F6"> mdi-format-quote-close-outline</v-icon></v-btn>
+                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" @click=cite(item)>引用<v-icon color="#64B5F6"> mdi-format-quote-close-outline</v-icon></v-btn>
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;">下载<v-icon color="#64B5F6">mdi-download</v-icon></v-btn>
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" @click="toDocument(item.title)">详情<v-icon color="#64B5F6">mdi-link-variant</v-icon></v-btn>
-3
+
             </div>
             </div>
         </v-list-item-content>
@@ -79,9 +108,19 @@ import axios from 'axios';
             selectMethod:"推荐排序",
             paperInfo:[],
             orderBy:1,
+            overlay:false,
+            absolute: false,
+            opacity: 0.5,//透明度
+            citeStyle:[{name:"引用类型", text:"引用文本"}],
             
         }),
         methods:{
+            cite(item){
+                this.citeStyle = item.cite
+                console.log(this.citeStyle)
+                this.overlay = !this.overlay
+                
+            },
             toDocument(title){
                 console.log(title)
                 this.$router.push({path:"/document", query:{Title:title, Id:123}})
