@@ -15,61 +15,6 @@
               style="width: 100%;margin-bottom: 20px;"
 
           >
-            <v-overlay
-                :absolute="absolute"
-                :value="dialogVisible"
-                :opacity="opacity"
-            >
-              <v-card style="width: 700px;background-color: white;margin-top: 150px;">
-                <v-toolbar
-                    color="blue darken-1"
-                    dark
-                >
-                  <v-toolbar-title>引用格式</v-toolbar-title>
-                  <v-spacer>
-                  </v-spacer>
-                  <v-btn icon
-                         @click="dialogVisible = false"
-                  >
-                    <v-icon>mdi-close</v-icon>
-                  </v-btn>
-                  <template v-slot:extension>
-                    <v-tabs
-                        v-model="tab"
-                        align-with-title
-                    >
-                      <v-tabs-slider color="yellow"></v-tabs-slider>
-
-                      <v-tab
-                          v-for="cite in citation_msg"
-                          :key="cite.name"
-                      >
-                        {{ cite.name }}
-                      </v-tab>
-                    </v-tabs>
-                  </template>
-                </v-toolbar>
-                <v-tabs-items v-model="tab">
-                  <v-tab-item
-                      v-for="citeContent in citation_msg"
-                      :key="citeContent.name"
-                  >
-                    <v-textarea
-                        :value=citeContent.content
-                        auto-grow
-                        row-height="15"
-                        readonly
-                    ></v-textarea>
-                    <v-btn
-                        depressed
-                        color="primary"
-                        @click="copyVal(citeContent.content)"
-                        style="width: 10%;float: right;margin-right: 10px;margin-bottom: 10px;"
-                    >复制</v-btn>
-                  </v-tab-item>
-                </v-tabs-items>
-              </v-card>
-            </v-overlay>
             <v-list-item-content style="margin-left: 30px;margin-right: 30px;margin-top: 20px">
 
               <v-list-item-title class="headline mb-2" v-text="item.paper_title" style="cursor: pointer" @click="toDocument">
@@ -84,9 +29,57 @@
               <div v-text="item.abstract" class="text-ellipsis-two" style="font-weight: 350;margin-bottom: 10px;">
               </div>
               <div>
-                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click="changePaperID(item)">
-                  <v-icon color="#64B5F6"> mdi-format-quote-close-outline</v-icon>引用
-                </v-btn>
+                <v-dialog
+                    transition="dialog-top-transition"
+                    max-width="600"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn v-bind="attrs" v-on="on" style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click="changePaperID(item)">
+                      <v-icon color="#64B5F6"> mdi-format-quote-close-outline</v-icon>引用
+                    </v-btn>
+                  </template>
+                  <template v-slot:default="dialog">
+                    <v-card>
+                      <v-toolbar
+                          color="primary"
+                          dark
+                      >
+                        <v-toolbar-title>引用</v-toolbar-title>
+                        <template v-slot:extension>
+                          <v-tabs
+                              v-model="tab"
+                              align-with-title
+                          >
+                            <v-tabs-slider color="yellow"></v-tabs-slider>
+
+                            <v-tab
+                                v-for="cite in citation_msg"
+                                :key="cite.id"
+                            >
+                              {{ cite.name }}
+                            </v-tab>
+                          </v-tabs>
+                        </template>
+                      </v-toolbar>
+                      <v-tabs-items v-model="tab">
+                        <v-tab-item
+                            v-for="citeContent in citation_msg"
+                            :key="citeContent.id"
+                        >
+                          <v-card flat>
+                            <v-card-text v-text="citeContent.content"></v-card-text>
+                          </v-card>
+                        </v-tab-item>
+                      </v-tabs-items>
+                      <v-card-actions class="justify-end">
+                        <v-btn
+                            text
+                            @click="dialog.value = false"
+                        >关闭</v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </template>
+                </v-dialog>
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;">
                   <v-icon color="#64B5F6" >mdi-trash-can-outline</v-icon>删除
                 </v-btn>
@@ -117,8 +110,7 @@ export default {
   props: ['articles'],
   data() {
     return {
-      absolute: false,
-      opacity: 0.2,
+
       tab:null,
       articlesItems:1,
       // 引用
@@ -167,21 +159,7 @@ export default {
     }
   },
   methods:{
-    copyVal(val) {
-      let aux = document.createElement("input");
-      aux.setAttribute("value", val);
-      document.body.appendChild(aux);
-      aux.select();
-      document.execCommand("copy");
-      document.body.removeChild(aux);
-      if (val !== null) {
-        this.$message.success("引用已复制至剪贴板");
-      } else {
-        this.$message.error("引用格式为空");
-      }
-    },
     changePaperID(item) {
-      this.dialogVisible=true;
       this.quote_paperId = item.paper_id;
       // console.log(this.quote_paperId);
       this.getCita();
