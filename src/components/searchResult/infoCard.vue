@@ -76,7 +76,7 @@
         :key="i"
         three-line
         >
-        
+
         <v-card
         style="width: 100%;margin-bottom: 20px;"
 
@@ -123,8 +123,9 @@
 import axios from 'axios';
 
     export default{
-       
+  
         data:()=>({
+            tab:null,
             page: 1,
             pageSize:10,
             pageNum:'1',
@@ -138,21 +139,28 @@ import axios from 'axios';
             absolute: false,
             opacity: 0.5,//透明度
             citeStyle:[{name:"引用类型", text:"引用文本"}],
-
-
-            isActive: false,
-            params:[],
             keyword:"gan",
-            
-
 
         }),
         methods:{
+          copyVal(val) {
+            let aux = document.createElement("input");
+            aux.setAttribute("value", val);
+            document.body.appendChild(aux);
+            aux.select();
+            document.execCommand("copy");
+            document.body.removeChild(aux);
+            if (val !== null) {
+              this.$message.success("引用已复制至剪贴板");
+            } else {
+              this.$message.error("引用格式为空");
+            }
+          },
             cite(item){
                 this.citeStyle = item.cite
                 console.log(this.citeStyle)
                 this.overlay = !this.overlay
-                
+                this.content=this.citeStyle(0).text
             },
             toDocument(title){
                 console.log(title)
@@ -177,7 +185,7 @@ import axios from 'axios';
                      let len=this.paperInfo.length
                      console.log("长度"+len)
                      let i=0;
-                     
+
                      for(i=0;i<len;i++){
                         let Author = this.paperInfo[i].author
                         let j=0;
@@ -185,7 +193,7 @@ import axios from 'axios';
                         str=Author[0].name
                         for(j=1;j<Author.length;j++){
                             str =  str+", "+Author[j].name
-                            
+
                         }
                         this.paperInfo[i].Author = str
                      }
@@ -194,7 +202,7 @@ import axios from 'axios';
                 }).catch(function(error){
                     console.log(error)
                 })
-                
+
             }
         },
         created(){
@@ -224,6 +232,10 @@ import axios from 'axios';
             },
             $route(to, from){
                 console.log(to)
+                this.keyword = to.query.keyword
+                console.log(this.keyword)
+                console.log("更新页面")
+                this.getCurrentPageData()
             }
         }
     }
