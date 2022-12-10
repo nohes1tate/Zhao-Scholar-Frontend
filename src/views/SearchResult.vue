@@ -5,8 +5,8 @@
    <div
    style="margin-top: 50px;"
    >
-    <selectBannerVue style="float:left;margin-left: 100px;"></selectBannerVue>
-    <infoCardVue style="float:left;margin-left: 20px;"></infoCardVue>
+    <selectBannerVue style="float:left;margin-left: 100px;" :keyword="keyword"></selectBannerVue>
+    <infoCardVue style="float:left;margin-left: 20px;" :keyword="keyword"></infoCardVue>
    </div>
   </div>
 </template>
@@ -23,10 +23,14 @@
       PageHeaderVue
     },
     data:()=>({
+      keyword:"GAN",
     }),
     created(){
       var q=this.$route.query
       console.log(q)
+    },
+    methods:{
+
     }
   }
 

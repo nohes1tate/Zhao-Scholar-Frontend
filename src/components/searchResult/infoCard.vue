@@ -66,16 +66,20 @@
 import axios from 'axios';
 
     export default{
+        props:{
+            keyword:String
+        },
         data:()=>({
             page: 1,
-            pageSize:5,
+            pageSize:10,
             pageNum:'1',
             Num:1,
             CurrentPageData:[],
-            selects:["推荐排序","被引用数", "收藏数", "发表时间"],
+            selects:["推荐排序","最近发表", "最早发表", "最多引用"],
             selectMethod:"推荐排序",
             paperInfo:[],
-            keyword:"飞机战斗机",
+            orderBy:1,
+            
         }),
         methods:{
             toDocument(title){
@@ -91,6 +95,8 @@ import axios from 'axios';
                 url += this.keyword
                 url= url+"&page="+this.page
                 url= url+"&pagesize="+this.pageSize
+                url= url+"&orderby="+this.orderBy
+                console.log("url:"+url)
                 axios.get(url).then((response)=>{
                     response = response.data
                     console.log(response)
@@ -132,7 +138,17 @@ import axios from 'axios';
                 this.getCurrentPageData()
             },
             selectMethod(){
-                console.log("selectMethod:"+this.selectMethod)
+                let selectIndex=1
+                if(this.selectMethod=="最近发表"){
+                    selectIndex=2
+                }else if(this.selectMethod=="最早发表"){
+                    selectIndex=3
+                }else if(this.selectMethod=="最多引用"){
+                    selectIndex=4
+                }
+                console.log("selectMethod:"+this.selectMethod+"**id:"+selectIndex)
+                this.orderBy = selectIndex
+                this.getCurrentPageData()
             }
         }
     }
