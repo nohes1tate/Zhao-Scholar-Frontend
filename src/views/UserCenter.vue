@@ -185,10 +185,7 @@
         </div>
         <div class="page-select-box">
           <ArticleBlocks v-if="userdata.length>0"
-                         :articles="userdata"
-
-                         flag="schLib"></ArticleBlocks>
-
+                         :articles="userdata"></ArticleBlocks>
           <div class="text-center">
             <v-pagination
                 circle
