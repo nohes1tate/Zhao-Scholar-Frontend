@@ -17,6 +17,7 @@ import user from "./store/user";
 import AMap from 'vue-amap';
 Vue.use(AMap);
 
+
 // 初始化vue-amap
 AMap.initAMapApiLoader({
   // 高德key

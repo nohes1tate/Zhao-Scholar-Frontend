@@ -20,56 +20,38 @@
             :value="overlay"
             :opacity="opacity"
           >
-      <v-card style="width: 700px;background-color: white;margin-top: 150px;">
-        <v-toolbar
-            color="blue darken-1"
-            dark
-        >
-          <v-toolbar-title>引用格式</v-toolbar-title>
-                 <v-spacer>
-                 </v-spacer>
-                 <v-btn icon
-                 @click="overlay = false"
-                 >
-                    <v-icon>mdi-close</v-icon>
-                  </v-btn>
-          <template v-slot:extension>
-            <v-tabs
-                v-model="tab"
-                align-with-title
-            >
-              <v-tabs-slider color="yellow"></v-tabs-slider>
 
-              <v-tab
-                  v-for="cite in citeStyle"
-                  :key="cite.name"
-              >
-                {{ cite.name }}
-              </v-tab>
-            </v-tabs>
-          </template>
-        </v-toolbar>
-        <v-tabs-items v-model="tab">
-          <v-tab-item
-              v-for="citeContent in citeStyle"
-              :key="citeContent.name"
-          >
-            <v-textarea
-                :value=citeContent.text
-                auto-grow
-                row-height="15"
-                readonly
-            ></v-textarea>
-            <v-btn
-                depressed
-                color="primary"
-                @click="copyVal(citeContent.text)"
-                style="width: 10%;float: right;margin-right: 10px;margin-bottom: 10px;"
-            >复制</v-btn>
-          </v-tab-item>
-        </v-tabs-items>
-      </v-card>
-    </v-overlay>
+         
+          
+          <v-card style="width: 700px;background-color: white;margin-top: 150px;">
+            
+            <v-toolbar
+        color="blue darken-1"
+        dark
+      >
+       <v-toolbar-title>引用格式</v-toolbar-title>
+       <v-spacer>
+       </v-spacer>
+       <v-btn icon
+       @click="overlay = false"
+       >
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </v-toolbar>
+      <v-responsive
+      class="overflow-y-auto"
+      max-height="500"
+    >
+           <v-card v-for="item in citeStyle" :key="item.name" style="color: black;background: transparent;box-shadow: none;">
+            <v-card-title>{{item.name}}</v-card-title>
+            <v-card-text style="color: black;background-color:#fcfcfc">{{item.text}}</v-card-text>
+           </v-card>
+        </v-responsive>
+        </v-card>
+        
+      
+          </v-overlay>
+
 
         <v-list-item
         v-for="(item, i) in this.CurrentPageData"
@@ -123,9 +105,7 @@
 import axios from 'axios';
 
     export default{
-        props:{
-            keyword:String
-        },
+        
         data:()=>({
             tab:null,
             page: 1,
@@ -141,6 +121,11 @@ import axios from 'axios';
             absolute: false,
             opacity: 0.5,//透明度
             citeStyle:[{name:"引用类型", text:"引用文本"}],
+
+            isActive: false,
+            params:[],
+            keyword:"",
+            
 
         }),
         methods:{
@@ -207,10 +192,15 @@ import axios from 'axios';
             }
         },
         created(){
+            let query = this.$route.query
+            console.log("路径参数")
+            console.log(query)
+            this.keyword = query.keyword
             this.Num = this.paperInfo.length;
             this.pageNum =  Math.ceil(this.Num/this.pageSize);
             console.log("page:"+this.pageNum)
             this.getCurrentPageData()
+            
         },
         //监听page的变化
         watch:{
@@ -229,6 +219,14 @@ import axios from 'axios';
                 }
                 console.log("selectMethod:"+this.selectMethod+"**id:"+selectIndex)
                 this.orderBy = selectIndex
+                this.getCurrentPageData()
+            },
+            $route(to, from){
+                console.log("to+")
+                console.log(to)
+                console.log("from+")
+                console.log(from)
+                this.keyword = to.query.keyword
                 this.getCurrentPageData()
             }
         }
