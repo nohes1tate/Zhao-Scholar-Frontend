@@ -6,18 +6,18 @@
         <v-col cols="12" md="12" sm="2">
           <v-row>
             <v-col cols="12" md="2" sm="12">
-              <h1 class="d-flex justify-center" :style="{ color: 'white' }">
-                LOGO
+              <h1 class="d-flex justify-center" :style="{ color: 'white','margin-left':'0px'}">
+                <img height="100px" :style="{'margin-left':'50px'}" src="../assets/HatchfulExport-All/twitter_header_photo_2.png"/>
               </h1>
             </v-col>
             <v-col cols="12" md="7" sm="12" />
             <v-col cols="12" md="3" sm="12" class="d-flex align-center">
               <div>
-                <v-btn text :style="{ 'font-weight': 'bold', color: 'white' }"
-                  >English</v-btn
-                >
-                <v-btn text :style="{ 'font-weight': 'bold', color: 'white' }"
+                <v-btn text :style="{ 'font-weight': 'bold', color: 'white' }" @click="$router.push({path: '/login'})" v-show="!state"
                   >登录</v-btn
+                >
+                <v-btn text :style="{ 'font-weight': 'bold', color: 'white' }" @click="$router.push({path: '/login'})" v-show="state"
+                  >个人中心</v-btn
                 >
               </div>
             </v-col>
@@ -163,11 +163,13 @@
 </template>
 
 <script>
+import user from "@/store/user"
 export default {
   name: "HomeView",
   data() {
     return {
       search: "",
+      state:user.getters.getUser(user.state),
       showSelect:false,
       items:[{key: '1234',name: '1234'},],
       TopAuthors: [
