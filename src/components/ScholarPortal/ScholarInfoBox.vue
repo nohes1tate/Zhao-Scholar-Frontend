@@ -52,6 +52,8 @@
 </template>
 
 <script>
+import request from "@/utils/request";
+
 export default {
   name: 'ScholarInfoBox',
   props:{
@@ -67,6 +69,17 @@ export default {
     unFavor(){
       this.hasFavored = false
     }
+  },
+  mounted() {
+    const data = new FormData();
+    data.append("scholarId", "53f36604dabfae4b3499a2e2");
+    request('POST', "/api/PortalManager/getPortalInfo/", data)
+        .then(data => {
+          console.log(data);
+        })
+        .catch(error => {
+          console.error(error);
+        });
   },
   data() {
     return {
