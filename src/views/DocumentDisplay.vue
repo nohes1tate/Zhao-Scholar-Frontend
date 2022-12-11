@@ -48,12 +48,12 @@
 
       </v-card>
 
-      <v-card
+      <!-- <v-card
         class="mt-8"
         float:left
         width = "full"
-      >
-        <v-card-text>
+      > -->
+        <!-- <v-card-text>
           <p class="card-title">
            图表提取
           </p>
@@ -87,53 +87,51 @@
 
         </v-card-text>
 
-      </v-card>
+      </v-card> -->
 
       <v-card
         class="mt-8"
         float:left
         width = "full"
       >
-        <v-card-text>
-          <!-- <p class="display-1 text--primary">
-            参考文献
-          </p> -->
-          <v-tabs>
-            <v-tab>引用文献</v-tab>
-            <v-tab>参考文献</v-tab>
-            <v-tab>相似文献</v-tab>
+        <!-- <v-card-text> -->
+       
+          <v-tabs v-model="tabpointer" height="50px">
+            <v-tab
+              v-for="i in tabs"
+              :key="i.tab"
+            >
+            <p class="card-tab"> {{ i.tab }}</p>
+             
+            </v-tab>
+          </v-tabs>
 
+          <v-tabs-items v-model="tabpointer">
             <v-tab-item
               v-for="i in tabs"
-              :key="i"
-              :value="'tab-' + i"
+              :key="i.tab"
             >
               <v-card
                 flat
                 tile
               >
                 <v-card-text>
-                  <div class="text--primary">
-                    <v-item-group>
-                      <v-item
-                        v-for="[
-                          text
-                        ] in references"
-                        :key="text"
-                      >
-                      <p>[1] {{text}}</p>
-                      </v-item>
-                    </v-item-group>
-                  </div>
+                  <!-- <div class="text--primary"> -->
+                    <p class="cite">
+                  {{i.content}}
+                    </p>
+                  <!-- </div> -->
                 </v-card-text>
               </v-card>
             </v-tab-item>
-          </v-tabs>
+          </v-tabs-items>
 
 
-        </v-card-text>
+        <!-- </v-card-text> -->
 
       </v-card>
+
+      
       </div>
 
       <div id="cards-right">
@@ -167,7 +165,7 @@
               ] in keywords"
               :key="text"
             >
-            <p>- {{text}}</p>
+            <p class="cite"><span class="blue--text text--darken-1">{{text}}</span></p>
             </v-item>
           </v-item-group>
           </v-card-text>
@@ -179,12 +177,13 @@
 </template>
 
 <script>
-
+  import request from '@/utils/request';
   import PageHeader from "@/components/UserCenter/PageHeader";
   export default {
     name: 'DocumentDisplay',
     components: {PageHeader},
     data: () => ({
+      id:'',
       DOI:"10.1109/cvprw50498.2020.0002",
       title:"TimeTraveler: Reinforcement Learning for Temporal Knowledge Graph Forecasting",
       paperConference:"CCF-A",
@@ -210,7 +209,7 @@
       stars:"36",
       reads:"108",
       keywords:[
-        ['computer science'],
+        ["computer science"],
         ['cv'],
         ['Object Detection'],
       ],
@@ -233,7 +232,11 @@
         [3,'https://cdn.vuetifyjs.com/images/cards/store.jpg'],
         [4,'https://cdn.vuetifyjs.com/images/cards/store.jpg'],
 
-      ]
+      ],
+      tabs:[{tab:"引用文献",content:"[1] Arya, S. and Mount, D.M. 1993. Approximate nearest neighbor searching. In Proc. 4th Annual ACM-SIAM Symposium on Dis- crete Algorithms, pp. 271-280."},
+            {tab:"参考文献",content:"cankao"},
+            {tab:"相似文献",content:"xiangsi"}],
+      tabpointer:null
     }),
     created(){
       var title = this.$route.query.Title
@@ -241,6 +244,8 @@
       console.log("进入详情页")
       console.log(title)
       console.log(id)
+      this.id = id;
+      this.title = title;
 
       this.get_paper_info()
 
@@ -251,6 +256,37 @@
       },
       get_paper_info(){
         console.log("get paper info")
+        const data = new FormData();
+        // data.append("paperID",this.id);
+        data.append("paperID","53e9ac48b7602d97036198e6");
+
+        var sample_id = 249908020;
+        const url = '/api/PaperBrowser/getPaperInfo/' ;
+        request('POST', url, data)
+        .then(data => {
+          console.log(data);
+          this.url = data.articles_list[0].url[0]
+          this.title = data.articles_list[0].title
+          this.abstract = data.articles_list[0].abstract
+          this.DOI = data.articles_list[0].doi
+          this.stars = data.stars
+          var new_authors = data.articles_list[0].authors
+          this.author = ""
+          for(var i in new_authors){
+            this.author += new_authors[i].name + "  " + new_authors[i].org + "; "
+          }
+          this.paperConference = data.articles_list[0].venue.name
+          var new_keywords = data.articles_list[0].keywords
+          for(var j in new_keywords){
+            var this_keyword = []
+            this_keyword[0] = new_keywords[j]
+            this.keywords[j] = this_keyword
+          }
+        
+        })
+        .catch(error => {
+          console.error(error);
+        });
       },
       read(){
         console.log("read this paper");
@@ -310,11 +346,21 @@
   font-size:1.5em;
   color: #000;
 }
+.card-tab{
+  font-family: Tahoma,fantasy;
+  font-weight: bolder;
+  font-size:1em;
+  color: rgb(61, 57, 57);
+}
 #abstract{
   text-align: justify;
   /* padding: 16px 16px 6px 16px;
   font-size: 15px;
   line-height: 24px; */
+  font-family: Georgia, fantasy;
+}
+.cite{
+  text-align: justify;
   font-family: Georgia, fantasy;
 }
 </style>

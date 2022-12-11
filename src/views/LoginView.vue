@@ -258,7 +258,7 @@ export default {
       formData.append("email", self.forgetEmail);
       self.$axios({
         method: 'post',
-        url: 'UserManager/forget/',
+        url: 'api/UserManager/forget/',
         data: formData,
       })
           .then(res => {
@@ -291,7 +291,7 @@ export default {
       //console.log(self.code)
       self.$axios({
         method: 'post',
-        url: 'UserManager/update/',
+        url: 'api/UserManager/update/',
         data: formData,
       })
           .then(res => {
@@ -327,7 +327,7 @@ export default {
       formData.append("password", this.password);
       this.$axios({
         method: 'post',
-        url: 'UserManager/login/',
+        url: 'api/UserManager/login/',
         data: formData,
       })
           .then(res => {
@@ -369,7 +369,7 @@ export default {
         _formData.append("email", this.email);
         this.$axios({
           method: 'post',
-          url: 'UserManager/register/',
+          url: 'api/UserManager/register/',
           data: _formData,
         })
             .then(res => {

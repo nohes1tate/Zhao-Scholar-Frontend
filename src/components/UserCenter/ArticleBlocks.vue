@@ -96,10 +96,6 @@
         </v-list-item>
 
     </div>
-      <CiteDialog
-          :paper_id="quote_paperId"
-          :showQuote="showQuote"
-          @closeChildDialog="closeChildDialog"></CiteDialog>
   </div>
   </div>
 </template>

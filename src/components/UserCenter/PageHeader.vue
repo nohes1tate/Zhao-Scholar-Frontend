@@ -187,6 +187,7 @@ export default {
   top:10vh;
   right: 1vw;
   width: 15%;
+  z-index: 3;
 }
 .search-box{
   margin-left: 5vw;
