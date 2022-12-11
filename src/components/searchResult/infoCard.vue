@@ -15,7 +15,7 @@
     style="float: left;box-shadow: none; background-color: #fcfcfc"
     >
 
-    <v-overlay
+    <!-- <v-overlay
             :absolute="absolute"
             :value="overlay"
             :opacity="opacity"
@@ -69,7 +69,7 @@
           </v-tab-item>
         </v-tabs-items>
       </v-card>
-    </v-overlay>
+    </v-overlay> -->
 
         <v-list-item
         v-for="(item, i) in this.CurrentPageData"
@@ -85,14 +85,29 @@
 
             <v-list-item-title class="headline mb-2" v-text="item.title">
             </v-list-item-title>
-            <v-list-item-subtitle v-text="item.Author" style="color: #1E88E5;">
+            <v-list-item-subtitle v-text="item.author" style="color: #1E88E5;">
             </v-list-item-subtitle>
+            <!-- 摘要 -->
             <div v-text="item.abstract" class="text-ellipsis-two" style="font-weight: 350;">
             </div>
-            <v-divider></v-divider>
+            <!-- 关键词 -->
+            <v-chip-group
+          v-model="TypeNum"
+          column
+          multiple
+        >
+        <v-chip filter outlined
+        v-for="(type, i) in item.keywords"
+        :key="i"
+       
+        >
+            {{type}}
+        </v-chip>
+        </v-chip-group>
+            
             <div>
             <div style="margin-top: 10px;float: left;">
-                <h5 style="float: left;">被引用数:{{item.citation_count}}</h5>
+                <h5 style="float: left;">被引用数:{{item.n_citation}}</h5>
                 <!-- <h5 style="float: left;margin-left: 30px;">收藏数:{{item.collections}}</h5> -->
                 <h5 style="float: left; margin-left: 30px;">发表时间:{{item.year}}</h5>
             </div>
@@ -100,7 +115,7 @@
 
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" >收藏<v-icon color="#64B5F6">mdi-star-plus-outline</v-icon></v-btn>
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" @click=cite(item)>引用<v-icon color="#64B5F6"> mdi-format-quote-close-outline</v-icon></v-btn>
-                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;">下载<v-icon color="#64B5F6">mdi-download</v-icon></v-btn>
+                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;">PDF<v-icon color="#64B5F6">mdi-download</v-icon></v-btn>
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" @click="toDocument(item.title, item.id)">详情<v-icon color="#64B5F6">mdi-link-variant</v-icon></v-btn>
 
             </div>
@@ -120,6 +135,7 @@
 </div>
 </template>
 <script>
+import request from '@/utils/request';
 import axios from 'axios';
 
     export default{
@@ -131,15 +147,16 @@ import axios from 'axios';
             pageNum:'1',
             Num:1,
             CurrentPageData:[],
-            selects:["推荐排序","最近发表", "最早发表", "最多引用"],
+            selects:["默认","出版年份", "引用数"],
             selectMethod:"推荐排序",
             paperInfo:[],
-            orderBy:1,
+            orderBy:"default",
             overlay:false,
             absolute: false,
             opacity: 0.5,//透明度
             citeStyle:[{name:"引用类型", text:"引用文本"}],
             keyword:"gan",
+            TypeNum:[],
 
         }),
         methods:{
@@ -167,27 +184,26 @@ import axios from 'axios';
                 this.$router.push({path:"/document", query:{Title:title, Id:id}})
             },
             getCurrentPageData(){
-                let begin = (this.page - 1) * this.pageSize;
-                let end = this.page * this.pageSize;
-                this.CurrentPageData=this.paperInfo.slice(begin, end);
-                console.log(this.page)
-                let url="https://www.acemap.info/api/v2/search/result?keyword="
-                url += this.keyword
-                url= url+"&page="+this.page
-                url= url+"&pagesize="+this.pageSize
-                url= url+"&orderby="+this.orderBy
-                console.log("url:"+url)
-                axios.get(url).then((response)=>{
-                    response = response.data
-                    console.log(response)
-                    this.Num = response.qcount
-                     this.paperInfo = response.paper
-                     let len=this.paperInfo.length
-                     console.log("长度"+len)
-                     let i=0;
-
-                     for(i=0;i<len;i++){
-                        let Author = this.paperInfo[i].author
+                
+                //获取我们自己的数据
+                // this.orderBy = JSON.stringify(this.orderBy)
+                let url = 'api/PaperBrowser/searchPaper/'
+                var formdata = new FormData();
+                formdata.append("page", this.page);
+                formdata.append("pagesize", this.pageSize);
+                formdata.append("keyword", this.keyword);
+                formdata.append("orderby", this.orderBy);
+                axios({
+                    method:"post",
+                    url:url,
+                    data:formdata
+                }).then(res=>{
+                    this.Num = res.data.total
+                    this.CurrentPageData = res.data.articles_list
+                    let i=0
+                    let j=0
+                    for(i=0;i<this.CurrentPageData.length;i++){
+                        let Author = this.CurrentPageData[i].authors
                         let j=0;
                         let str="作者："
                         str=Author[0].name
@@ -195,14 +211,11 @@ import axios from 'axios';
                             str =  str+", "+Author[j].name
 
                         }
-                        this.paperInfo[i].Author = str
+                        this.CurrentPageData[i].author = str
                      }
-                     this.CurrentPageData = this.paperInfo
-                     this.pageNum= Math.ceil(this.Num/this.pageSize)
-                }).catch(function(error){
-                    console.log(error)
                 })
-
+                
+            
             }
         },
         created(){
@@ -219,12 +232,12 @@ import axios from 'axios';
             },
             selectMethod(){
                 let selectIndex=1
-                if(this.selectMethod=="最近发表"){
-                    selectIndex=2
-                }else if(this.selectMethod=="最早发表"){
-                    selectIndex=3
-                }else if(this.selectMethod=="最多引用"){
-                    selectIndex=4
+                if(this.selectMethod=="出版年份"){
+                    selectIndex="time"
+                }else if(this.selectMethod=="引用数"){
+                    selectIndex="citation"
+                }else{
+                    selectIndex = "default"
                 }
                 console.log("selectMethod:"+this.selectMethod+"**id:"+selectIndex)
                 this.orderBy = selectIndex

@@ -9,6 +9,7 @@ function request(method, url, data) {
         data.append("userID", userInfo.user.userId)
     }
     return new Promise((resolve, reject) => {
+        
         axios({
             method: method,
             url: url,
