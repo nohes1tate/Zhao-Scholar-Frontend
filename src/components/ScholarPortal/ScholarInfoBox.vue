@@ -20,8 +20,12 @@
           <div class="field-tag">c++</div>
         </div>
       </div>
-      <div style="margin-left: 3vw">
+      <div style="margin-left: 1vw">
         <v-btn outlined color="primary" v-if="!isMine" @click="toApply">认领门户</v-btn>
+      </div>
+      <div style="margin-left: 1.5vw">
+        <v-btn outlined color="green" v-if="!hasFavored" @click="favor">关注学者</v-btn>
+        <v-btn outlined color="gray" v-if="hasFavored" @click="unFavor">取消关注</v-btn>
       </div>
     </div>
     <div class="scholar-bottom">
@@ -56,6 +60,12 @@ export default {
   methods: {
     toApply(){
       this.$router.push({path:'/apply'})
+    },
+    favor(){
+      this.hasFavored = true
+    },
+    unFavor(){
+      this.hasFavored = false
     }
   },
   data() {
@@ -67,7 +77,8 @@ export default {
         paperCount: 1200,
         citationCount: 10000,
         hIndex: 10000,
-      }
+      },
+      hasFavored: false,
     }
   },
 }

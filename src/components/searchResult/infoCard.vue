@@ -101,7 +101,7 @@
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" >收藏<v-icon color="#64B5F6">mdi-star-plus-outline</v-icon></v-btn>
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" @click=cite(item)>引用<v-icon color="#64B5F6"> mdi-format-quote-close-outline</v-icon></v-btn>
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;">下载<v-icon color="#64B5F6">mdi-download</v-icon></v-btn>
-                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" @click="toDocument(item.title)">详情<v-icon color="#64B5F6">mdi-link-variant</v-icon></v-btn>
+                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" @click="toDocument(item.title, item.id)">详情<v-icon color="#64B5F6">mdi-link-variant</v-icon></v-btn>
 
             </div>
             </div>
@@ -162,9 +162,9 @@ import axios from 'axios';
                 this.overlay = !this.overlay
                 this.content=this.citeStyle(0).text
             },
-            toDocument(title){
+            toDocument(title, id){
                 console.log(title)
-                this.$router.push({path:"/document", query:{Title:title, Id:123}})
+                this.$router.push({path:"/document", query:{Title:title, Id:id}})
             },
             getCurrentPageData(){
                 let begin = (this.page - 1) * this.pageSize;
