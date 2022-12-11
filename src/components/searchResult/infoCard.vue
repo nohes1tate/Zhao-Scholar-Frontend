@@ -15,7 +15,7 @@
     style="float: left;box-shadow: none; background-color: #fcfcfc"
     >
 
-    <!-- <v-overlay
+    <v-overlay
             :absolute="absolute"
             :value="overlay"
             :opacity="opacity"
@@ -69,7 +69,7 @@
           </v-tab-item>
         </v-tabs-items>
       </v-card>
-    </v-overlay> -->
+    </v-overlay>
 
         <v-list-item
         v-for="(item, i) in this.CurrentPageData"
@@ -115,7 +115,7 @@
 
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" >收藏<v-icon color="#64B5F6">mdi-star-plus-outline</v-icon></v-btn>
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" @click=cite(item)>引用<v-icon color="#64B5F6"> mdi-format-quote-close-outline</v-icon></v-btn>
-                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;">PDF<v-icon color="#64B5F6">mdi-download</v-icon></v-btn>
+                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" @click="pdf(item.pdf)" v-show="item.haspdf">下载<v-icon color="#64B5F6">mdi-download</v-icon></v-btn>
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" @click="toDocument(item.title, item.id)">详情<v-icon color="#64B5F6">mdi-link-variant</v-icon></v-btn>
 
             </div>
@@ -175,9 +175,10 @@ import axios from 'axios';
           },
             cite(item){
                 this.citeStyle = item.cite
+                console.log(item.cite)
                 console.log(this.citeStyle)
                 this.overlay = !this.overlay
-                this.content=this.citeStyle(0).text
+                // this.content=this.citeStyle(0).text
             },
             toDocument(title, id){
                 console.log(title)
@@ -202,6 +203,7 @@ import axios from 'axios';
                     this.CurrentPageData = res.data.articles_list
                     let i=0
                     let j=0
+                    //对数据逐个进行处理
                     for(i=0;i<this.CurrentPageData.length;i++){
                         let Author = this.CurrentPageData[i].authors
                         let j=0;
@@ -212,11 +214,70 @@ import axios from 'axios';
 
                         }
                         this.CurrentPageData[i].author = str
-                     }
+                        // if(this.CurrentPageData[i])
+                        if("pdf" in this.CurrentPageData[i]){
+                            this.CurrentPageData[i].haspdf=1
+                        }else{
+                            this.CurrentPageData[i].haspdf=0
+                        }
+                        // if("vuenue" in )
+                        let cite = []
+                        if("venue" in this.CurrentPageData[i]){
+                            let GBT = this.GBTgenerateCitation(this.CurrentPageData[i].title, this.CurrentPageData[i].authors, this.CurrentPageData[i].year, this.CurrentPageData[i].venue.name)
+                            cite.push({name:"GB/T", text:GBT})
+                        }
+                        let MLA = this.MLAgenerateCitation(this.CurrentPageData[i].title, this.CurrentPageData[i].author, this.CurrentPageData[i].year)
+                        cite.push({name:"MLA", text:MLA})
+                        let BIBTEX  = this.BIBTEXgenerateCitation(this.CurrentPageData[i])
+                        cite.push({name:"BIBTEX", text:BIBTEX})
+                        this.CurrentPageData[i].cite = cite
+                    }
                 })
                 
             
+            },
+            pdf(url){
+                window.open(url, "_blank")
+            },
+            GBTgenerateCitation(title, authors, year, publisher) {
+                // 处理多个作者
+                var authorInitials = "";
+                for (var i = 0; i < authors.length; i++) {
+                    var author = authors[i].name;
+                    var initials = author.charAt(0);  // 获取作者姓氏首字母
+                    authorInitials += initials;  // 拼接作者姓氏首字母
+                }
+
+                // 使用字符串拼接函数将论文信息组合成GB/T简略引用格式
+                var citation = "[" + authorInitials + "] " + year + ". " + title + ". " + publisher + ".";
+                // 返回GB/T简略引用格式
+                return citation;
+            },
+            MLAgenerateCitation(title, authors, year){
+                var citation = authors + ". " + title + ". " + year + ".";
+                return citation
+            },
+            BIBTEXgenerateCitation(paper) {
+            // 使用字符串拼接函数将论文信息组合成BIBTEX引用格式
+            var citation = "@article{key,\n"
+                        + "  title = {" + paper.title + "},\n"
+                        + "  author = {" + paper.author + "},\n"
+                        
+            if("volume" in paper){
+                citation +=  "  volume = {" + paper.volume + "},\n"
             }
+            if("venue" in paper){
+                citation +=  "  journal = {" + paper.venue.name + "},\n"
+            }
+            citation +=  "  year = {" + paper.year + "}\n"
+            citation+= "}"
+            // 返回BIBTEX引用格式
+            return citation;
+        }
+
+
+
+
         },
         created(){
             this.Num = this.paperInfo.length;
