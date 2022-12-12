@@ -72,7 +72,7 @@ export default {
   },
   mounted() {
     const data = new FormData();
-    data.append("scholarId", "53f36604dabfae4b3499a2e2");
+    data.append("scholarID", "53f36612dabfae4b3499a60e");
     request('POST', "/api/PortalManager/getPortalInfo/", data)
         .then(data => {
           console.log(data);

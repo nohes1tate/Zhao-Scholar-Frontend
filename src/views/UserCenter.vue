@@ -1,6 +1,6 @@
 <template>
   <div class="userCenter">
-    <page-header :show-search="false"></page-header>
+    <page-header :show-search="true"></page-header>
     <div class="main-body">
       <v-row class="header">
         <span @click="backToUserCenter">个人图书馆</span>

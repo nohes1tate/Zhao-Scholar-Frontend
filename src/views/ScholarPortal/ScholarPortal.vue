@@ -1,6 +1,6 @@
 <template>
   <div class="scholar-page">
-    <page-header :show-search="false" :is-login="isLogin"></page-header>
+    <page-header :show-search="true" :is-login="isLogin"></page-header>
     <div class="top-info-and-map">
       <ScholarInfoBox />
       <RelationMap />

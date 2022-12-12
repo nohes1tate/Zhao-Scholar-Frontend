@@ -1,6 +1,6 @@
 <template>
   <div>
-    <page-header :show-search="false"></page-header>
+    <page-header :show-search="true"></page-header>
     <div class="institution-top">
       <div class="top-left">
         <v-card class="institution-info-card" elevation="2">
