@@ -21,7 +21,7 @@
 
             <v-btn color="primary" dark outlined class="ml-4" @click="addStar">收藏<v-icon class="ml-2">mdi-star-plus-outline</v-icon></v-btn>
 
-            <v-btn color="primary" dark text class="ml-4" @click="cite">引用</v-btn>
+            <v-btn color="primary" dark text class="ml-4" @click="cite">引用<v-icon>mdi-format-quote-close-outline</v-icon></v-btn>
             <!-- 找一个引号图标放到引用后面 -->
 
             <v-btn color="primary" dark text class="ml-4" @click="share">分享<v-icon>mdi-arrow-top-right-bold-box-outline</v-icon></v-btn>
@@ -149,7 +149,7 @@
                   <div class="text-h4 green--text text--darken-2 font-weight-medium">{{stars}}</div><div class="ml-0">收藏量</div>
                 </div>
                 <div  class="d-inline-block ml-5">
-                  <div class="text-h4 amber--text text--darken-4 font-weight-medium" >{{reads}}</div><div class="ml-2">阅读数</div>
+                  <div class="text-h4 amber--text text--darken-4 font-weight-medium" >{{n_citation}}</div><div class="ml-2">被引数</div>
                 </div>
             </div>
           </v-card-text>
@@ -172,6 +172,63 @@
 
         </v-card>
       </div>
+
+      <v-overlay
+           
+            :value="overlay"
+            :opacity="opacity"
+          >
+      <v-card style="width: 700px;background-color: white;margin-top: 150px;">
+        <v-toolbar
+            color="blue darken-1"
+            dark
+        >
+          <v-toolbar-title>引用格式</v-toolbar-title>
+                 <v-spacer>
+                 </v-spacer>
+                 <v-btn icon
+                 @click="overlay = false"
+                 >
+                    <v-icon>mdi-close</v-icon>
+                  </v-btn>
+          <template v-slot:extension>
+            <v-tabs
+                v-model="tab"
+                align-with-title
+            >
+              <v-tabs-slider color="yellow"></v-tabs-slider>
+
+              <v-tab
+                  v-for="cite in citeStyle"
+                  :key="cite.name"
+              >
+                {{ cite.name }}
+              </v-tab>
+            </v-tabs>
+          </template>
+        </v-toolbar>
+        <v-tabs-items v-model="tab">
+          <v-tab-item
+              v-for="citeContent in citeStyle"
+              :key="citeContent.name"
+          >
+            <v-textarea
+                :value=citeContent.text
+                auto-grow
+                row-height="15"
+                readonly
+            ></v-textarea>
+            <v-btn
+                depressed
+                color="primary"
+                @click="copyVal(citeContent.text)"
+                style="width: 10%;float: right;margin-right: 10px;margin-bottom: 10px;"
+            >复制</v-btn>
+          </v-tab-item>
+        </v-tabs-items>
+      </v-card>
+    </v-overlay>
+
     </div>
   </div>
 </template>
@@ -188,30 +245,12 @@
       title:"TimeTraveler: Reinforcement Learning for Temporal Knowledge Graph Forecasting",
       paperConference:"CCF-A",
       author:"Haofan WangZifan WangMengnan DuFan YangZijian ZhangSirui DingPiotr MardzielXia Hu",
-      url:"https://www.runoob.com",
-      items: [
-        {
-          text: 'Dashboard',
-          disabled: false,
-          href: 'breadcrumbs_dashboard',//跳转到的链接
-        },
-        {
-          text: 'Link 1',
-          disabled: false,
-          href: 'breadcrumbs_link_1',
-        },
-        {
-          text: 'Link 2',
-          disabled: true,
-          href: 'breadcrumbs_link_2',
-        },
-      ],
+      url:"",
+     
       stars:"36",
-      reads:"108",
+      n_citation:"108",
       keywords:[
-        ["computer science"],
-        ['cv'],
-        ['Object Detection'],
+        
       ],
       abstract:'well meaning and kindly."a benevolent smile"well meaning and kindly.well meand kindly."a benevolent smile"well meaning and kindly.well meand kindly."a benevolent smile"well meaning and kindly.well meand kindly."a benevolent smile"well meaning and kindly.well mean',
       references:[
@@ -236,7 +275,11 @@
       tabs:[{tab:"引用文献",content:"[1] Arya, S. and Mount, D.M. 1993. Approximate nearest neighbor searching. In Proc. 4th Annual ACM-SIAM Symposium on Dis- crete Algorithms, pp. 271-280."},
             {tab:"参考文献",content:"cankao"},
             {tab:"相似文献",content:"xiangsi"}],
-      tabpointer:null
+      tabpointer:null,
+      tab:null,
+      citeStyle:[{name:"引用类型", text:"引用文本"}],
+      overlay:false,
+      opacity:0.5
     }),
     created(){
       var title = this.$route.query.Title
@@ -264,15 +307,23 @@
         request('POST', url, data)
         .then(data => {
           console.log(data);
-          this.url = data.articles_list[0].url[0]
+          if(data.articles_list[0].url[0]){
+             this.url = data.articles_list[0].url[0]
+          }
+           
           this.title = data.articles_list[0].title
           this.abstract = data.articles_list[0].abstract
           this.DOI = data.articles_list[0].doi
           this.stars = data.stars
+          this.n_citation = data.articles_list[0].n_citation
           var new_authors = data.articles_list[0].authors
           this.author = ""
           for(var i in new_authors){
-            this.author += new_authors[i].name + "  " + new_authors[i].org + "; "
+            this.author += new_authors[i].name 
+            if(new_authors[i].org){
+              this.author += "  " + new_authors[i].org 
+            }
+            this.author += "; "
           }
           this.paperConference = data.articles_list[0].venue.name
           var new_keywords = data.articles_list[0].keywords
@@ -282,6 +333,16 @@
             this.keywords[j] = this_keyword
           }
         
+          let cite = []
+            if("venue" in data.articles_list[0]){
+              let GBT = this.GBTgenerateCitation(data.articles_list[0].title, data.articles_list[0].authors, data.articles_list[0].year, data.articles_list[0].venue.name)
+              cite.push({name:"GB/T", text:GBT})
+            }
+            let MLA = this.MLAgenerateCitation(data.articles_list[0].title, data.articles_list[0].authors[0].name, data.articles_list[0].year)
+            cite.push({name:"MLA", text:MLA})
+            let BIBTEX  = this.BIBTEXgenerateCitation(data.articles_list[0])
+            cite.push({name:"BIBTEX", text:BIBTEX})
+            this.citeStyle = cite;
         })
         .catch(error => {
           console.error(error);
@@ -290,17 +351,85 @@
       read(){
         console.log("read this paper");
         // window.location.replace(this.url);
-        window.open(this.url, "_blank")
+        if(this.url==""){
+          this.$message.error("不存在原文链接");
+        }else{
+          window.open(this.url, "_blank")
+        }
       },
       addStar(){
         console.log("star this paper")
       },
       share(){
         console.log("share this paper")
+        const share = {
+        title: this.title,
+        desc: "描述",
+        share_url: this.url
+      };
+      location.replace(
+        "https://connect.qq.com/widget/shareqq/index.html?url=" +
+          encodeURIComponent(share.share_url) +
+          "&title=" +
+          share.title +
+          "&desc=" +
+          share.desc
+      );
       },
       cite(){
-        console.log("cite this paper")
+            this.overlay = !this.overlay
+            console.log(this.citeStyle)
+            // this.overlay = !this.overlay
+                // this.content=this.citeStyle(0).text
       },
+      copyVal(val) {
+            let aux = document.createElement("input");
+            aux.setAttribute("value", val);
+            document.body.appendChild(aux);
+            aux.select();
+            document.execCommand("copy");
+            document.body.removeChild(aux);
+            if (val !== null) {
+              this.$message.success("引用已复制至剪贴板");
+            } else {
+              this.$message.error("引用格式为空");
+            }
+          },
+      GBTgenerateCitation(title, authors, year, publisher) {
+                // 处理多个作者
+                var authorInitials = "";
+                for (var i = 0; i < authors.length; i++) {
+                    var author = authors[i].name;
+                    var initials = author.charAt(0);  // 获取作者姓氏首字母
+                    authorInitials += initials;  // 拼接作者姓氏首字母
+                }
+
+                // 使用字符串拼接函数将论文信息组合成GB/T简略引用格式
+                var citation = "[" + authorInitials + "] " + year + ". " + title + ". " + publisher + ".";
+                // 返回GB/T简略引用格式
+                return citation;
+            },
+            MLAgenerateCitation(title, authors, year){
+                var citation = authors + ". " + title + ". " + year + ".";
+                return citation
+            },
+            BIBTEXgenerateCitation(paper) {
+            // 使用字符串拼接函数将论文信息组合成BIBTEX引用格式
+            var citation = "@article{key,\n"
+                        + "  title = {" + paper.title + "},\n"
+                        + "  author = {" + paper.author + "},\n"
+                        
+            if("volume" in paper){
+                citation +=  "  volume = {" + paper.volume + "},\n"
+            }
+            if("venue" in paper){
+                citation +=  "  journal = {" + paper.venue.name + "},\n"
+            }
+            citation +=  "  year = {" + paper.year + "}\n"
+            citation+= "}"
+            // 返回BIBTEX引用格式
+            return citation;
+        }
     }
   }
 </script>
