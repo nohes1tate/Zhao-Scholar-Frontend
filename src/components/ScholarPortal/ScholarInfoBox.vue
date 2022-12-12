@@ -15,9 +15,7 @@
           {{ scholarInfo.affiliation }}
         </div>
         <div class="field-tag-box">
-          <div class="field-tag">python</div>
-          <div class="field-tag">java</div>
-          <div class="field-tag">c++</div>
+          <div class="field-tag" v-for="item in scholarInfo.field" :key="item">{{ item }}</div>
         </div>
       </div>
       <div style="margin-left: 1vw">
@@ -56,9 +54,6 @@ import request from "@/utils/request";
 
 export default {
   name: 'ScholarInfoBox',
-  props:{
-    isMine:{default: false},
-  },
   methods: {
     toApply(){
       this.$router.push({path:'/apply'})
@@ -72,10 +67,17 @@ export default {
   },
   mounted() {
     const data = new FormData();
-    data.append("scholarID", "53f36612dabfae4b3499a60e");
+    data.append("scholarID", this.$route.query.id);
     request('POST', "/api/PortalManager/getPortalInfo/", data)
         .then(data => {
-          console.log(data);
+          this.scholarInfo.name = data.scholarName;
+          this.scholarInfo.affiliation = data.institution;
+          this.scholarInfo.paperCount = data.papers;
+          this.scholarInfo.citationCount = data.citations;
+          this.scholarInfo.hIndex = data.hIndex;
+          this.scholarInfo.field = data.fields;
+          this.hasFavored = data.hasFavored;
+          this.isMine = data.isMine;
         })
         .catch(error => {
           console.error(error);
@@ -84,14 +86,15 @@ export default {
   data() {
     return {
       scholarInfo: {
-        name: 'Scholar Name',
-        affiliation: 'Beihang University',
-        field: ['python', 'java', 'c++'],
-        paperCount: 1200,
-        citationCount: 10000,
-        hIndex: 10000,
+        name: '学者姓名',
+        affiliation: '未知',
+        field: [],
+        paperCount: 0,
+        citationCount: 0,
+        hIndex: 0,
       },
       hasFavored: false,
+      isMine: false,
     }
   },
 }
@@ -145,6 +148,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width:7vw;
   margin-top: 4vh;
   margin-left: 9vh;
   margin-right: 9vh;

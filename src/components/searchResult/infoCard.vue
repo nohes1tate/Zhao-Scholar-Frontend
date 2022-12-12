@@ -179,7 +179,11 @@ import axios from 'axios';
         }),
         methods:{
           toscholar(id){
-            this.$router.push({path:"/scholar", query:{id:id}})
+            if(id){
+              this.$router.push({path:"/scholar", query:{id:id}})
+            } else {
+              this.$message.error('没有该学者信息');
+            }
           },
           searchkeyword(keyword){
             this.$router.push({path:"/search", query:{keyword:keyword}})
