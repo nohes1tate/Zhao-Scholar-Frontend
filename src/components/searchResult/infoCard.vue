@@ -1,15 +1,19 @@
 <template>
     <div>
-    <div style="margin-top: 20px;font-size: 18px;">
-    <div style="margin-left: 10px;float: left;">找到{{Num}}条结果</div>
-    <div style="margin-left: 10px;float: left;">第{{page}}页</div>
-    <div style="float: right;margin-right: 20px;">
+    <div style="font-size: 18px; height: 80px;">
+        <span style="float:left; text-align:right;margin-top: 20px;color: grey;font-size: 15px;margin-left: 18px;">
+            找到{{Num}}条结果
+        </span>
+        <span style="float:left; text-align:right;margin-top: 20px;color: grey;font-size: 15px;margin-left: 30px;">
+            第{{page}}页
+        </span>
         <v-select
             :items="selects"
             label="排序方式"
             v-model="selectMethod"
+            style="float:right;margin-top: 0%;"
           ></v-select></div>
-</div>
+
     <v-card
     width="1000px"
     style="float: left;box-shadow: none; background-color: #fcfcfc"
