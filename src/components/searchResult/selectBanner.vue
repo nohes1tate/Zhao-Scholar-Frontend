@@ -1,6 +1,12 @@
 <template>
+    <div width="250px">
+      <div style="font-size: 18px; height: 80px;">
+        <span style="float:left; text-align:right;margin-top: 20px;color: grey;font-size: 15px;margin-left: 0px;">
+            筛选
+        </span>
+      </div>
     <v-card 
-    width="250px"
+    width="100%"
     height=""
     >
     <v-subheader>类型</v-subheader>
@@ -72,6 +78,7 @@
     
     <v-divider></v-divider>
     </v-card>
+  </div>
 </template>
 <script>
 import Vue from 'vue'
