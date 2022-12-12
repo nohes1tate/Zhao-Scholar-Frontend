@@ -193,6 +193,7 @@ export default {
   cursor: pointer;
 }
 .select-box{
+  z-index: 2;
   position: absolute;
   top:10vh;
   right: 1vw;
