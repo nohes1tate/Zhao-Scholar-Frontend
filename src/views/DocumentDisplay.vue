@@ -4,7 +4,7 @@
     <page-header :show-search="true"></page-header>
       <!-- <v-input persistant-hint="输入你想了解的论文" absolute right>input</v-input> -->
 <!--      <v-btn  @click="jump2login" tile color="indigo" dark absolute right>登录/注册</v-btn>-->
-
+      <CollectDialog :collect-show="collectShow" :paperID="id" :isCollect="isCollect" @closeChildDialog="closeChildDialog"></CollectDialog>
       <div id="allcontent">
 
 
@@ -19,7 +19,7 @@
 
             <v-btn color="primary" dark @click="read">阅读<v-icon class="ml-2">mdi-eye</v-icon></v-btn>
 
-            <v-btn color="primary" dark outlined class="ml-4" @click="addStar">收藏<v-icon class="ml-2">mdi-star-plus-outline</v-icon></v-btn>
+            <v-btn color="primary" dark outlined class="ml-4" @click="changeCollectIconToTrue">收藏<v-icon class="ml-2">mdi-star-plus-outline</v-icon></v-btn>
 
             <v-btn color="primary" dark text class="ml-4" @click="cite">引用<v-icon>mdi-format-quote-close-outline</v-icon></v-btn>
             <!-- 找一个引号图标放到引用后面 -->
@@ -34,7 +34,6 @@
       <div id="cards-left" class="mt-8">
         <v-card
         class="mx=auto"
-        float:left
         width = "full"
       >
         <v-card-text>
@@ -91,18 +90,17 @@
 
       <v-card
         class="mt-8"
-        float:left
         width = "full"
       >
         <!-- <v-card-text> -->
-       
+
           <v-tabs v-model="tabpointer" height="50px">
             <v-tab
               v-for="i in tabs"
               :key="i.tab"
             >
             <p class="card-tab"> {{ i.tab }}</p>
-             
+
             </v-tab>
           </v-tabs>
 
@@ -131,14 +129,12 @@
 
       </v-card>
 
-      
+
       </div>
 
       <div id="cards-right">
         <v-card
         class="ml-10 mt-8"
-        float:right
-        padding:10px
         >
           <v-card-text>
             <p class="card-title">
@@ -174,7 +170,7 @@
       </div>
 
       <v-overlay
-           
+
             :value="overlay"
             :opacity="opacity"
           >
@@ -236,9 +232,11 @@
 <script>
   import request from '@/utils/request';
   import PageHeader from "@/components/UserCenter/PageHeader";
+  import user from "@/store/user";
+  import CollectDialog from "@/components/UserCenter/collectDialog";
   export default {
     name: 'DocumentDisplay',
-    components: {PageHeader},
+    components: {CollectDialog, PageHeader},
     data: () => ({
       id:'',
       DOI:"10.1109/cvprw50498.2020.0002",
@@ -246,11 +244,11 @@
       paperConference:"CCF-A",
       author:"Haofan WangZifan WangMengnan DuFan YangZijian ZhangSirui DingPiotr MardzielXia Hu",
       url:"",
-     
+
       stars:"36",
       n_citation:"108",
       keywords:[
-        
+
       ],
       abstract:'well meaning and kindly."a benevolent smile"well meaning and kindly.well meand kindly."a benevolent smile"well meaning and kindly.well meand kindly."a benevolent smile"well meaning and kindly.well meand kindly."a benevolent smile"well meaning and kindly.well mean',
       references:[
@@ -279,7 +277,10 @@
       tab:null,
       citeStyle:[{name:"引用类型", text:"引用文本"}],
       overlay:false,
-      opacity:0.5
+      opacity:0.5,
+      chooseTag:[],
+      collectShow:false,
+      isCollect:false,
     }),
     created(){
       var title = this.$route.query.Title
@@ -291,9 +292,15 @@
       this.title = title;
 
       this.get_paper_info()
-
     },
     methods:{
+      changeCollectIconToTrue(){
+        this.collectShow=true;
+        this.isCollect=true;
+      },
+      closeChildDialog() {
+        this.collectShow = false;
+      },
       jump2login(){
         this.$router.push('/login');
       },
@@ -306,11 +313,9 @@
         const url = '/api/PaperBrowser/getPaperInfo/' ;
         request('POST', url, data)
         .then(data => {
-          console.log(data);
           if(data.articles_list[0].url[0]){
              this.url = data.articles_list[0].url[0]
           }
-           
           this.title = data.articles_list[0].title
           this.abstract = data.articles_list[0].abstract
           this.DOI = data.articles_list[0].doi
@@ -319,9 +324,9 @@
           var new_authors = data.articles_list[0].authors
           this.author = ""
           for(var i in new_authors){
-            this.author += new_authors[i].name 
+            this.author += new_authors[i].name
             if(new_authors[i].org){
-              this.author += "  " + new_authors[i].org 
+              this.author += "  " + new_authors[i].org
             }
             this.author += "; "
           }
@@ -332,7 +337,6 @@
             this_keyword[0] = new_keywords[j]
             this.keywords[j] = this_keyword
           }
-        
           let cite = []
             if("venue" in data.articles_list[0]){
               let GBT = this.GBTgenerateCitation(data.articles_list[0].title, data.articles_list[0].authors, data.articles_list[0].year, data.articles_list[0].venue.name)
@@ -343,6 +347,8 @@
             let BIBTEX  = this.BIBTEXgenerateCitation(data.articles_list[0])
             cite.push({name:"BIBTEX", text:BIBTEX})
             this.citeStyle = cite;
+            console.log(121)
+            console.log(this.citeStyle)
         })
         .catch(error => {
           console.error(error);
@@ -356,9 +362,6 @@
         }else{
           window.open(this.url, "_blank")
         }
-      },
-      addStar(){
-        console.log("star this paper")
       },
       share(){
         console.log("share this paper")
@@ -418,7 +421,7 @@
             var citation = "@article{key,\n"
                         + "  title = {" + paper.title + "},\n"
                         + "  author = {" + paper.author + "},\n"
-                        
+
             if("volume" in paper){
                 citation +=  "  volume = {" + paper.volume + "},\n"
             }
@@ -492,4 +495,5 @@
   text-align: justify;
   font-family: Georgia, fantasy;
 }
+
 </style>

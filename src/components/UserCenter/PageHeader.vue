@@ -104,6 +104,7 @@ export default {
       }
       else if(i===1){
         if(this.authorId===0){
+          this.$message.warning("请先认领学者来激活您的个人门户")
           this.$router.push({path:'/apply', query:{id:this.userId}})
         }
         else

@@ -68,12 +68,12 @@
                         <v-card-actions class="justify-end">
                           <v-btn
                               text
-                              @click="handleNewTag"
-                          >确定</v-btn>
-                          <v-btn
-                              text
                               @click="dialog.value = false"
                           >关闭</v-btn>
+                          <v-btn
+                              text
+                              @click="handleNewTag"
+                          >确定</v-btn>
                         </v-card-actions>
                       </v-card>
                     </template>
@@ -191,6 +191,7 @@
           <ArticleBlocks v-if="userdata.length>0"
                          :articles="userdata"
                          :tagID="thisTagId"
+                         :key="reloadKey3"
                          flag="schLib"></ArticleBlocks>
 
           <div class="text-center">
@@ -221,6 +222,7 @@ export default {
   name: "UserCenter",
   components: {PageHeader ,ArticleBlocks},
   data:() => ({
+      reloadKey3:false,
       reloadKey2:false,
       reloadKey:false,
       userId:"",
@@ -290,7 +292,7 @@ export default {
       val && setTimeout(() => (this.activePicker = 'YEAR'))
     },
   },
-  created() {
+  mounted() {
     const userInfo = user.getters.getUser(user.state());
     if (!userInfo)
     {
@@ -304,11 +306,85 @@ export default {
       this.userId=userInfo.user.userId;
       this.getAllTags();
       this.getFollowAuthor();
-      this.reloadKey=!this.reloadKey;
-      this.thisTagId=this.tagData[0].collectID;
-      this.thisTagName=this.tagData[0].tag_name;
   },
   methods: {
+    setDefaultTagData(){
+      this.reloadKey=!this.reloadKey;
+      this.thisTagId=this.tagData[0].collectID;
+      console.log(this.tagData)
+      this.thisTagName=this.tagData[0].tag_name;
+      this.getDefaultArticle();
+    },
+    getArticleCite(){
+      let i=0;
+      for(i=0;i<this.articles.length;i++){
+        let Author = this.articles[i].authors
+        let j=0;
+        let str="作者："
+        str=Author[0].name
+        for(j=1;j<Author.length;j++){
+          str =  str+", "+Author[j].name
+
+        }
+        this.articles[i].author = str
+        if("pdf" in this.articles[i]){
+          this.articles[i].haspdf=1
+        }else{
+          this.articles[i].haspdf=0
+        }
+        if("keywords" in this.articles[i]){
+          this.articles[i].haskeywords=true;
+        }else{
+          this.articles[i].haskeywords=false;
+        }
+        // if("vuenue" in )
+        let cite = []
+        if("venue" in this.articles[i]){
+          let GBT = this.GBTgenerateCitation(this.articles[i].title, this.articles[i].authors, this.articles[i].year, this.articles[i].venue.name)
+          cite.push({name:"GB/T", text:GBT})
+        }
+        let MLA = this.MLAgenerateCitation(this.articles[i].title, this.articles[i].author, this.articles[i].year)
+        cite.push({name:"MLA", text:MLA})
+        let BIBTEX  = this.BIBTEXgenerateCitation(this.articles[i])
+        cite.push({name:"BIBTEX", text:BIBTEX})
+        this.articles[i].cite = cite
+      }
+    },
+    GBTgenerateCitation(title, authors, year, publisher) {
+      // 处理多个作者
+      var authorInitials = "";
+      for (var i = 0; i < authors.length; i++) {
+        var author = authors[i].name;
+        var initials = author.charAt(0);  // 获取作者姓氏首字母
+        authorInitials += initials;  // 拼接作者姓氏首字母
+      }
+
+      // 使用字符串拼接函数将论文信息组合成GB/T简略引用格式
+      var citation = "[" + authorInitials + "] " + year + ". " + title + ". " + publisher + ".";
+      // 返回GB/T简略引用格式
+      return citation;
+    },
+    MLAgenerateCitation(title, authors, year){
+      var citation = authors + ". " + title + ". " + year + ".";
+      return citation
+    },
+    BIBTEXgenerateCitation(paper) {
+      // 使用字符串拼接函数将论文信息组合成BIBTEX引用格式
+      var citation = "@article{key,\n"
+          + "  title = {" + paper.title + "},\n"
+          + "  author = {" + paper.author + "},\n"
+
+      if("volume" in paper){
+        citation +=  "  volume = {" + paper.volume + "},\n"
+      }
+      if("venue" in paper){
+        citation +=  "  journal = {" + paper.venue.name + "},\n"
+      }
+      citation +=  "  year = {" + paper.year + "}\n"
+      citation+= "}"
+      // 返回BIBTEX引用格式
+      return citation;
+    },
     getFollowAuthor(){
       const userInfo = user.getters.getUser(user.state);
       const formData = new FormData();
@@ -321,7 +397,6 @@ export default {
         data: formData,
       })
           .then(res => {
-            console.log(res.data)
             if(res.data.error===0){
               this.follow_list=res.data.follow_list;
               this.reloadKey2=!this.reloadKey2;
@@ -350,6 +425,7 @@ export default {
           .then(res => {
             if(res.data.error===0){
               this.articles=res.data.articles_list;
+              this.getArticleCite();
             }
             else
               this.$message.warning(res.data.msg);
@@ -373,7 +449,8 @@ export default {
         data: formData,
       })
           .then(res => {
-            this.articles=res.data.articles_list
+            this.articles=res.data.articles_list;
+            this.getArticleCite();
           })
           .catch(err => {
             console.log(err);
@@ -393,6 +470,7 @@ export default {
           .then(res => {
               this.tagData=res.data.tagData;
             this.reloadKey=!this.reloadKey;
+            this.setDefaultTagData();
           })
           .catch(err => {
             console.log(err);
@@ -440,37 +518,6 @@ export default {
     },
     handleCurrentChange(val) {
       this.pageIdx = val;
-    },
-    save (date) {
-      this.$refs.menu.save(date)
-    },
-    updateTime() {
-      let _min_year = 2022, _max_year = 0;
-      for (let i = 0; i < this.articles.length; i++) {
-        if (this.articles[i].year < _min_year)
-          _min_year = this.articles[i].year;
-        if (this.articles[i].year > _max_year)
-          _max_year = this.articles[i].year;
-      }
-      this.year[0] = _min_year;
-      this.year[1] = _max_year;
-    },
-
-    // 分页
-    indexMethod(index) {
-      return (this.pageIdx-1)*this.size+index;
-    },
-    handleSizeChange(val) {
-      this.pageIdx = 1;
-      this.size = val;
-    },
-
-    delArticleInLists(paper_id) {
-      let i;
-      for (i = 0; i < this.articles.length; i++)
-        if (this.articles[i].paper_id === paper_id)
-          break;
-      this.articles.splice(i,1);
     },
     backToUserCenter() {
       let routeUrl = this.$router.resolve({
@@ -534,6 +581,28 @@ export default {
               console.log(err);
             })
     },
+    getDefaultArticle(){
+      const userInfo = user.getters.getUser(user.state);
+      const formData = new FormData();
+      const self = this;
+      formData.append("authorization", userInfo.user.Authorization)
+      formData.append("user_id", userInfo.user.userId)
+      formData.append("tag_name", this.thisTagName)
+      self.$axios({
+        method: 'post',
+        url: 'api/UserManager/getCollectPapers/',
+        data: formData,
+      })
+          .then(res => {
+            this.articles=res.data.articles_list;
+            this.getArticleCite();
+            this.reloadKey3=!this.reloadKey3;
+          })
+          .catch(err => {
+            console.log(err);
+          })
+    },
+
   },
   computed: {
     pageLength: function (){

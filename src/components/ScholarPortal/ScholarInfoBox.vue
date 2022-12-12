@@ -91,22 +91,22 @@ export default {
     unFavor(){
       this.hasFavored = false;
       const userInfo = user.getters.getUser(user.state);
-      this.not_follow=false;
-      this.showMenu=false;
       const self = this;
       const formData = new FormData();
       formData.append("username", userInfo.user.username)
       formData.append("authorization", userInfo.user.Authorization)
       formData.append("userID", userInfo.user.userId)
-      formData.append("authorID",this.current_follow_id)
+      formData.append("authorID",this.scholarInfo.scholarID)
       self.$axios({
         method: 'post',
         url: 'api/UserManager/disfollow/',
         data: formData,
       })
           .then(res => {
-            console.log(res.data.error)
-            console.log(res.data.msg)
+            if(res.data.error===0)
+              this.$message.success("取消关注成功！")
+            else
+              this.$message.error("取消关注失败！")
           })
           .catch(err => {
             console.log(err);

@@ -341,7 +341,7 @@ export default {
                   'Authorization': res.data.authorization,
                   'userId': res.data.userID,
                   'email':res.data.email,
-                  'authorId': res.data.authorID,
+                  'authorId': res.data.scholarID,
                 }
               });
               const history_pth = localStorage.getItem('preRoute');

@@ -54,7 +54,7 @@
                       :key="citeContent.name"
                   >
                     <v-textarea
-                        :value=citeContent.content
+                        :value=citeContent.text
                         auto-grow
                         row-height="15"
                         readonly
@@ -62,7 +62,7 @@
                     <v-btn
                         depressed
                         color="primary"
-                        @click="copyVal(citeContent.content)"
+                        @click="copyVal(citeContent.text)"
                         style="width: 10%;float: right;margin-right: 10px;margin-bottom: 10px;"
                     >复制</v-btn>
                   </v-tab-item>
@@ -166,7 +166,8 @@ export default {
   },
   methods:{
     cite(item){
-      // this.citeStyle = item.cite
+       this. citation_msg = item.cite
+      console.log(this. citation_msg)
       this.overlay = !this.overlay
       // this.content=this.citeStyle(0).text
     },
@@ -224,6 +225,9 @@ export default {
       formData.append("userID", userInfo.user.userId)
       formData.append("collectID", this.tagID)
       formData.append("paperID", item.id)
+      console.log(item.id)
+      console.log(this.tagID)
+      console.log(userInfo.user.userId)
       self.$axios({
         method: 'post',
         url: 'api/UserManager/discollectPaper/',
@@ -237,41 +241,6 @@ export default {
             console.log(err);
           })
     },
-    GBTgenerateCitation(title, authors, year, publisher) {
-      // 处理多个作者
-      var authorInitials = "";
-      for (var i = 0; i < authors.length; i++) {
-        var author = authors[i].name;
-        var initials = author.charAt(0);  // 获取作者姓氏首字母
-        authorInitials += initials;  // 拼接作者姓氏首字母
-      }
-
-      // 使用字符串拼接函数将论文信息组合成GB/T简略引用格式
-      var citation = "[" + authorInitials + "] " + year + ". " + title + ". " + publisher + ".";
-      // 返回GB/T简略引用格式
-      return citation;
-    },
-    MLAgenerateCitation(title, authors, year){
-      var citation = authors + ". " + title + ". " + year + ".";
-      return citation
-    },
-    BIBTEXgenerateCitation(paper) {
-      // 使用字符串拼接函数将论文信息组合成BIBTEX引用格式
-      var citation = "@article{key,\n"
-          + "  title = {" + paper.title + "},\n"
-          + "  author = {" + paper.author + "},\n"
-
-      if("volume" in paper){
-        citation +=  "  volume = {" + paper.volume + "},\n"
-      }
-      if("venue" in paper){
-        citation +=  "  journal = {" + paper.venue.name + "},\n"
-      }
-      citation +=  "  year = {" + paper.year + "}\n"
-      citation+= "}"
-      // 返回BIBTEX引用格式
-      return citation;
-    }
   }
 }
 </script>

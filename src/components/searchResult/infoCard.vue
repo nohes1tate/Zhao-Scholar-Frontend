@@ -74,6 +74,61 @@
         </v-tabs-items>
       </v-card>
     </v-overlay>
+      <v-overlay
+          :absolute="absolute"
+          :value="collectShow"
+          :opacity="opacity"
+      >
+        <v-card style="width: 700px;background-color: white;margin-top: 150px;">
+          <v-toolbar
+              color="blue darken-1"
+              dark
+          >
+            <v-toolbar-title>引用格式</v-toolbar-title>
+            <v-spacer>
+            </v-spacer>
+            <v-btn icon
+                   @click="collectShow = false"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+            <template v-slot:extension>
+              <v-tabs
+                  v-model="tab"
+                  align-with-title
+              >
+                <v-tabs-slider color="yellow"></v-tabs-slider>
+
+                <v-tab
+                    v-for="cite in citeStyle"
+                    :key="cite.name"
+                >
+                  {{ cite.name }}
+                </v-tab>
+              </v-tabs>
+            </template>
+          </v-toolbar>
+          <v-tabs-items v-model="tab">
+            <v-tab-item
+                v-for="citeContent in citeStyle"
+                :key="citeContent.name"
+            >
+              <v-textarea
+                  :value=citeContent.text
+                  auto-grow
+                  row-height="15"
+                  readonly
+              ></v-textarea>
+              <v-btn
+                  depressed
+                  color="primary"
+                  @click="copyVal(citeContent.text)"
+                  style="width: 10%;float: right;margin-right: 10px;margin-bottom: 10px;"
+              >复制</v-btn>
+            </v-tab-item>
+          </v-tabs-items>
+        </v-card>
+      </v-overlay>
 
         <v-list-item
         v-for="(item, i) in this.CurrentPageData"
@@ -87,53 +142,57 @@
         >
         <v-list-item-content style="margin-left: 10px;">
 
-            <v-list-item-title class="headline mb-2" v-text="item.title" @click="toDocument(item.title, item.id)">
+            <v-list-item-title class="paper-title headline mb-2" v-text="item.title" @click="toDocument(item.title, item.id)">
             </v-list-item-title>
 
 
             <v-list-item-subtitle style="color: #1E88E5;">
-                
+
                 <span
-                
+
                class="focusChange"
-                v-for="(author_item, j) in item.authors" :key="j" 
+                v-for="(author_item, j) in item.authors" :key="j"
                 v-on:click="toscholar(author_item.id)"
-                
+
                 >
                 {{author_item.name}},
                 </span>
             </v-list-item-subtitle>
             <!-- 摘要 -->
             <div v-text="item.abstract" class="text-ellipsis-two" style="font-weight: 350;"
-            
+
             >
             </div>
             <!-- 关键词 -->
-           
-            
+
+
          <v-list-item-action-text v-show="item.haskeywords">
         关键词：
-        
+
         <v-chip  outlined
         v-for="(type, i) in item.keywords"
         :key="i"
         @click="searchkeyword(type)"
-        
+
         :ripple="false"
         class="ma-2"
         label
         >
             {{type}}
         </v-chip>
-    </v-list-item-action-text>  
+    </v-list-item-action-text>
 
             <div>
+
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click=cite(item)>
                     引用<v-icon color="#64B5F6"> mdi-format-quote-close-outline</v-icon>
                 </v-btn>
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click="toDocument(item.title, item.id)">
                     详情<v-icon color="#64B5F6">mdi-link-variant</v-icon>
                 </v-btn>
+              <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click="getCollect(item.title, item.id)">
+                收藏<v-icon color="#64B5F6">mdi-star-plus-outline</v-icon>
+              </v-btn>
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click="pdf(item.pdf)" v-show="item.haspdf">
                     下载<v-icon color="#64B5F6">mdi-download</v-icon>
                 </v-btn>
@@ -150,7 +209,7 @@
                   {{item.year}}
                 </span>
                 </span>
-           
+
             </div>
         </v-list-item-content>
     </v-card>
@@ -171,8 +230,9 @@ import request from '@/utils/request';
 import axios from 'axios';
 
     export default{
-  
+
         data:()=>({
+            collectShow:false,
             tab:null,
             page: 1,
             pageSize:10,
@@ -189,9 +249,13 @@ import axios from 'axios';
             citeStyle:[{name:"引用类型", text:"引用文本"}],
             keyword:"gan",
             TypeNum:[],
+            tagData:[],
 
         }),
         methods:{
+          getCollect(title,id){
+            this.collectShow=true;
+          },
           toscholar(id){
             if(id){
               this.$router.push({path:"/scholar", query:{id:id}})
@@ -227,7 +291,7 @@ import axios from 'axios';
                 this.$router.push({path:"/document", query:{Title:title, Id:id}})
             },
             getCurrentPageData(){
-                
+
                 //获取我们自己的数据
                 // this.orderBy = JSON.stringify(this.orderBy)
                 let url = 'api/PaperBrowser/searchPaper/'
@@ -281,8 +345,8 @@ import axios from 'axios';
                         this.CurrentPageData[i].cite = cite
                     }
                 })
-                
-            
+
+
             },
             pdf(url){
                 window.open(url, "_blank")
@@ -310,7 +374,7 @@ import axios from 'axios';
             var citation = "@article{key,\n"
                         + "  title = {" + paper.title + "},\n"
                         + "  author = {" + paper.author + "},\n"
-                        
+
             if("volume" in paper){
                 citation +=  "  volume = {" + paper.volume + "},\n"
             }
@@ -375,7 +439,9 @@ import axios from 'axios';
 .focusChange:hover{
     text-decoration: underline;
     color:#006064 ;
-
+    cursor: pointer;
 }
-
+.paper-title:hover{
+  cursor: pointer;
+}
 </style>
