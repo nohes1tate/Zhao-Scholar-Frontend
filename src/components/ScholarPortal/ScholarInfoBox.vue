@@ -116,11 +116,10 @@ export default {
   mounted() {
     this.scholarInfo.scholarID=this.$route.query.id;
     const data = new FormData();
-    data.append("scholarID", this.scholarID);
+    data.append("scholarID", this.scholarInfo.scholarID);
     request('POST', "/api/PortalManager/getPortalInfo/", data)
         .then(data => {
           this.scholarInfo.name = data.scholarName;
-          console.log(this.scholarInfo.name)
           this.scholarInfo.affiliation = data.institution;
           this.scholarInfo.paperCount = data.papers;
           this.scholarInfo.citationCount = data.citations;

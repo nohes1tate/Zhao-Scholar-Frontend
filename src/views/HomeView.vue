@@ -206,7 +206,7 @@
             <v-list dense>
               <v-list-item-group v-model="item" color="primary">
                 <v-list-item
-                  v-for="(item, i) in TopAuthors"
+                  v-for="(item, i) in ShowAuthors"
                   :key="i"
                   :style="{ 'margin-left': '10px', 'margin-right': '10px' }"
                   inactive
@@ -437,50 +437,14 @@ export default {
       page3:1,
       state:user.getters.getUser(user.state),
       showSelect:false,
-      general:{
-        authors:2147483647,
-        papers:114514000,
-        affiliations:1919810,
-        venues:20373614,
-        fields:9876543,
-      },
+      general:{},
       items:[{key: '1234',name: '1234'},],
-      TopAuthors: [
-        { progress: 454, name: "AAA", percentage: 100 },
-        { progress: 453, name: "BBB", percentage: 453 / 4.54 },
-        { progress: 346, name: "CCC", percentage: 346 / 4.54 },
-        { progress: 234, name: "DDD", percentage: 234 / 4.54 },
-        { progress: 220, name: "EEE", percentage: 220 / 4.54 },
-        { progress: 198, name: "FFF", percentage: 198 / 4.54 },
-        { progress: 176, name: "GGG", percentage: 176 / 4.54 },
-        { progress: 154, name: "HHH", percentage: 154 / 4.54 },
-        { progress: 132, name: "III", percentage: 132 / 4.54 },
-        { progress: 123, name: "JJJ", percentage: 123 / 4.54 },
-      ],
-      TopAffiliations: [
-        { progress: 454, name: "AAA", percentage: 100 },
-        { progress: 453, name: "BBB", percentage: 453 / 4.54 },
-        { progress: 346, name: "CCC", percentage: 346 / 4.54 },
-        { progress: 234, name: "DDD", percentage: 234 / 4.54 },
-        { progress: 220, name: "EEE", percentage: 220 / 4.54 },
-        { progress: 198, name: "FFF", percentage: 198 / 4.54 },
-        { progress: 176, name: "GGG", percentage: 176 / 4.54 },
-        { progress: 154, name: "HHH", percentage: 154 / 4.54 },
-        { progress: 132, name: "III", percentage: 132 / 4.54 },
-        { progress: 123, name: "JJJ", percentage: 123 / 4.54 },
-      ],
-      TopJournals: [
-        { progress: 454, name: "AAA", percentage: 100 },
-        { progress: 453, name: "BBB", percentage: 453 / 4.54 },
-        { progress: 346, name: "CCC", percentage: 346 / 4.54 },
-        { progress: 234, name: "DDD", percentage: 234 / 4.54 },
-        { progress: 220, name: "EEE", percentage: 220 / 4.54 },
-        { progress: 198, name: "FFF", percentage: 198 / 4.54 },
-        { progress: 176, name: "GGG", percentage: 176 / 4.54 },
-        { progress: 154, name: "HHH", percentage: 154 / 4.54 },
-        { progress: 132, name: "III", percentage: 132 / 4.54 },
-        { progress: 123, name: "JJJ", percentage: 123 / 4.54 },
-      ],
+      TopAuthors: [],
+      TopAffiliations: [],
+      TopJournals: [],
+      ShowAuthors:[],
+      ShowAffiliations:[],
+      ShowJournals:[],
       Conference: [
         {name:"CVPR 2020",url:"www.baidu.com"},
         {name:"CVPR 2019",url:"www.baidu.com"},
@@ -521,19 +485,33 @@ export default {
     getAll(){
       let data=new FormData();
       request('GET', "/api/PortalManager/getGeneralInfo/",data)
-        .then(data => {
-          console.log(data);
+        .then(response => {
+          this.general=response
         })
         .catch(error => {
           console.error(error);
         });
-    }
-  },
+    },
+    getAuthors(){
+      let data=new FormData();
+      data.append('count','40')
+       request('POST', "/api/PortalManager/getTopAuthor/",data)
+        .then(response => {
+          console.log(response)
+          this.TopAuthors=response.TopAuthors;
+          this.ShowAuthors=this.TopAuthors.slice(0,10)
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
+    },
   watch: {
     search:'inputHandle'
   },
   mounted(){
     this.getAll()
+    this.getAuthors()
   }
 };
 </script>
