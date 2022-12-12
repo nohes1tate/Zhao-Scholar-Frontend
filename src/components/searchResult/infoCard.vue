@@ -313,6 +313,7 @@ import axios from 'axios';
             this.Num = this.paperInfo.length;
             this.pageNum =  Math.ceil(this.Num/this.pageSize);
             console.log("page:"+this.pageNum)
+            this.keyword = this.$route.query.keyword
             this.getCurrentPageData()
         },
         //监听page的变化
