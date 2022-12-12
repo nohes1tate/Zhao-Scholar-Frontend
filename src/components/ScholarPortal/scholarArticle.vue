@@ -2,13 +2,13 @@
   <div>
     <div style="margin-top: 20px;font-size: 18px;">
       <div style="margin-left: 20px;float: left;margin-top: 10px">学者文献共<span style="font-size: 30px">{{Num}}</span>篇</div>
-      <div style="float: right;margin-right: 20px;">
-        <v-select
-            :items="selects"
-            label="排序方式"
-            v-model="selectMethod"
+<!--      <div style="float: right;margin-right: 20px;">-->
+<!--        <v-select-->
+<!--            :items="selects"-->
+<!--            label="排序方式"-->
+<!--            v-model="selectMethod"-->
 
-        ></v-select></div>
+<!--        ></v-select></div>-->
     </div>
     <v-card
         width="1000px"

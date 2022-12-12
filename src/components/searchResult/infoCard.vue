@@ -87,7 +87,7 @@
         >
         <v-list-item-content style="margin-left: 10px;">
 
-            <v-list-item-title class="headline mb-2" v-text="item.title" @click="toDocument(item.title, item.id)">
+            <v-list-item-title class="paper-title headline mb-2" v-text="item.title" @click="toDocument(item.title, item.id)">
             </v-list-item-title>
 
 
@@ -375,7 +375,9 @@ import axios from 'axios';
 .focusChange:hover{
     text-decoration: underline;
     color:#006064 ;
-
+    cursor: pointer;
 }
-
+.paper-title:hover{
+  cursor: pointer;
+}
 </style>
