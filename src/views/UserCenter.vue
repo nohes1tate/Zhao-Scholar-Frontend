@@ -124,18 +124,18 @@
                 <v-toolbar-title>关注学者</v-toolbar-title>
                 <v-spacer></v-spacer>
               </v-toolbar>
-              <v-list>
+              <v-list :key="reloadKey2">
                 <v-list-item
                     v-for="item in follow_list"
-                    :key="item.id"
-                    @click="show(item.id,$event);"
+                    :key="item.authorID"
+                    @click="show(item.authorID,$event);"
                 >
                   <v-list-item-avatar>
                     <v-img src="@/assets/scholar-avatar.png"></v-img>
                   </v-list-item-avatar>
 
                   <v-list-item-content>
-                    <v-list-item-title v-text="item.name"></v-list-item-title>
+                    <v-list-item-title v-text="item.authorName"></v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
               </v-list>
@@ -154,7 +154,7 @@
                 >
                   <template v-slot:activator="{ on, attrs }">
                     <v-list>
-                      <v-list-item @click="toScholar">前往门户</v-list-item>
+                      <v-list-item @click="toScholar()">前往门户</v-list-item>
                       <v-list-item v-bind="attrs" v-on="on">取消关注</v-list-item>
                     </v-list>
                   </template>
@@ -221,6 +221,7 @@ export default {
   name: "UserCenter",
   components: {PageHeader ,ArticleBlocks},
   data:() => ({
+      reloadKey2:false,
       reloadKey:false,
       userId:"",
       not_follow:false,
@@ -239,10 +240,10 @@ export default {
       queue: ["匹配程度","发表时间","引用次数"],
       value2: "匹配程度",
       follow_list: [
-      { name: 'Jason Oner', id: 1 },
-      { name: 'Ranee Carlson', id: 2 },
-      { name: 'Cindy Baker', id: 3 },
-      { name: 'Ali Connors', id: 4 },
+      { authorName: 'Jason Oner', authorID: 1 },
+      { authorName: 'Ranee Carlson', authorID: 2 },
+      { authorName: 'Cindy Baker', authorID: 3 },
+      { authorName: 'Ali Connors', authorID: 4 },
       ],
 
       articles: [
@@ -302,11 +303,36 @@ export default {
       this.isLogin = true;
       this.userId=userInfo.user.userId;
       this.getAllTags();
+      this.getFollowAuthor();
       this.reloadKey=!this.reloadKey;
       this.thisTagId=this.tagData[0].collectID;
       this.thisTagName=this.tagData[0].tag_name;
   },
   methods: {
+    getFollowAuthor(){
+      const userInfo = user.getters.getUser(user.state);
+      const formData = new FormData();
+      const self = this;
+      formData.append("authorization", userInfo.user.Authorization)
+      formData.append("userID", userInfo.user.userId)
+      self.$axios({
+        method: 'post',
+        url: 'api/UserManager/getFollowInfo/',
+        data: formData,
+      })
+          .then(res => {
+            console.log(res.data)
+            if(res.data.error===0){
+              this.follow_list=res.data.follow_list;
+              this.reloadKey2=!this.reloadKey2;
+            }
+            else
+              this.$message.warning(res.data.msg);
+          })
+          .catch(err => {
+            console.log(err);
+          })
+    },
     handleYearSelect(){
       const userInfo = user.getters.getUser(user.state);
       const formData = new FormData();
@@ -382,6 +408,7 @@ export default {
       formData.append("authorization", userInfo.user.Authorization)
       formData.append("userID", userInfo.user.userId)
       formData.append("authorID",this.current_follow_id)
+
       self.$axios({
         method: 'post',
         url: 'api/UserManager/disfollow/',
@@ -390,6 +417,8 @@ export default {
           .then(res => {
             console.log(res.data.error)
             console.log(res.data.msg)
+            this.getFollowAuthor();
+            this.reloadKey2=!this.reloadKey2;
           })
           .catch(err => {
             console.log(err);
