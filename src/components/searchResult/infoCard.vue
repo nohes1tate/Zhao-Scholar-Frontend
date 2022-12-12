@@ -85,7 +85,15 @@
 
             <v-list-item-title class="headline mb-2" v-text="item.title" @click="toDocument(item.title, item.id)">
             </v-list-item-title>
-            <v-list-item-subtitle v-text="item.author" style="color: #1E88E5;">
+
+
+            <v-list-item-subtitle style="color: #1E88E5;">
+                
+                <span
+                @click="toscholar(author_item.id)"
+                v-for="(author_item, j) in item.authors" :key="j" >
+                {{author_item.name}},
+                </span>
             </v-list-item-subtitle>
             <!-- 摘要 -->
             <div v-text="item.abstract" class="text-ellipsis-two" style="font-weight: 350;">
@@ -164,6 +172,9 @@ import axios from 'axios';
 
         }),
         methods:{
+          toscholar(id){
+            this.$router.push({path:"/scholar", query:{id:id}})
+          },
           searchkeyword(keyword){
             this.$router.push({path:"/search", query:{keyword:keyword}})
           },
