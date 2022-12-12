@@ -1,15 +1,19 @@
 <template>
     <div>
-    <div style="margin-top: 20px;font-size: 18px;">
-    <div style="margin-left: 10px;float: left;">找到{{Num}}条结果</div>
-    <div style="margin-left: 10px;float: left;">第{{page}}页</div>
-    <div style="float: right;margin-right: 20px;">
+    <div style="font-size: 18px; height: 80px;">
+        <span style="float:left; text-align:right;margin-top: 20px;color: grey;font-size: 15px;margin-left: 18px;">
+            找到{{Num}}条结果
+        </span>
+        <span style="float:left; text-align:right;margin-top: 20px;color: grey;font-size: 15px;margin-left: 30px;">
+            第{{page}}页
+        </span>
         <v-select
             :items="selects"
             label="排序方式"
             v-model="selectMethod"
+            style="float:right;margin-top: 0%;"
           ></v-select></div>
-</div>
+
     <v-card
     width="1000px"
     style="float: left;box-shadow: none; background-color: #fcfcfc"
@@ -83,42 +87,70 @@
         >
         <v-list-item-content style="margin-left: 10px;">
 
-            <v-list-item-title class="headline mb-2" v-text="item.title">
+            <v-list-item-title class="headline mb-2" v-text="item.title" @click="toDocument(item.title, item.id)">
             </v-list-item-title>
-            <v-list-item-subtitle v-text="item.author" style="color: #1E88E5;">
+
+
+            <v-list-item-subtitle style="color: #1E88E5;">
+                
+                <span
+                
+               class="focusChange"
+                v-for="(author_item, j) in item.authors" :key="j" 
+                v-on:click="toscholar(author_item.id)"
+                
+                >
+                {{author_item.name}},
+                </span>
             </v-list-item-subtitle>
             <!-- 摘要 -->
-            <div v-text="item.abstract" class="text-ellipsis-two" style="font-weight: 350;">
+            <div v-text="item.abstract" class="text-ellipsis-two" style="font-weight: 350;"
+            
+            >
             </div>
             <!-- 关键词 -->
-            <v-chip-group
-          v-model="TypeNum"
-          column
-          multiple
-        >
-        <v-chip filter outlined
+           
+            
+         <v-list-item-action-text v-show="item.haskeywords">
+        关键词：
+        
+        <v-chip  outlined
         v-for="(type, i) in item.keywords"
         :key="i"
-       
+        @click="searchkeyword(type)"
+        
+        :ripple="false"
+        class="ma-2"
+        label
         >
             {{type}}
         </v-chip>
-        </v-chip-group>
-            
+    </v-list-item-action-text>  
+
             <div>
-            <div style="margin-top: 10px;float: left;">
-                <h5 style="float: left;">被引用数:{{item.n_citation}}</h5>
-                <!-- <h5 style="float: left;margin-left: 30px;">收藏数:{{item.collections}}</h5> -->
-                <h5 style="float: left; margin-left: 30px;">发表时间:{{item.year}}</h5>
-            </div>
-            <div style="float: right;">
+                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click=cite(item)>
+                    引用<v-icon color="#64B5F6"> mdi-format-quote-close-outline</v-icon>
+                </v-btn>
+                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click="toDocument(item.title, item.id)">
+                    详情<v-icon color="#64B5F6">mdi-link-variant</v-icon>
+                </v-btn>
+                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click="pdf(item.pdf)" v-show="item.haspdf">
+                    下载<v-icon color="#64B5F6">mdi-download</v-icon>
+                </v-btn>
+                <span style="float:right; text-align:right;margin-top: 8px;color: grey;font-size: 15px;margin-right: 150px;">
+                被引次数：
+                <span style="color: #2d94d4;">
+                  {{item.n_citation}}
+                </span>
+                </span>
 
-                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" >收藏<v-icon color="#64B5F6">mdi-star-plus-outline</v-icon></v-btn>
-                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" @click=cite(item)>引用<v-icon color="#64B5F6"> mdi-format-quote-close-outline</v-icon></v-btn>
-                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" @click="pdf(item.pdf)" v-show="item.haspdf">下载<v-icon color="#64B5F6">mdi-download</v-icon></v-btn>
-                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" @click="toDocument(item.title, item.id)">详情<v-icon color="#64B5F6">mdi-link-variant</v-icon></v-btn>
-
-            </div>
+                <span style="float:right; text-align:right;margin-top: 8px;color: grey;font-size: 15px;margin-right: 50px;">
+                发表时间：
+                <span style="color: #2d94d4;">
+                  {{item.year}}
+                </span>
+                </span>
+           
             </div>
         </v-list-item-content>
     </v-card>
@@ -160,6 +192,16 @@ import axios from 'axios';
 
         }),
         methods:{
+          toscholar(id){
+            if(id){
+              this.$router.push({path:"/scholar", query:{id:id}})
+            } else {
+              this.$message.error('没有该学者信息');
+            }
+          },
+          searchkeyword(keyword){
+            this.$router.push({path:"/search", query:{keyword:keyword}})
+          },
           copyVal(val) {
             let aux = document.createElement("input");
             aux.setAttribute("value", val);
@@ -200,6 +242,7 @@ import axios from 'axios';
                     data:formdata
                 }).then(res=>{
                     this.Num = res.data.total
+                    this.pageNum = Math.ceil(this.Num/this.pageSize)
                     this.CurrentPageData = res.data.articles_list
                     let i=0
                     let j=0
@@ -219,6 +262,11 @@ import axios from 'axios';
                             this.CurrentPageData[i].haspdf=1
                         }else{
                             this.CurrentPageData[i].haspdf=0
+                        }
+                        if("keywords" in this.CurrentPageData[i]){
+                            this.CurrentPageData[i].haskeywords=true;
+                        }else{
+                            this.CurrentPageData[i].haskeywords=false;
                         }
                         // if("vuenue" in )
                         let cite = []
@@ -283,6 +331,7 @@ import axios from 'axios';
             this.Num = this.paperInfo.length;
             this.pageNum =  Math.ceil(this.Num/this.pageSize);
             console.log("page:"+this.pageNum)
+            this.keyword = this.$route.query.keyword
             this.getCurrentPageData()
         },
         //监听page的变化
@@ -323,6 +372,10 @@ import axios from 'axios';
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
+.focusChange:hover{
+    text-decoration: underline;
+    color:#006064 ;
 
+}
 
 </style>

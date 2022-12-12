@@ -15,9 +15,7 @@
           {{ scholarInfo.affiliation }}
         </div>
         <div class="field-tag-box">
-          <div class="field-tag">python</div>
-          <div class="field-tag">java</div>
-          <div class="field-tag">c++</div>
+          <div class="field-tag" v-for="item in scholarInfo.field" :key="item">{{ item }}</div>
         </div>
       </div>
       <div style="margin-left: 1vw">
@@ -53,29 +51,82 @@
 
 <script>
 import request from "@/utils/request";
+import user from "@/store/user";
 
 export default {
   name: 'ScholarInfoBox',
-  props:{
-    isMine:{default: false},
-  },
   methods: {
     toApply(){
       this.$router.push({path:'/apply'})
     },
     favor(){
       this.hasFavored = true
+      const userInfo = user.getters.getUser(user.state);
+      const formData = new FormData();
+      const self = this;
+      formData.append("authorization", userInfo.user.Authorization)
+      formData.append("userID", userInfo.user.userId)
+      formData.append("authorID", this.scholarInfo.scholarID)
+      formData.append("authorName", this.scholarInfo.name)
+      console.log(this.scholarInfo.scholarID)
+      console.log(this.scholarInfo.name)
+      console.log(userInfo.user.userId)
+      console.log(userInfo.user.Authorization)
+      self.$axios({
+        method: 'post',
+        url: 'api/UserManager/follow/',
+        data: formData,
+      })
+          .then(res => {
+            if(res.data.error===0){
+              this.$message.success(res.data.msg);
+            }
+            else
+              this.$message.warning("关注失败！");
+          })
+          .catch(err => {
+            console.log(err);
+          })
     },
     unFavor(){
-      this.hasFavored = false
+      this.hasFavored = false;
+      const userInfo = user.getters.getUser(user.state);
+      this.not_follow=false;
+      this.showMenu=false;
+      const self = this;
+      const formData = new FormData();
+      formData.append("username", userInfo.user.username)
+      formData.append("authorization", userInfo.user.Authorization)
+      formData.append("userID", userInfo.user.userId)
+      formData.append("authorID",this.current_follow_id)
+      self.$axios({
+        method: 'post',
+        url: 'api/UserManager/disfollow/',
+        data: formData,
+      })
+          .then(res => {
+            console.log(res.data.error)
+            console.log(res.data.msg)
+          })
+          .catch(err => {
+            console.log(err);
+          })
     }
   },
   mounted() {
+    this.scholarInfo.scholarID=this.$route.query.id;
     const data = new FormData();
-    data.append("scholarId", "53f36604dabfae4b3499a2e2");
+    data.append("scholarID", this.scholarInfo.scholarID);
     request('POST', "/api/PortalManager/getPortalInfo/", data)
         .then(data => {
-          console.log(data);
+          this.scholarInfo.name = data.scholarName;
+          this.scholarInfo.affiliation = data.institution;
+          this.scholarInfo.paperCount = data.papers;
+          this.scholarInfo.citationCount = data.citations;
+          this.scholarInfo.hIndex = data.hIndex;
+          this.scholarInfo.field = data.fields;
+          this.hasFavored = data.hasFavored;
+          this.isMine = data.isMine;
         })
         .catch(error => {
           console.error(error);
@@ -84,14 +135,16 @@ export default {
   data() {
     return {
       scholarInfo: {
-        name: 'Scholar Name',
-        affiliation: 'Beihang University',
-        field: ['python', 'java', 'c++'],
-        paperCount: 1200,
-        citationCount: 10000,
-        hIndex: 10000,
+        scholarID:'',
+        name: '学者姓名',
+        affiliation: '未知',
+        field: [],
+        paperCount: 0,
+        citationCount: 0,
+        hIndex: 0,
       },
       hasFavored: false,
+      isMine: false,
     }
   },
 }
@@ -145,6 +198,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width:7vw;
   margin-top: 4vh;
   margin-left: 9vh;
   margin-right: 9vh;

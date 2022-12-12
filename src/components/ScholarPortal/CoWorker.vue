@@ -10,7 +10,7 @@
     <v-list subheader>
     <v-list-item
         v-for="item in items"
-        :key="item.title"
+        :key="item.id"
         @click="toCoworkers(item.id)"
     >
       <v-list-item-avatar>
@@ -18,7 +18,7 @@
       </v-list-item-avatar>
 
       <v-list-item-content>
-        <v-list-item-title v-text="item.title"></v-list-item-title>
+        <v-list-item-title v-text="item.name"></v-list-item-title>
       </v-list-item-content>
 
       <v-list-item-icon>
@@ -31,19 +31,33 @@
 </template>
 
 <script>
+import request from "@/utils/request";
+
 export default {
   name: "CoWorker",
+  mounted() {
+    const data = new FormData();
+    data.append("scholarID", this.$route.query.id);
+    request("POST", "/api/PortalManager/getCoauthors/", data)
+      .then((res) => {
+        console.log(res)
+        this.items = res.coworkers;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
   data: () => ({
-    items: [
-      { title: 'Jason Oner', id: 1 },
-      { title: 'Ranee Carlson', id: 2 },
-      { title: 'Cindy Baker', id: 3 },
-      { title: 'Ali Connors', id: 4 },
-    ],
+    items: [],
   }),
   methods: {
     toCoworkers(ID){
-      this.$router.push({path:'/scholar', query: {id: ID}})
+      if(ID){
+        this.$router.push({path:'/scholar', query: {id: ID}})
+        this.$router.go(0)
+      } else {
+        this.$message.error('没有该学者信息');
+      }
     }
   }
 }

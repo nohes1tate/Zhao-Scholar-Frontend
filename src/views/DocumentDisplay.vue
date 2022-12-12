@@ -1,7 +1,7 @@
 <template>
   <!-- <h1>文献展示页面</h1> -->
   <div class="root">
-    <page-header :show-search="false"></page-header>
+    <page-header :show-search="true"></page-header>
       <!-- <v-input persistant-hint="输入你想了解的论文" absolute right>input</v-input> -->
 <!--      <v-btn  @click="jump2login" tile color="indigo" dark absolute right>登录/注册</v-btn>-->
 
@@ -257,10 +257,9 @@
       get_paper_info(){
         console.log("get paper info")
         const data = new FormData();
-        // data.append("paperID",this.id);
-        data.append("paperID","53e9ac48b7602d97036198e6");
+        data.append("paperID",this.id);
+        // data.append("paperID","53e9ac48b7602d97036198e6");
 
-        var sample_id = 249908020;
         const url = '/api/PaperBrowser/getPaperInfo/' ;
         request('POST', url, data)
         .then(data => {
@@ -290,7 +289,8 @@
       },
       read(){
         console.log("read this paper");
-        window.location.replace(this.url);
+        // window.location.replace(this.url);
+        window.open(this.url, "_blank")
       },
       addStar(){
         console.log("star this paper")

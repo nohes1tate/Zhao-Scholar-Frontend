@@ -43,7 +43,7 @@ const routes = [
     component: DocumentDisplay
   },
   {
-    path: '/institution',
+    path: '/institution/:institutionID',
     name: 'institutionPortal',
     component: InstitutionPortal
   },
