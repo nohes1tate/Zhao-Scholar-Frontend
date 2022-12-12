@@ -2043,8 +2043,6 @@ export default {
       {text: '论文数', value: 'papers'},
       {text: '被引数', value: 'citation'},
       {text: 'H-index', value: 'H_index'},
-      {text: '第一作者发文数', value: 'firstPapers'},
-      {text: '第一作者被引数', value: 'firstCitation'},
     ],
     headers: [
       {
@@ -2122,13 +2120,18 @@ export default {
     this.initDetailInfo()
   },
   methods: {
-    initDetailInfo() {
+    initChartInfo() {
+      console.log('initChart:')
       const data = new FormData()
       let institutionID = this.$route.params.institutionID
       data.append("institutionId", institutionID);
+      request('POST', "/api/PortalManager/getChartInfo/", data)
+      .then(res => {
+        this.charts = res.charts
+      })
     },
-    initChartInfo() {
-      console.log('initChart:')
+    initDetailInfo() {
+      console.log('initDetail:')
       const data = new FormData()
       let institutionID = this.$route.params.institutionID
       data.append("institutionId", institutionID);
@@ -2153,6 +2156,7 @@ export default {
       })
     },
     initInstitutionInfo() {
+      console.log('initInfo:')
       const data = new FormData();
       let institutionID = this.$route.params.institutionID
       data.append("institutionId", institutionID);

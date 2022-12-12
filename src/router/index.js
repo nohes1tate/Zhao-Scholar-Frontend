@@ -9,6 +9,7 @@ import ApplySettle from "@/views/ScholarPortal/ApplySettle.vue";
 import UserCenter from '../views/UserCenter.vue'
 import adminView from "@/views/Administrator/AdminView";
 import LoginView from "@/views/LoginView";
+import confirmView from "@/views/ConfirmView";
 
 
 Vue.use(VueRouter)
@@ -61,6 +62,11 @@ const routes = [
     path: '/user',
     name: 'userCenter',
     component: UserCenter
+  },
+  {
+    path: '/confirm',
+    name: 'confirm',
+    component: confirmView
   },
   {
     path: '/admin',
