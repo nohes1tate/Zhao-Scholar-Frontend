@@ -83,7 +83,7 @@
         >
         <v-list-item-content style="margin-left: 10px;">
 
-            <v-list-item-title class="headline mb-2" v-text="item.title">
+            <v-list-item-title class="headline mb-2" v-text="item.title" @click="toDocument(item.title, item.id)">
             </v-list-item-title>
             <v-list-item-subtitle v-text="item.author" style="color: #1E88E5;">
             </v-list-item-subtitle>
@@ -91,20 +91,24 @@
             <div v-text="item.abstract" class="text-ellipsis-two" style="font-weight: 350;">
             </div>
             <!-- 关键词 -->
-            <v-chip-group
-          v-model="TypeNum"
-          column
-          multiple
-        >
-        <v-chip filter outlined
+           
+            
+         <v-list-item-action-text v-show="item.haskeywords">
+        关键词：
+        
+        <v-chip  outlined
         v-for="(type, i) in item.keywords"
         :key="i"
-       
+        @click="searchkeyword(type)"
+        
+        :ripple="false"
+        class="ma-2"
+        label
         >
             {{type}}
         </v-chip>
-        </v-chip-group>
-            
+    </v-list-item-action-text>  
+    
             <div>
             <div style="margin-top: 10px;float: left;">
                 <h5 style="float: left;">被引用数:{{item.n_citation}}</h5>
@@ -160,6 +164,9 @@ import axios from 'axios';
 
         }),
         methods:{
+          searchkeyword(keyword){
+            this.$router.push({path:"/search", query:{keyword:keyword}})
+          },
           copyVal(val) {
             let aux = document.createElement("input");
             aux.setAttribute("value", val);
@@ -200,6 +207,7 @@ import axios from 'axios';
                     data:formdata
                 }).then(res=>{
                     this.Num = res.data.total
+                    this.pageNum = Math.ceil(this.Num/this.pageSize)
                     this.CurrentPageData = res.data.articles_list
                     let i=0
                     let j=0
@@ -219,6 +227,11 @@ import axios from 'axios';
                             this.CurrentPageData[i].haspdf=1
                         }else{
                             this.CurrentPageData[i].haspdf=0
+                        }
+                        if("keywords" in this.CurrentPageData[i]){
+                            this.CurrentPageData[i].haskeywords=true;
+                        }else{
+                            this.CurrentPageData[i].haskeywords=false;
                         }
                         // if("vuenue" in )
                         let cite = []
