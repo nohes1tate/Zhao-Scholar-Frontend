@@ -90,13 +90,19 @@
             <v-list-item-subtitle style="color: #1E88E5;">
                 
                 <span
-                @click="toscholar(author_item.id)"
-                v-for="(author_item, j) in item.authors" :key="j" >
+                
+               class="focusChange"
+                v-for="(author_item, j) in item.authors" :key="j" 
+                v-on:click="toscholar(author_item.id)"
+                
+                >
                 {{author_item.name}},
                 </span>
             </v-list-item-subtitle>
             <!-- 摘要 -->
-            <div v-text="item.abstract" class="text-ellipsis-two" style="font-weight: 350;">
+            <div v-text="item.abstract" class="text-ellipsis-two" style="font-weight: 350;"
+            
+            >
             </div>
             <!-- 关键词 -->
            
@@ -307,6 +313,7 @@ import axios from 'axios';
             this.Num = this.paperInfo.length;
             this.pageNum =  Math.ceil(this.Num/this.pageSize);
             console.log("page:"+this.pageNum)
+            this.keyword = this.$route.query.keyword
             this.getCurrentPageData()
         },
         //监听page的变化
@@ -347,6 +354,10 @@ import axios from 'axios';
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
+.focusChange:hover{
+    text-decoration: underline;
+    color:#006064 ;
 
+}
 
 </style>
