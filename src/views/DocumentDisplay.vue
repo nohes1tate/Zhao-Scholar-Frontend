@@ -257,10 +257,9 @@
       get_paper_info(){
         console.log("get paper info")
         const data = new FormData();
-        // data.append("paperID",this.id);
-        data.append("paperID","53e9ac48b7602d97036198e6");
+        data.append("paperID",this.id);
+        // data.append("paperID","53e9ac48b7602d97036198e6");
 
-        var sample_id = 249908020;
         const url = '/api/PaperBrowser/getPaperInfo/' ;
         request('POST', url, data)
         .then(data => {
@@ -290,7 +289,8 @@
       },
       read(){
         console.log("read this paper");
-        window.location.replace(this.url);
+        // window.location.replace(this.url);
+        window.open(this.url, "_blank")
       },
       addStar(){
         console.log("star this paper")
