@@ -51,6 +51,7 @@
 
 <script>
 import request from "@/utils/request";
+import user from "@/store/user";
 
 export default {
   name: 'ScholarInfoBox',
@@ -60,14 +61,62 @@ export default {
     },
     favor(){
       this.hasFavored = true
+      const userInfo = user.getters.getUser(user.state);
+      const formData = new FormData();
+      const self = this;
+      formData.append("authorization", userInfo.user.Authorization)
+      formData.append("userID", userInfo.user.userId)
+      formData.append("authorID", this.scholarInfo.scholarID)
+      formData.append("authorName", this.scholarInfo.name)
+      console.log(this.scholarInfo.scholarID)
+      console.log(this.scholarInfo.name)
+      console.log(userInfo.user.userId)
+      console.log(userInfo.user.Authorization)
+      self.$axios({
+        method: 'post',
+        url: 'api/UserManager/follow/',
+        data: formData,
+      })
+          .then(res => {
+            if(res.data.error===0){
+              this.$message.success(res.data.msg);
+            }
+            else
+              this.$message.warning("关注失败！");
+          })
+          .catch(err => {
+            console.log(err);
+          })
     },
     unFavor(){
-      this.hasFavored = false
+      this.hasFavored = false;
+      const userInfo = user.getters.getUser(user.state);
+      this.not_follow=false;
+      this.showMenu=false;
+      const self = this;
+      const formData = new FormData();
+      formData.append("username", userInfo.user.username)
+      formData.append("authorization", userInfo.user.Authorization)
+      formData.append("userID", userInfo.user.userId)
+      formData.append("authorID",this.current_follow_id)
+      self.$axios({
+        method: 'post',
+        url: 'api/UserManager/disfollow/',
+        data: formData,
+      })
+          .then(res => {
+            console.log(res.data.error)
+            console.log(res.data.msg)
+          })
+          .catch(err => {
+            console.log(err);
+          })
     }
   },
   mounted() {
+    this.scholarInfo.scholarID=this.$route.query.id;
     const data = new FormData();
-    data.append("scholarID", this.$route.query.id);
+    data.append("scholarID", this.scholarInfo.scholarID);
     request('POST', "/api/PortalManager/getPortalInfo/", data)
         .then(data => {
           this.scholarInfo.name = data.scholarName;
@@ -86,6 +135,7 @@ export default {
   data() {
     return {
       scholarInfo: {
+        scholarID:'',
         name: '学者姓名',
         affiliation: '未知',
         field: [],

@@ -13,15 +13,69 @@
         >
           <v-card
               style="width: 100%;margin-bottom: 20px;"
-
           >
+            <v-overlay
+                :absolute="absolute"
+                :value="overlay"
+                :opacity="opacity"
+            >
+              <v-card style="width: 700px;background-color: white;margin-top: 150px;">
+                <v-toolbar
+                    color="blue darken-1"
+                    dark
+                >
+                  <v-toolbar-title>引用格式</v-toolbar-title>
+                  <v-spacer>
+                  </v-spacer>
+                  <v-btn icon
+                         @click="overlay = false"
+                  >
+                    <v-icon>mdi-close</v-icon>
+                  </v-btn>
+                  <template v-slot:extension>
+                    <v-tabs
+                        v-model="tab"
+                        align-with-title
+                    >
+                      <v-tabs-slider color="yellow"></v-tabs-slider>
+
+                      <v-tab
+                          v-for="cite in citation_msg"
+                          :key="cite.name"
+                      >
+                        {{ cite.name }}
+                      </v-tab>
+                    </v-tabs>
+                  </template>
+                </v-toolbar>
+                <v-tabs-items v-model="tab">
+                  <v-tab-item
+                      v-for="citeContent in citation_msg"
+                      :key="citeContent.name"
+                  >
+                    <v-textarea
+                        :value=citeContent.content
+                        auto-grow
+                        row-height="15"
+                        readonly
+                    ></v-textarea>
+                    <v-btn
+                        depressed
+                        color="primary"
+                        @click="copyVal(citeContent.content)"
+                        style="width: 10%;float: right;margin-right: 10px;margin-bottom: 10px;"
+                    >复制</v-btn>
+                  </v-tab-item>
+                </v-tabs-items>
+              </v-card>
+            </v-overlay>
             <v-list-item-content style="margin-left: 30px;margin-right: 30px;margin-top: 20px">
 
-              <v-list-item-title class="headline mb-2" v-text="item.paper_title" style="cursor: pointer" @click="toDocument">
+              <v-list-item-title class="headline mb-2" v-text="item.title" style="cursor: pointer" @click="toDocument(item.id)">
               </v-list-item-title>
               <div style="display: flex; flex-direction: row">
                 <div v-for="(j,index) in item.authors" :key="j" style="color: #1E88E5;display: flex;flex-direction: row">
-                  <div style="cursor: pointer" @click="toAuthor">{{j.author_name}}</div>
+                  <div style="cursor: pointer" @click="toAuthor(j.id)">{{j.name}}</div>
                   <div v-show="index!==(item.authors.length-1)">,</div>
                 </div>
               </div>
@@ -29,64 +83,16 @@
               <div v-text="item.abstract" class="text-ellipsis-two" style="font-weight: 350;margin-bottom: 10px;">
               </div>
               <div>
-                <v-dialog
-                    transition="dialog-top-transition"
-                    max-width="600"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn v-bind="attrs" v-on="on" style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click="changePaperID(item)">
-                      <v-icon color="#64B5F6"> mdi-format-quote-close-outline</v-icon>引用
-                    </v-btn>
-                  </template>
-                  <template v-slot:default="dialog">
-                    <v-card>
-                      <v-toolbar
-                          color="primary"
-                          dark
-                      >
-                        <v-toolbar-title>引用</v-toolbar-title>
-                        <template v-slot:extension>
-                          <v-tabs
-                              v-model="tab"
-                              align-with-title
-                          >
-                            <v-tabs-slider color="yellow"></v-tabs-slider>
-
-                            <v-tab
-                                v-for="cite in citation_msg"
-                                :key="cite.id"
-                            >
-                              {{ cite.name }}
-                            </v-tab>
-                          </v-tabs>
-                        </template>
-                      </v-toolbar>
-                      <v-tabs-items v-model="tab">
-                        <v-tab-item
-                            v-for="citeContent in citation_msg"
-                            :key="citeContent.id"
-                        >
-                          <v-card flat>
-                            <v-card-text v-text="citeContent.content"></v-card-text>
-                          </v-card>
-                        </v-tab-item>
-                      </v-tabs-items>
-                      <v-card-actions class="justify-end">
-                        <v-btn
-                            text
-                            @click="dialog.value = false"
-                        >关闭</v-btn>
-                      </v-card-actions>
-                    </v-card>
-                  </template>
-                </v-dialog>
-                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;">
+                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click="cite(item)">
+                  <v-icon color="#64B5F6"> mdi-format-quote-close-outline</v-icon>引用
+                </v-btn>
+                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click="handleDelete(item)">
                   <v-icon color="#64B5F6" >mdi-trash-can-outline</v-icon>删除
                 </v-btn>
                 <span style="float:right; text-align:right;margin-top: 8px;color: grey;font-size: 15px;">
                 被引次数：
                 <span style="color: #2d94d4;">
-                  {{item.citation_count.toLocaleString()}}
+                  {{item.n_citation.toLocaleString()}}
                 </span>
                 </span>
               </div>
@@ -101,12 +107,16 @@
 </template>
 
 <script>
+import user from "@/store/user";
+
 export default {
   name: "ArticleBlocks",
-  props: ['articles'],
+  props: ['articles','tagID'],
   data() {
     return {
-
+      overlay:false,
+      absolute: false,
+      opacity: 0.5,//透明度
       tab:null,
       articlesItems:1,
       // 引用
@@ -155,20 +165,34 @@ export default {
     }
   },
   methods:{
+    cite(item){
+      // this.citeStyle = item.cite
+      this.overlay = !this.overlay
+      // this.content=this.citeStyle(0).text
+    },
+    copyVal(val) {
+      let aux = document.createElement("input");
+      aux.setAttribute("value", val);
+      document.body.appendChild(aux);
+      aux.select();
+      document.execCommand("copy");
+      document.body.removeChild(aux);
+      if (val !== null) {
+        this.$message.success("引用已复制至剪贴板");
+      } else {
+        this.$message.error("引用格式为空");
+      }
+    },
     changePaperID(item) {
-      this.quote_paperId = item.paper_id;
+      this.quote_paperId = item.id;
       // console.log(this.quote_paperId);
       this.getCita();
     },
-    closeChildDialog() {
-      this.showQuote = false;
-      this.showCollect = false;
+    toDocument(ID){
+      this.$router.push({path:"/document", query: {id: ID} })
     },
-    toDocument(){
-      this.$router.push({path:"/document"} )
-    },
-    toAuthor(){
-      this.$router.push({path:"/scholar"})
+    toAuthor(ID){
+      this.$router.push({path:"/scholar", query: {id: ID} })
     },
     getCita() {
       this.$axios({
@@ -190,6 +214,63 @@ export default {
           .catch(err => {
             console.log(err);
           })
+    },
+    handleDelete(item){
+      //console.log(111)
+      const userInfo = user.getters.getUser(user.state);
+      const formData = new FormData();
+      const self = this;
+      formData.append("authorization", userInfo.user.Authorization)
+      formData.append("userID", userInfo.user.userId)
+      formData.append("collectID", this.tagID)
+      formData.append("paperID", item.id)
+      self.$axios({
+        method: 'post',
+        url: 'api/UserManager/discollectPaper/',
+        data: formData,
+      })
+          .then(res => {
+            console.log(res.data.error)
+            console.log(res.data.msg)
+          })
+          .catch(err => {
+            console.log(err);
+          })
+    },
+    GBTgenerateCitation(title, authors, year, publisher) {
+      // 处理多个作者
+      var authorInitials = "";
+      for (var i = 0; i < authors.length; i++) {
+        var author = authors[i].name;
+        var initials = author.charAt(0);  // 获取作者姓氏首字母
+        authorInitials += initials;  // 拼接作者姓氏首字母
+      }
+
+      // 使用字符串拼接函数将论文信息组合成GB/T简略引用格式
+      var citation = "[" + authorInitials + "] " + year + ". " + title + ". " + publisher + ".";
+      // 返回GB/T简略引用格式
+      return citation;
+    },
+    MLAgenerateCitation(title, authors, year){
+      var citation = authors + ". " + title + ". " + year + ".";
+      return citation
+    },
+    BIBTEXgenerateCitation(paper) {
+      // 使用字符串拼接函数将论文信息组合成BIBTEX引用格式
+      var citation = "@article{key,\n"
+          + "  title = {" + paper.title + "},\n"
+          + "  author = {" + paper.author + "},\n"
+
+      if("volume" in paper){
+        citation +=  "  volume = {" + paper.volume + "},\n"
+      }
+      if("venue" in paper){
+        citation +=  "  journal = {" + paper.venue.name + "},\n"
+      }
+      citation +=  "  year = {" + paper.year + "}\n"
+      citation+= "}"
+      // 返回BIBTEX引用格式
+      return citation;
     }
   }
 }

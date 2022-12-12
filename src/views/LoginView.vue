@@ -186,6 +186,7 @@ export default {
   name: "LoginView",
   data(){
     return{
+      userID:'',
       forgetPasswordDialog:false,
       show1:false,
       show2:false,
@@ -380,6 +381,7 @@ export default {
                   setTimeout(() => {
                     this.$router.push("/login");
                   }, 1000);
+                  this.userID=res.data.userID;
                   break;
                 case 4002:
                   this.$message.warning("请勿重复注册");
@@ -391,6 +393,21 @@ export default {
                   this.$message.error("验证码失效，请重新获取");
                   break;
               }
+            })
+            .catch(err => {
+              console.log(err);
+            })
+        const formData = new FormData();
+        formData.append("userID", this.userID);
+        formData.append("name", "默认");
+        this.$axios({
+          method: 'post',
+          url: 'api/UserManager/createCollect/',
+          data: formData,
+        })
+            .then(res => {
+              if(res.data.error===0)
+                this.$message.success("成功创建默认收藏夹");
             })
             .catch(err => {
               console.log(err);

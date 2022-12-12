@@ -51,13 +51,26 @@ export default {
   },
 
   mounted() {
-    if (this.chartType===1)
-      this.initEcharts()
-    else {
-      this.initRelation()
+
+  },
+  watch: {
+    graph(newVal, oldVal){
+      console.log('update graph',newVal, oldVal)
+      if (this.chartType===1)
+        this.initEcharts()
+      else {
+        this.initRelation()
+      }
+    },
+    yData(newVal, oldVal){
+      console.log('update yData',newVal, oldVal)
+      if (this.chartType===1)
+        this.initEcharts()
+      else {
+        this.initRelation()
+      }
     }
   },
-
   methods: {
     showGraph() {
       this.$emit("showGraph",this.graph)

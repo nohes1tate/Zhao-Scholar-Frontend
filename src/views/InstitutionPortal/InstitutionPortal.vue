@@ -1,6 +1,6 @@
 <template>
   <div>
-    <page-header :show-search="true"></page-header>
+    <page-header :show-search="false" style="z-index: 50"></page-header>
     <div class="institution-top">
       <div class="top-left">
         <v-card class="institution-info-card" elevation="2">
@@ -21,7 +21,7 @@
               </v-row>
               <v-row>
                 <v-col>
-                  <v-btn color="primary"> 官方网站</v-btn>
+                  <v-btn color="primary" @click="toWebsite"> 官方网站</v-btn>
                 </v-col>
 
               </v-row>
@@ -33,13 +33,22 @@
         <v-card class="institution-info-card" elevation="2">
           <div style="margin-left: 1vw">
             <v-row>
-              <span class="institution-statistic">论文数:{{ papersNum }}</span>
+              <span class="institution-statistic">
+                <span class="tab-name"><v-icon>mdi-note-edit-outline</v-icon> 论文数</span>
+                <span class="tab-data">{{ papersNum }}</span>
+              </span>
             </v-row>
             <v-row>
-              <span class="institution-statistic">学者数:{{ authorsNum }}</span>
+              <span class="institution-statistic">
+                <span class="tab-name"><v-icon>mdi-account-edit-outline</v-icon>学者数</span>
+                <span class="tab-data">{{ authorsNum }}</span>
+              </span>
             </v-row>
             <v-row>
-              <span class="institution-statistic">被引数:{{ citationsNum }}</span>
+              <span class="institution-statistic">
+                <span class="tab-name"><v-icon>mdi-format-quote-open-outline</v-icon> 被引数</span>
+                <span class="tab-data">{{ citationsNum }}</span>
+              </span>
             </v-row>
           </div>
         </v-card>
@@ -59,21 +68,21 @@
     </div>
     <div class="institution-detail">
       <v-row>
-        <v-col cols="2">
-          <v-card elevation="2" class="institution-detail-filter">
-            <el-tree :data="achievements"
-                     show-checkbox
-                     ref="tree"
-                     node-key="id"
-                     :default-checked-keys="[0]"
-                     @check="handleCheck"
-                     default-expand-all>
-            <span class="custom-tree-node" slot-scope="{ node, data }">
-        <span>[{{ data.num }}]{{ node.label }}</span>
-      </span>
-            </el-tree>
-          </v-card>
-        </v-col>
+<!--        <v-col cols="2">-->
+<!--          <v-card elevation="2" class="institution-detail-filter">-->
+<!--            <el-tree :data="achievements"-->
+<!--                     show-checkbox-->
+<!--                     ref="tree"-->
+<!--                     node-key="id"-->
+<!--                     :default-checked-keys="[0]"-->
+<!--                     @check="handleCheck"-->
+<!--                     default-expand-all>-->
+<!--            <span class="custom-tree-node" slot-scope="{ node, data }">-->
+<!--        <span>[{{ data.num }}]{{ node.label }}</span>-->
+<!--      </span>-->
+<!--            </el-tree>-->
+<!--          </v-card>-->
+<!--        </v-col>-->
         <v-col>
           <v-card elevation="2" class="institution-detail-info">
             <div>
@@ -109,13 +118,13 @@
               </v-data-table>
               <v-row>
                 <v-col>
-                  <div id="paperInfo" style="width: 100%;height: 40vh">
+                  <div id="paperInfo" style="width: 80%;height: 50vh;margin-left: 10%">
                   </div>
                 </v-col>
-                <v-col>
-                  <div id="achievementInfo" style="width: 100%;height: 40vh">
-                  </div>
-                </v-col>
+<!--                <v-col>-->
+<!--                  <div id="achievementInfo" style="width: 100%;height: 40vh">-->
+<!--                  </div>-->
+<!--                </v-col>-->
               </v-row>
               <v-data-table
                   :headers="authorHeaders"
@@ -168,13 +177,14 @@
 </template>
 
 <script>
+import request from "@/utils/request";
 import PageHeader from "@/components/UserCenter/PageHeader";
 import ChartsCard from "@/components/InstitutionPortal/ChartsCard";
 import * as echarts from 'echarts'
+import axios from "axios";
 
 export default {
-  name: 'SearchResult',
-  components: {ChartsCard,PageHeader },
+  components: {ChartsCard, PageHeader},
   data: () => ({
     chartDialog: false,
     graphDialog: false,
@@ -2013,6 +2023,7 @@ export default {
         }
       }
     ],
+    institutionPage: "https://www.buaa.edu.cn",
     institutionName: "中国科学院",
     institutionLogo: "http://www.zsdlw.com/uploadfiles/dxlogo/bj/zgkxydx.jpg",
     institutionDescription: "中国科学院（英文名称：Chinese Academy of Sciences，简称中科院）成立于1949年11月，为中国自然科学最高学术机构、科学技术最高咨询机构、自然科学与高技术综合研究发展中心。 中国科学院提出了建设国家创新体系的构想，先后实施知识创新工程、“创新2020”、《“率先行动”计划暨全面深化改革纲要》，提出了《迎接知识经济时代，建设国家创新体系》《创新促进发展，科技引领未来》《创新2050：科学技术与中国的未来》《科技发展新态势与面向2020年的战略选择》等战略研究报告。 据2021年11月中国科学院官网显示，全院共拥有11个分院、100多家科研院所、3所大学（中国科学院大学、中国科学技术大学，与上海市共建上海科技大学）、130多个国家级重点实验室和工程中心、68个国家野外观测研究站、20个国家科技资源共享服务平台，承担30余项国家重大科技基础设施的建设与运行，正式职工6.9万余人，在学研究生7.9万余人；建成了完整的自然科学学科体系，物理、化学、材料科学、数学、环境与生态学、地球科学等学科整体水平已进入世界先进行列，一些领域方向也具备了进入世界第一方阵的良好态势。在解决关系国家全局和长远发展的重大问题上，已成为不可替代的国家战略科技力量。一批科学家在国家重大科技任务中发挥了关键和中坚作用，并作为我国科技界的代表活跃在国际科技前沿。 [1]  2019年9月，经党中央批准，十九届中央第四轮巡视将对中国科学院党组织开展常规巡视。 [2]",
@@ -2032,12 +2043,10 @@ export default {
       {text: '论文数', value: 'papers'},
       {text: '被引数', value: 'citation'},
       {text: 'H-index', value: 'H_index'},
-      {text: '第一作者发文数', value: 'firstPapers'},
-      {text: '第一作者被引数', value: 'firstCitation'},
     ],
     headers: [
       {
-        text: '科研机构',
+        text: '机构名',
         align: 'start',
         sortable: false,
         value: 'name',
@@ -2103,22 +2112,75 @@ export default {
     ]
   }),
   mounted() {
-    this.initPaperInfo()
-    this.handleCheck()
-    this.updateAchievementInfo()
+    this.initInstitutionInfo()
+    // this.searchInfo()
+    // this.updateAchievementInfo()
+    this.initChartInfo()
+
+    this.initDetailInfo()
   },
   methods: {
-    handleCheck() {
-      var data1 = this.$refs.tree.getCheckedNodes(true);
-      console.log(this.$refs.tree)
-      this.selectedData = data1
-      console.log(this.selectedData)
+    initChartInfo() {
+      console.log('initChart:')
+      const data = new FormData()
+      let institutionID = this.$route.params.institutionID
+      data.append("institutionId", institutionID);
+      request('POST', "/api/PortalManager/getChartInfo/", data)
+      .then(res => {
+        this.charts = res.charts
+      })
+    },
+    initDetailInfo() {
+      console.log('initDetail:')
+      const data = new FormData()
+      let institutionID = this.$route.params.institutionID
+      data.append("institutionId", institutionID);
+      data.append("scholarNum", 10)
+      request('POST', "/api/PortalManager/detailInfo/",data)
+      .then(res => {
+        console.log('detailInfo:', res)
+        this.authorData = res.authorData
+        this.paperInfoXAxis = res.paperInfoXAxis
+        this.paperInfoData = res.paperInfoData
+        this.initPaperInfo()
+
+      })
+    },
+    searchInfo() {
+      const data = new FormData()
+      let searchInfo = "BUAA"
+      let url = "https://baike.baidu.com/api/second/video/list?lemmaId=3350958&isSensitive=0&scene=pc_top&filterId=52650380&rn=12"
+      axios.get(url).then((res) => {
+        console.log("searchRes:", res)
+
+      })
+    },
+    initInstitutionInfo() {
+      console.log('initInfo:')
+      const data = new FormData();
+      let institutionID = this.$route.params.institutionID
+      data.append("institutionId", institutionID);
+      request('POST', "/api/PortalManager/getAffiliationInfo/", data)
+          .then(data => {
+            console.log("init info:", data);
+            this.institutionPage = data.institutionPage
+            this.institutionName = data.institutionName
+            this.authorsNum = data.authorsNum
+            this.citationsNum = data.citationsNum
+            this.papersNum = data.papersNum
+          })
+          .catch(error => {
+            console.error(error);
+          });
     },
     toAuthorCenter(id) {
       this.$message.success(id)
     },
     closeGraphDialog() {
 
+    },
+    toWebsite() {
+      window.open(this.institutionPage)
     },
     closeDialog() {
       let chartDom = document.getElementById('showchart');
@@ -2314,6 +2376,7 @@ export default {
 <style scoped>
 
 .institution-top {
+  z-index: -1;
   width: 100vw;
   margin-left: 2vw;
   display: flex;
@@ -2321,11 +2384,13 @@ export default {
 
 
 .top-left {
+  z-index: 0;
   margin-top: 10vh;
   width: 62vw;
 }
 
 .top-right {
+  z-index: 0;
   margin-top: 10vh;
   margin-left: 2vw;
   width: 30vw;
@@ -2363,9 +2428,13 @@ export default {
 }
 
 .institution-statistic {
-  margin-top: 8vh;
-  font-weight: bold;
+  margin-top: 6vh;
   font-size: 24px;
+  width: 100%;
+  height: 53px;
+  line-height: 53px;
+  display: flex;
+  justify-content: center;
 }
 
 .institution-info-card {
@@ -2384,5 +2453,24 @@ export default {
 .author-table {
   max-height: 50vh;
   overflow: scroll;
+}
+
+.tab-name {
+  width: 40%;
+  min-width: 120px;
+  color: #595959;
+  font-size: 34px;
+  text-align: center;
+}
+
+.tab-name .v-icon {
+  font-size: 40px;
+}
+
+.tab-data {
+  width: 58%;
+  color: #0274b3;
+  font-size: 34px;
+  text-align: center;
 }
 </style>

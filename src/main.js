@@ -14,16 +14,8 @@ Vue.prototype.$echarts = echarts;
 axios.defaults.baseURL = "http://124.70.62.18/"
 
 import user from "./store/user";
-import AMap from 'vue-amap';
-Vue.use(AMap);
 
-// 初始化vue-amap
-AMap.initAMapApiLoader({
-  // 高德key
-  key: '25318b8ad2adf02d2d1b93cb7028021e',
-  // 插件集合 （插件按需引入）
-  plugin: ['AMap.Geolocation']
-});
+
 
 Vue.use(ElementUI);
 

@@ -79,6 +79,8 @@ export default {
         {text: '退出',icon:'mdi-location-exit'},
       ],
       username:'username',
+      authorId:"",
+      userId:"",
     }
   },
   methods:{
@@ -97,10 +99,16 @@ export default {
       this.$router.push('/searchAdvance')
     },
     goTo(i){
-      if(i===0)
-        this.$router.push('/user')
-      else if(i===1)
-        this.$router.push('/scholar')
+      if(i===0){
+        this.$router.push({path:'/user', query: {id: this.userId}})
+      }
+      else if(i===1){
+        if(this.authorId===0){
+          this.$router.push({path:'/apply', query:{id:this.userId}})
+        }
+        else
+          this.$router.push({path:'/scholar', query: {id: this.authorId}})
+      }
       else if(i===2){
           this.$store.dispatch('clear');
           this.$message.success("退出成功！");
@@ -116,6 +124,8 @@ export default {
     {
       this.isLogin = true;
       this.username = userInfo.user.username;
+      this.authorId=userInfo.user.authorId;
+      this.userId=userInfo.user.userId;
     }
   },
 }
@@ -183,11 +193,12 @@ export default {
   cursor: pointer;
 }
 .select-box{
+  z-index: 2;
   position: absolute;
   top:10vh;
   right: 1vw;
   width: 15%;
-  z-index: 3;
+  z-index: 1000;
 }
 .search-box{
   margin-left: 5vw;
