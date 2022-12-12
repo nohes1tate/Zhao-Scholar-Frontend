@@ -191,6 +191,7 @@
           <ArticleBlocks v-if="userdata.length>0"
                          :articles="userdata"
                          :tagID="thisTagId"
+                         :key="reloadKey3"
                          flag="schLib"></ArticleBlocks>
 
           <div class="text-center">
@@ -221,6 +222,7 @@ export default {
   name: "UserCenter",
   components: {PageHeader ,ArticleBlocks},
   data:() => ({
+      reloadKey3:false,
       reloadKey2:false,
       reloadKey:false,
       userId:"",
@@ -290,7 +292,7 @@ export default {
       val && setTimeout(() => (this.activePicker = 'YEAR'))
     },
   },
-  created() {
+  mounted() {
     const userInfo = user.getters.getUser(user.state());
     if (!userInfo)
     {
@@ -304,12 +306,15 @@ export default {
       this.userId=userInfo.user.userId;
       this.getAllTags();
       this.getFollowAuthor();
-      this.reloadKey=!this.reloadKey;
-      this.thisTagId=this.tagData[0].collectID;
-      this.thisTagName=this.tagData[0].tag_name;
-      this.getDefaultArticle();
   },
   methods: {
+    setDefaultTagData(){
+      this.reloadKey=!this.reloadKey;
+      this.thisTagId=this.tagData[0].collectID;
+      console.log(this.tagData)
+      this.thisTagName=this.tagData[0].tag_name;
+      this.getDefaultArticle();
+    },
     getArticleCite(){
       let i=0;
       for(i=0;i<this.articles.length;i++){
@@ -392,7 +397,6 @@ export default {
         data: formData,
       })
           .then(res => {
-            console.log(res.data)
             if(res.data.error===0){
               this.follow_list=res.data.follow_list;
               this.reloadKey2=!this.reloadKey2;
@@ -466,6 +470,7 @@ export default {
           .then(res => {
               this.tagData=res.data.tagData;
             this.reloadKey=!this.reloadKey;
+            this.setDefaultTagData();
           })
           .catch(err => {
             console.log(err);
@@ -591,6 +596,7 @@ export default {
           .then(res => {
             this.articles=res.data.articles_list;
             this.getArticleCite();
+            this.reloadKey3=!this.reloadKey3;
           })
           .catch(err => {
             console.log(err);

@@ -313,11 +313,9 @@
         const url = '/api/PaperBrowser/getPaperInfo/' ;
         request('POST', url, data)
         .then(data => {
-          console.log(data);
           if(data.articles_list[0].url[0]){
              this.url = data.articles_list[0].url[0]
           }
-
           this.title = data.articles_list[0].title
           this.abstract = data.articles_list[0].abstract
           this.DOI = data.articles_list[0].doi
@@ -339,7 +337,6 @@
             this_keyword[0] = new_keywords[j]
             this.keywords[j] = this_keyword
           }
-
           let cite = []
             if("venue" in data.articles_list[0]){
               let GBT = this.GBTgenerateCitation(data.articles_list[0].title, data.articles_list[0].authors, data.articles_list[0].year, data.articles_list[0].venue.name)
@@ -350,6 +347,8 @@
             let BIBTEX  = this.BIBTEXgenerateCitation(data.articles_list[0])
             cite.push({name:"BIBTEX", text:BIBTEX})
             this.citeStyle = cite;
+            console.log(121)
+            console.log(this.citeStyle)
         })
         .catch(error => {
           console.error(error);

@@ -54,7 +54,7 @@
                       :key="citeContent.name"
                   >
                     <v-textarea
-                        :value=citeContent.content
+                        :value=citeContent.text
                         auto-grow
                         row-height="15"
                         readonly
@@ -62,7 +62,7 @@
                     <v-btn
                         depressed
                         color="primary"
-                        @click="copyVal(citeContent.content)"
+                        @click="copyVal(citeContent.text)"
                         style="width: 10%;float: right;margin-right: 10px;margin-bottom: 10px;"
                     >复制</v-btn>
                   </v-tab-item>
@@ -166,7 +166,8 @@ export default {
   },
   methods:{
     cite(item){
-      // this.citeStyle = item.cite
+       this. citation_msg = item.cite
+      console.log(this. citation_msg)
       this.overlay = !this.overlay
       // this.content=this.citeStyle(0).text
     },
@@ -224,6 +225,9 @@ export default {
       formData.append("userID", userInfo.user.userId)
       formData.append("collectID", this.tagID)
       formData.append("paperID", item.id)
+      console.log(item.id)
+      console.log(this.tagID)
+      console.log(userInfo.user.userId)
       self.$axios({
         method: 'post',
         url: 'api/UserManager/discollectPaper/',

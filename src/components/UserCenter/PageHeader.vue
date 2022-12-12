@@ -127,8 +127,6 @@ export default {
       this.username = userInfo.user.username;
       this.authorId=userInfo.user.authorId;
       this.userId=userInfo.user.userId;
-      console.log(111)
-      console.log(this.authorId)
     }
   },
 }

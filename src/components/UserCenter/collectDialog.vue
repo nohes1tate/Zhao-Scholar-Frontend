@@ -119,8 +119,9 @@ export default {
           data: formData,
         })
             .then(res => {
-              console.log(res.data.error)
-              console.log(res.data.msg)
+              if(res.data.error===0){
+                this.$message.success("成功添加到收藏夹！");
+              }
             })
             .catch(err => {
               console.log(err);
