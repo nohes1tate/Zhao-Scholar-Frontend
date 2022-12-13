@@ -5,25 +5,14 @@
       <div class="top-left">
         <v-card class="institution-info-card" elevation="2">
           <v-row>
-            <v-col cols="2" style="margin-left: 2vw">
-              <v-img width="20vh" height="20vh" :src="institutionLogo">
-
-              </v-img>
-            </v-col>
             <v-col style="margin-left: 2vw">
               <v-row>
-                <div class="institution-name">`
+                <div class="institution-name" @click="toWebsite">
                   {{ institutionName }}
                 </div>
               </v-row>
               <v-row>
-                <div class="institution-description">{{ institutionDescription }}</div>
-              </v-row>
-              <v-row>
-                <v-col>
-                  <v-btn color="primary" @click="toWebsite"> 官方网站</v-btn>
-                </v-col>
-
+                <iframe id="iframeContain" :src="institutionPage"></iframe>
               </v-row>
             </v-col>
           </v-row>
@@ -106,10 +95,10 @@
                   <div id="paperInfo" style="width: 80%;height: 50vh;margin-left: 10%">
                   </div>
                 </v-col>
-<!--                <v-col>-->
-<!--                  <div id="achievementInfo" style="width: 100%;height: 40vh">-->
-<!--                  </div>-->
-<!--                </v-col>-->
+                <!--                <v-col>-->
+                <!--                  <div id="achievementInfo" style="width: 100%;height: 40vh">-->
+                <!--                  </div>-->
+                <!--                </v-col>-->
               </v-row>
               <v-data-table
                   :headers="authorHeaders"
@@ -2109,10 +2098,10 @@ export default {
       let institutionID = this.$route.params.institutionID
       data.append("institutionId", institutionID);
       request('POST', "/api/PortalManager/getChartInfo/", data)
-      .then(res => {
-        console.log('chart:',res)
-        this.charts = res.charts
-      })
+          .then(res => {
+            console.log('chart:',res)
+            this.charts = res.charts
+          })
     },
     initDetailInfo() {
       console.log('initDetail:')
@@ -2121,17 +2110,17 @@ export default {
       data.append("institutionId", institutionID);
       data.append("scholarNum", 50)
       request('POST', "/api/PortalManager/detailInfo/",data)
-      .then(res => {
-        console.log('detailInfo:', res)
-        this.authorData = res.authorData
-        this.paperInfoXAxis = res.paperInfoXAxis
-        this.paperInfoData = res.paperInfoData
-        this.initPaperInfo()
-        this.institutionData = []
-        this.institutionData.push(res.institutionData)
-         console.log(res.institutionData)
-         console.log(this.institutionData)
-      })
+          .then(res => {
+            console.log('detailInfo:', res)
+            this.authorData = res.authorData
+            this.paperInfoXAxis = res.paperInfoXAxis
+            this.paperInfoData = res.paperInfoData
+            this.initPaperInfo()
+            this.institutionData = []
+            this.institutionData.push(res.institutionData)
+            console.log(res.institutionData)
+            console.log(this.institutionData)
+          })
     },
     initInstitutionInfo() {
       console.log('initInfo:')
@@ -2152,7 +2141,7 @@ export default {
           });
     },
     toAuthorCenter(id) {
-      this.$message.success(id)
+      this.$router.push({path:'/scholar', query: {id: id}})
     },
     closeGraphDialog() {
 
@@ -2380,6 +2369,11 @@ export default {
 .institution-name {
   font-size: 32px;
   font-weight: bold;
+  cursor: pointer;
+}
+
+.institution-name:hover {
+  color: #1E88E5;
 }
 
 .institution-charts {
@@ -2452,4 +2446,8 @@ export default {
   font-size: 34px;
   text-align: center;
 }
+
+#iframeContain {
+  width: 60vw;
+  height:40vh; }
 </style>

@@ -169,10 +169,10 @@
                   <v-radio :label="n.name" :value="n.id"></v-radio>
                   <div v-for="(s, index) in n.content" :key="index">
                     <v-row :style="{ 'margin-left': '50px' }">
-                      <v-col cols="12" md="12" sm="12">
+                      <v-col cols="12" md="11" sm="12" >
                         <h2>{{ s.title }}</h2>
-                        <h4>{{ s.abstract }}</h4>
-                        <h4>{{ s.team }}</h4>
+                        <h5>{{s.abstract || null}}</h5>
+                        <h4 :style="{color:'grey'}">{{ s.teams }}</h4>
                       </v-col>
                     </v-row>
                   </div>
@@ -300,11 +300,32 @@ export default {
     },
     applySettle1() {
       let data = new FormData();
+      let i=0,j=0,k=0;
       data.append("name", this.form1.name);
       request("POST", "/api/PortalManager/SubmitApplication/", data)
         .then((response) => {
           console.log(response);
           this.allAchievements=response.allAchievements;
+          for(i=0;i<this.allAchievements.length;i++){
+            for(j=0;j<this.allAchievements[i].content.length;j++){
+              if(this.allAchievements[i].content[j].title.length>80){
+                this.allAchievements[i].content[j].title=this.allAchievements[i].content[j].title.substring(0,80)+"...";
+              }
+              if(this.allAchievements[i].content[j].abstract.length>320){
+                this.allAchievements[i].content[j].abstract=this.allAchievements[i].content[j].abstract.substring(0,320)+"...";
+              }
+              let teams="",num=0;
+              for(k=0;k<this.allAchievements[i].content[j].team.length-1;k++){
+                teams+=this.allAchievements[i].content[j].team[k].name+", ";
+                num+=this.allAchievements[i].content[j].team[k].name.length+2;
+                if(num>220){teams=teams+"...";break;}
+              }
+              if(k==this.allAchievements[i].content[j].team.length-1&&k!=0){
+                teams+=this.allAchievements[i].content[j].team[k].name;
+              }
+              this.allAchievements[i].content[j].teams=teams
+            }
+          }
         })
         .catch((error) => {
           console.error(error);
@@ -313,13 +334,14 @@ export default {
     applySettle2() {
       let data = new FormData();
       data.append("workplace", this.form1.workplace);
+      data.append("name", this.form1.name);
       data.append("email", this.form1.email);
       data.append("field", this.form1.field);
       if (this.form1.homepage.trim()!= "") {
         data.append("homepage", this.form1.homepage);
       }
       data.append("id", this.selectedId);
-      console.log(this.selectedId)
+      console.log(this.selectedId+"sss");
       request('POST', "/api/PortalManager/ConfirmSubmit/",data)
         .then(response => {
           console.log(response)
