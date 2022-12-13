@@ -1,7 +1,58 @@
 <template>
 
 <div>
- 
+  <div style="float: left;width:250px;margin-left: 150px;margin-right: 20px;">
+      <div style="font-size: 18px; height: 80px;">
+        <span style="float:left; text-align:right;margin-top: 20px;color: grey;font-size: 15px;margin-left: 0px;">
+            筛选
+        </span>
+      </div>
+    <v-card 
+    width=""
+    height=""
+    >
+    <v-subheader>作者</v-subheader>
+    <v-list-item
+                v-for="item in authorList"
+                :key=item.name
+               
+            >
+            <v-list-item-content>
+                  <v-list-item-title >
+                    <span @click="ChooseAuthor(item.name, item.status, item.id)" class="clickchange">{{item.name}} </span> </v-list-item-title>
+                </v-list-item-content>
+               
+        </v-list-item>
+      <v-divider></v-divider>
+    <v-subheader>期刊</v-subheader>
+  
+    <v-list-item
+                v-for="item in journalList"
+                :key=item.name
+            >
+            <v-list-item-content>
+                  <v-list-item-title >
+                    <span @click="ChooseType(item.name, item.status)" class="clickchange">{{item.name}}</span>
+                    </v-list-item-title>
+                </v-list-item-content>
+  
+        
+        </v-list-item>
+    <!-- <v-subheader>时间选择</v-subheader>
+    <v-list-item
+                v-for="item in Time"
+                :key="item"
+            >
+            <v-list-item-action>
+                <v-btn style="background-color: transparent;" @click="TimeSelect(item)">{{item}}</v-btn>
+            </v-list-item-action>
+    </v-list-item> -->
+    <v-divider></v-divider>
+    
+
+
+    </v-card>
+  </div>
    <div style="float: left;">
             <CollectDialog
                 :collect-show="collectShow"
@@ -193,7 +244,7 @@ import CollectDialog from "@/components/UserCenter/collectDialog";
 import PageHeader from "@/components/UserCenter/PageHeader";
 import user from "@/store/user";
 import selectBannerVue from './selectBanner.vue';
-
+import Vue from 'vue'
     export default{
       components: {CollectDialog},
         data:()=>({
@@ -220,11 +271,136 @@ import selectBannerVue from './selectBanner.vue';
             paperID:'',
             isCollect:false,
             tag_list:'',
-            
+            authorList:[],
+        journalList:[],
+            new:0,
+            journal:"",
+            author:"",
 
 
         }),
         methods:{
+          //刷新authorlist
+          newselect(){
+                    //对数据逐个进行处理
+                    console.log("开始更新左侧")
+                  
+                    console.log(this.CurrentPageData)
+                    var i=0
+                    var j=0
+                    for(i=0;i<this.CurrentPageData.length;i++){
+                        if("venue" in this.CurrentPageData[i] ){
+                          if("name" in this.CurrentPageData[i].venue){
+                            var e = this.CurrentPageData[i].venue
+                          var has=0
+                          for(j=0;j<this.journalList.length;j++){
+                            if(this.journalList[j].name===e.name){
+                              has=1
+                              console.log("重复"+e.name+" "+has)
+                              
+                            }
+                          }
+                          if(has===0){
+                            this.journalList.push(this.CurrentPageData[i].venue)
+                          }
+                          }
+                          
+                        }
+                        if("authors" in this.CurrentPageData[i]){
+                          if(this.CurrentPageData[i].authors.length>0){
+                            e = this.CurrentPageData[i].authors[0]
+                          has=0
+                          for(j=0;j<this.authorList.length;j++){
+                            if(this.authorList[j].id===e.id){
+                              has=1
+                            }
+                          }
+                          if(has===0){
+                            this.authorList.push(this.CurrentPageData[i].authors[0])
+                          }
+                          }
+                          
+                        }
+                    }
+                    
+                    this.journalList.forEach((item, index)=> {
+                        Vue.set(item, 'status', false)
+                    })
+                    this.authorList.forEach((item, index)=> {
+                        Vue.set(item, 'status', false)
+                    })
+                    console.log("筛选栏结果")
+                    console.log(this.authorList)
+                    console.log(this.journalList)
+          },
+
+                //会议选择
+        ChooseConference(name, status){
+            console.log("选择会议："+name)
+            console.log('状态：'+status)//每点击一次 该item的status会发生改变
+        },
+        //类型选择----变更为期刊选择
+        ChooseType(name, status){
+          // this.formdata.keyword.push({keyword:"[A & A case reports', 'XML a Primer: A Primer]", op:"and", method:"term", type:"venue.name.keyword"})
+            console.log("选择期刊："+name)
+            console.log("状态："+status)
+            // var has=0
+            // var hasjournal=0
+            // for(var i=0;i<this.formdata.keyword.length;i++){
+            //   if(this.formdata.keyword[i].keyword.type=="venue.name"||this.formdata.keyword[i].keyword.type=="venue.name.keyword"){
+            //     hasjournal=1
+            //   }
+            //   if(this.formdata.keyword[i].keyword==name){
+            //     has=1
+            //     if(status===false){
+            //       this.formdata.keyword[i].op='or'
+            //     }else{
+            //       this.formdata.keyword[i].op='and'
+            //     }
+            //   }
+            // }
+            // if(has==0){
+            //   this.formdata.keyword.push({keyword:name, op:"and", method:"fuzzy", type:"venue.name.keyword"})
+            // }
+            this.formdata.journal_filter="yes"
+            this.formdata.journal=name
+            this.formdata.author_filter="no"
+            this.getCurrentPageData()
+
+        },
+        //时间选择
+        TimeSelect(time){
+          console.log("时间选择："+time)
+        },
+        //作者选择
+        ChooseAuthor(name, status, id){
+          console.log("选择作者："+name)
+          console.log("状态："+status)
+   
+          // var has=0
+          //   for(var i=0;i<this.formdata.keyword.length;i++){
+          //     if(this.formdata.keyword[i].keyword==name){
+          //       has=1
+          //       if(status===false){
+          //         this.formdata.keyword[i].op='or'
+          //       }else{
+          //         this.formdata.keyword[i].op='and'
+          //       }
+          //     }
+          //   }
+          //   if(has==0){
+          //     this.formdata.keyword.push({keyword:name+'a a zevin', op:"and", method:"fuzzy", type:"authors.name.keyword"})
+          //   }
+          this.formdata.author_filter="yes"
+          this.formdata.journal_filter="no"
+          this.formdata.author=id
+          console.log("作者筛选----")
+          console.log(this.formdata)
+            this.getCurrentPageData()
+           this.getCurrentPageData()
+        },
+
+
           closeChildDialog() {
             this.collectShow = false;
           },
@@ -289,31 +465,47 @@ import selectBannerVue from './selectBanner.vue';
             },
             getCurrentPageData(){
                 console.log("开始请求")
-                if("keyword" in this.$route.query){
-                this.keyword = this.$route.query.keyword
-                this.formdata = new FormData();
-                this.formdata.append("page", this.page);
-                this.formdata.append("pagesize", this.pageSize);
-                this.formdata.append("keyword", this.keyword);
-                this.formdata.append("orderby", this.orderBy);
-                this.posturl="/api/PaperBrowser/searchPaper/"
-                }else if("formdata" in this.$route.query){
+                if("keyword" in this.$route.query && this.new==0){
+                // this.keyword = this.$route.query.keyword
+                // this.formdata = new FormData();
+                // this.formdata.append("page", 1);
+                // this.formdata.append("pagesize", 10);
+                // this.formdata.append("keyword", this.keyword);
+                // this.formdata.append("orderby", "citation");
+                this.formdata.keyword=[]
+                this.formdata.keyword.push({keyword:this.$route.query.keyword, method:"match", op:"and",type:"title"})
+                this.formdata.minyear=0
+                this.formdata.maxyear=2022
+                this.posturl="/api/PaperBrowser/superSearch/"
+                }else if("formdata" in this.$route.query && this.new==0){
                   console.log("高级检索")
                   console.log()
                   this.formdata = this.$route.query.formdata
-                  this.formdata.page = this.page
-                  this.formdata.pagesize = this.pageSize
-                  this.formdata.orderby = this.orderBy
-                  console.log(this.formdata)
+                  
                   this.posturl = this.$route.query.url
-                }else{
-                  return
                 }
+                this.formdata.page = this.page
+                this.formdata.pagesize = this.pageSize
+                this.formdata.orderby = this.orderBy
+                if(!("author" in this.formdata)){
+                  this.formdata.author=""
+                }
+                if(!("journal" in this.formdata)){
+                  this.formdata.journal=""
+                }
+                if(!("author_filter" in this.formdata)){
+                  this.formdata.author_filter="no"
+                }
+                if(!("journal_filter" in this.formdata)){
+                  this.formdata.journal_filter="no"
+                }
+                
                 //获取我们自己的数据
                 // this.orderBy = JSON.stringify(this.orderBy)
                 // let url = 'api/PaperBrowser/searchPaper/'
                 console.log("请求路径")
                 console.log(this.posturl)
+                console.log(this.formdata)
                 axios({
                     method:"post",
                     url:this.posturl,
@@ -361,6 +553,11 @@ import selectBannerVue from './selectBanner.vue';
                         let BIBTEX  = this.BIBTEXgenerateCitation(this.CurrentPageData[i])
                         cite.push({name:"BIBTEX", text:BIBTEX})
                         this.CurrentPageData[i].cite = cite
+                        if(this.new==0){
+                          this.newselect()
+                          this.new=1
+                        }
+
                     }
                 })
 
@@ -410,6 +607,10 @@ import selectBannerVue from './selectBanner.vue';
 
         },
         created(){
+          this.new=0
+          this.authorList=[]
+          this.journalList=[]
+            console.log("刷新页面")
             this.Num = this.paperInfo.length;
             this.pageNum =  Math.ceil(this.Num/this.pageSize);
             console.log("page:"+this.pageNum)
@@ -417,33 +618,7 @@ import selectBannerVue from './selectBanner.vue';
             console.log("当前携带参数:")
             console.log(this.$route.query.formdata)
             this.getCurrentPageData()
-            // if("keyword" in this.$route.query){
-
-            //     this.posturl = '/api/PaperBrowser/searchPaper/'
-            //     this.keyword = this.$route.query.keyword
-            //     var formdata0 = new FormData();
-            //     formdata0.append("page", this.page);
-            //     formdata0.append("pagesize", this.pageSize);
-            //     formdata0.append("keyword", this.keyword);
-            //     formdata0.append("orderby", this.orderBy);
-            //     this.formdata = formdata0
-            //     this.getCurrentPageData()
-
-            // }else{
-            //   console.log("采用高级检索")
-            //   this.posturl = this.$route.query.url
-            //   this.formdata = this.$route.query.formdata
-            //     this.formdata.page = this.page
-            //     this.formdata.pagesize = this.pageSize
-            //     this.formdata.orderby = this.orderBy
-            //     console.log(this.posturl)
-            //     console.log(this.formdata)
-            //     this.getCurrentPageData()
-            // }
-
-
-
-
+         
         },
         //监听page的变化
         watch:{
@@ -466,10 +641,14 @@ import selectBannerVue from './selectBanner.vue';
                 this.getCurrentPageData()
             },
             $route(to, from){
+                this.new=0
+                this.authorList=[]
+                this.journalList=[]
                 console.log(to)
                 // this.keyword=to.query.keyword
                 console.log("更新页面"+this.keyword)
                 this.getCurrentPageData()
+               
             }
         }
     }
@@ -490,5 +669,10 @@ import selectBannerVue from './selectBanner.vue';
 }
 .paper-title:hover{
   cursor: pointer;
+}
+.clickchange:hover{
+  text-decoration: underline;
+    color:#006064 ;
+    cursor: pointer;
 }
 </style>

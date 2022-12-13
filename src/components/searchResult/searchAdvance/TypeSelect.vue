@@ -152,7 +152,8 @@ export default{
         SearchRequest:[{select:{value:"title", label:"标题"}, str:"",relation:{value:"and", label:"且"}, method:{value:"term", label:"精确"}},
         {select:{value:"title", label:"标题"}, str:"",relation:{value:"and", label:"且"}, method:{value:"term", label:"精确"}}],
         TypeList:["主题", "关键词", "全文", "篇名", "第一作者", "通讯作者","摘要","参考文献", "文献来源", "DOI"],
-        options:[{value:"title", label:"标题"}, {value:"abstract", label:"摘要"}, {value:"keywords", label:"关键词"}, {value:"venue.name", label:"期刊"},{value:"authors.org", label:"作者机构"},
+        options:[{value:"title", label:"标题"}, {value:"abstract", label:"摘要"}, {value:"keywords", label:"关键词"}, 
+        {value:"venue.name", label:"期刊"},{value:"authors.org", label:"作者机构"},
         {value:"authors.name", label:"作者名称"}, {value:"doi", label:"doi"},{value:"issn", label:"issn"}],//
         relaOptions:[{value:"and", label:"且"}, {value:"or", label:"或"}, {value:"not", label:"非"}],
         TypeCheck:[{k:"0", v:"基础科学"}, {k:"0", v:"工程科技"}, {k:0, v:"农业科技"}, {k:0, v:"农业卫生科技"}, {k:0, v:"医药卫生科技"}, {k:0, v:"哲学与人文科学"}, {k:0, v:"社会科学"}, {k:0, v:"消息科技"}, {k:0, v:"经济管理科学"}],

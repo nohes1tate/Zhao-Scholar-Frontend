@@ -3,7 +3,7 @@
     <PageHeaderVue :show-search="true" style="width: 100%;"></PageHeaderVue>
     <div>
  
-    <selectBannerVue style="float:left;margin-left: 100px;width: 250px;" :keyword="keyword"></selectBannerVue>
+    <!-- <selectBannerVue style="float:left;margin-left: 100px;width: 250px;" :keyword="keyword"></selectBannerVue> -->
     <infoCardVue style="float: left;" ></infoCardVue>
     </div>
    <!-- <searchBannerVue></searchBannerVue> -->
@@ -21,7 +21,8 @@
     components:{
       infoCardVue,
       PageHeaderVue,
-      selectBannerVue
+
+
     },
     data:()=>({
       keyword:"GAN",
