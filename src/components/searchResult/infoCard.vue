@@ -235,7 +235,7 @@ import axios from 'axios';
         data:()=>({
             collectShow:false,
             tab:null,
-            page: 1,
+            page: 0,
             pageSize:10,
             pageNum:'1',
             Num:1,
@@ -248,11 +248,11 @@ import axios from 'axios';
             absolute: false,
             opacity: 0.5,//透明度
             citeStyle:[{name:"引用类型", text:"引用文本"}],
-            keyword:"",
+            keyword:null,
             TypeNum:[],
             tagData:[],
             posturl:"gan",
-            formdata:"",
+            formdata:{},
 
         }),
         methods:{
@@ -266,9 +266,7 @@ import axios from 'axios';
               this.$message.error('没有该学者信息');
             }
           },
-          searchkeyword(keyword){
-            this.$router.push({path:"/search", query:{keyword:keyword}})
-          },
+         
           copyVal(val) {
             let aux = document.createElement("input");
             aux.setAttribute("value", val);
@@ -294,16 +292,32 @@ import axios from 'axios';
                 this.$router.push({path:"/document", query:{Title:title, Id:id}})
             },
             getCurrentPageData(){
-
+                console.log("开始请求")
+                if("keyword" in this.$route.query){
+                this.keyword = this.$route.query.keyword
+                this.formdata = new FormData();
+                this.formdata.append("page", this.page);
+                this.formdata.append("pagesize", this.pageSize);
+                this.formdata.append("keyword", this.keyword);
+                this.formdata.append("orderby", this.orderBy);
+                this.posturl="/api/PaperBrowser/searchPaper/"
+                }else if("formdata" in this.$route.query){
+                  console.log("高级检索")
+                  console.log()
+                  this.formdata = this.$route.query.formdata
+                  this.formdata.page = this.page
+                  this.formdata.pagesize = this.pageSize
+                  this.formdata.orderby = this.orderBy
+                  console.log(this.formdata)
+                  this.posturl = this.$route.query.url
+                }else{
+                  return
+                }
                 //获取我们自己的数据
                 // this.orderBy = JSON.stringify(this.orderBy)
                 // let url = 'api/PaperBrowser/searchPaper/'
-                // var formdata = new FormData();
-                // formdata.append("page", this.page);
-                // formdata.append("pagesize", this.pageSize);
-                // formdata.append("keyword", this.keyword);
-                // formdata.append("orderby", this.orderBy);
-
+                console.log("请求路径")
+                console.log(this.posturl)
                 axios({
                     method:"post",
                     url:this.posturl,
@@ -403,35 +417,38 @@ import axios from 'axios';
             console.log("page:"+this.pageNum)
             
             console.log("当前携带参数:")
-            console.log(this.$route.query)
-            if("keyword" in this.$route.query){
+            console.log(this.$route.query.formdata)
+            this.getCurrentPageData()
+            // if("keyword" in this.$route.query){
                 
-                this.posturl = '/api/PaperBrowser/searchPaper/'
-                this.keyword = this.$route.query.keyword
-                var formdata0 = new FormData();
-                formdata0.append("page", this.page);
-                formdata0.append("pagesize", this.pageSize);
-                formdata0.append("keyword", this.keyword);
-                formdata0.append("orderby", this.orderBy);
-                this.formdata = formdata0
-                this.getCurrentPageData()
+            //     this.posturl = '/api/PaperBrowser/searchPaper/'
+            //     this.keyword = this.$route.query.keyword
+            //     var formdata0 = new FormData();
+            //     formdata0.append("page", this.page);
+            //     formdata0.append("pagesize", this.pageSize);
+            //     formdata0.append("keyword", this.keyword);
+            //     formdata0.append("orderby", this.orderBy);
+            //     this.formdata = formdata0
+            //     this.getCurrentPageData()
                 
-            }else{
-              this.posturl = this.$route.query.url
-              this.formdata = this.$route.query.formdata
-                this.formdata.page = this.page
-                this.formdata.pagesize = this.pageSize
-                this.formdata.orderby = this.orderBy
-                console.log(this.posturl)
-                console.log(this.formdata)
-                this.getCurrentPageData()
-            }
+            // }else{
+            //   console.log("采用高级检索")
+            //   this.posturl = this.$route.query.url
+            //   this.formdata = this.$route.query.formdata
+            //     this.formdata.page = this.page
+            //     this.formdata.pagesize = this.pageSize
+            //     this.formdata.orderby = this.orderBy
+            //     console.log(this.posturl)
+            //     console.log(this.formdata)
+            //     this.getCurrentPageData()
+            // }
             
         },
         //监听page的变化
         watch:{
             page(){
                 console.log("page:"+this.page)
+                
                 this.getCurrentPageData()
             },
             selectMethod(){
@@ -449,16 +466,8 @@ import axios from 'axios';
             },
             $route(to, from){
                 console.log(to)
-                this.keyword=to.query.keyword
+                // this.keyword=to.query.keyword
                 console.log("更新页面"+this.keyword)
-                console.log(to)
-                console.log(from)
-                var formdata0 = new FormData();
-                formdata0.append("page", this.page);
-                formdata0.append("pagesize", this.pageSize);
-                formdata0.append("keyword", this.keyword);
-                formdata0.append("orderby", this.orderBy);
-                this.formdata = formdata0
                 this.getCurrentPageData()
             }
         }
