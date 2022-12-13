@@ -1,10 +1,9 @@
 <template>
   <div class="institution-chart-card">
-    <v-card height="45vh" width="30vw" elevation="2" @click="showChart" v-if="chartType === 1">
-      <div>{{ title }}{{chartType}}</div>
+    <v-card height="35vh" width="30vw" elevation="2" @click="showChart" v-if="chartType === 1">
       <div :id='"charts-"+ id' style="height: 100%; width: 100%; cursor: pointer"></div>
     </v-card>
-    <v-card height="45vh" width="30vw" elevation="2" @click="showGraph" v-else>
+    <v-card height="35vh" width="30vw" elevation="2" @click="showGraph" v-else>
       <div ref="insRelation" style="width: 100%; height: 100%; cursor: pointer"></div>
     </v-card>
   </div>
@@ -123,6 +122,11 @@ export default {
       let d = this.yData
 
       option = {
+        title: {
+          text: this.title,
+          top: 'top',
+          left: 'left'
+        },
         xAxis: {
           type: 'category',
           data: x
@@ -146,8 +150,6 @@ export default {
 
 <style scoped>
 .institution-chart-card {
-  margin-left: 2vw;
-  margin-top: 3vh;
   cursor: pointer;
 }
 
