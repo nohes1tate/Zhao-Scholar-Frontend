@@ -1,13 +1,14 @@
 <template>
   <div>
-    <PageHeaderVue :show-search="true"></PageHeaderVue>
+    <PageHeaderVue :show-search="true" style="width: 100%;"></PageHeaderVue>
+    <div>
+ 
+    <!-- <selectBannerVue style="float:left;margin-left: 100px;width: 250px;" :keyword="keyword"></selectBannerVue> -->
+    <infoCardVue style="float: left;" ></infoCardVue>
+    </div>
    <!-- <searchBannerVue></searchBannerVue> -->
-   <div
-   style="margin-top: 50px;"
-   >
-    <selectBannerVue style="float:left;margin-left: 100px;" :keyword="keyword"></selectBannerVue>
-    <infoCardVue style="float:left;margin-left: 20px;" :keyword="keyword"></infoCardVue>
-   </div>
+
+
   </div>
 </template>
 
@@ -19,8 +20,9 @@
     name: 'SearchResult',
     components:{
       infoCardVue,
-      selectBannerVue,
-      PageHeaderVue
+      PageHeaderVue,
+
+
     },
     data:()=>({
       keyword:"GAN",
