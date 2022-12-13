@@ -315,10 +315,11 @@ export default {
       data.append("workplace", this.form1.workplace);
       data.append("email", this.form1.email);
       data.append("field", this.form1.field);
-      if (this.form1.homepage.trim != "") {
+      if (this.form1.homepage.trim()!= "") {
         data.append("homepage", this.form1.homepage);
       }
       data.append("id", this.selectedId);
+      console.log(this.selectedId)
       request('POST', "/api/PortalManager/ConfirmSubmit/",data)
         .then(response => {
           console.log(response)

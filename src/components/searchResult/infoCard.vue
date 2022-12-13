@@ -142,9 +142,12 @@
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click="toDocument(item.title, item.id)">
                     详情<v-icon color="#64B5F6">mdi-link-variant</v-icon>
                 </v-btn>
-              <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click="changeCollectIconToTrue(item.id)">
-                收藏<v-icon color="#64B5F6">mdi-star-plus-outline</v-icon>
-              </v-btn>
+                  <v-btn
+                      style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;"
+                      @click="changeCollectIconToTrue(item.id)">
+                    收藏<v-icon color="#64B5F6">mdi-star</v-icon>
+                  </v-btn>
+
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click="pdf(item.pdf)" v-show="item.haspdf">
                     下载<v-icon color="#64B5F6">mdi-download</v-icon>
                 </v-btn>
@@ -180,10 +183,14 @@
 <script>
 import request from '@/utils/request';
 import axios from 'axios';
+import collectDialog from "@/components/UserCenter/collectDialog";
+import CollectDialog from "@/components/UserCenter/collectDialog";
+import PageHeader from "@/components/UserCenter/PageHeader";
+import user from "@/store/user";
 
 
     export default{
-
+      components: {CollectDialog},
         data:()=>({
             collectShow:false,
             tab:null,
@@ -214,11 +221,32 @@ import axios from 'axios';
           closeChildDialog() {
             this.collectShow = false;
           },
-          changeCollectIconToTrue(id){
-            this.collectShow=true;
+          getCollectInfo(){
+            const userInfo = user.getters.getUser(user.state);
+            const formData = new FormData();
+            formData.append("userID", userInfo.user.userId);
+            formData.append("authorization", userInfo.user.Authorization)
+            formData.append("paperID", this.paperID)
+            this.$axios({
+              method: 'post',
+              url: 'api/UserManager/isCollect/',
+              data: formData,
+            })
+                .then(res => {
+                  if(res.data.error=== 0){
+                    this.isCollect=res.data.isCollect;
+                    if(this.isCollect)
+                      this.tag_list=res.data.tag_list;
+                  }
+                })
+                .catch(err => {
+                  console.log(err);
+                })
           },
-          getCollect(title,id){
+          changeCollectIconToTrue(ID){
             this.collectShow=true;
+            this.paperID=ID;
+            this.getCollectInfo();
           },
           toscholar(id){
             if(id){
