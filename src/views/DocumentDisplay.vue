@@ -33,7 +33,38 @@
             <!-- 找一个引号图标放到引用后面 -->
 
             <v-btn color="primary" dark text class="ml-4" @click="share">分享<v-icon>mdi-arrow-top-right-bold-box-outline</v-icon></v-btn>
-
+            <v-btn color="primary" dark text class="ml-4" v-show="!isMine" @click="update">更新<v-icon>mdi-arrow-u-up-right</v-icon></v-btn>
+            <v-btn color="red" dark text class="ml-4" v-show="isMine" @click="delet">下架<v-icon>mdi-delete</v-icon></v-btn>
+        <v-dialog v-model="dialog" max-width="600px">
+          <v-card>
+            <v-card-title>
+              <span class="headline">更新文献信息</span>
+            </v-card-title>
+            <v-card-text>
+              <v-container>
+                <v-row>
+                  <v-col cols="12">
+                    <v-text-field label="原文地址" v-model="dialogUrl"></v-text-field>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-textarea
+                        name="input-7-1"
+                        filled
+                        label="摘要"
+                        auto-grow
+                        :value="dialogAbstract"
+                    ></v-textarea>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
+              <v-btn color="blue darken-1" text @click="dialog = false">Save</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
 
 
 
@@ -290,6 +321,10 @@
       collectShow:false,
       isCollect:false,
       tag_list:[],
+      isMine:false,
+      dialog:false,
+      dialogUrl:'',
+      dialogAbstract:'',
     }),
     created(){
       var title = this.$route.query.Title
@@ -302,6 +337,12 @@
       this.checkPaperIsCollect();
     },
     methods:{
+      update(){
+        this.dialog=true;
+      },
+      delet(){
+
+      },
       checkPaperIsCollect(){
         const userInfo = user.getters.getUser(user.state);
         const formData = new FormData();
@@ -345,9 +386,11 @@
           console.log(data)
           if(data.articles_list[0].url){
              this.url = data.articles_list[0].url[0]
+            this.dialogUrl = this.url
           }
           this.title = data.articles_list[0].title
           this.abstract = data.articles_list[0].abstract
+          this.dialogAbstract = this.abstract
           this.DOI = data.articles_list[0].doi
           this.stars = data.stars
           this.n_citation = data.articles_list[0].n_citation
