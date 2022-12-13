@@ -22,7 +22,7 @@
                 <div class="tag-line" :key="reloadKey">
                   <v-chip
                       class="ma-2"
-                      color=#546E7A
+                      color="blue darken-1"
                       label
                       text-color="white"
                       style="display: flex; cursor: pointer;"
@@ -41,7 +41,7 @@
                     <template v-slot:activator="{ on, attrs }">
                       <v-chip
                           class="ma-2"
-                          color=#546E7A
+                          color="blue darken-1"
                           label
                           text-color="white"
                           style="display: flex;cursor: pointer"

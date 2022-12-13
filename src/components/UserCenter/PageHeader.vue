@@ -21,10 +21,10 @@
       </v-text-field>
     </div>
     <div v-show="isLogin" class="user-box" @mouseenter="hover=true" @mouseleave="hover=false">
-      <v-icon style="font-size: 40px">mdi-account-outline</v-icon>
-      <span>{{this.username}}</span>
+      <v-icon style="font-size: 40px" color="#1E88E5">mdi-account-outline</v-icon>
+      <span style="color: #1E88E5">{{this.username}}</span>
       <div class="expand-more" :class="[hover?'go':'aa']" >
-        <v-icon class="material-symbols-outlined" >expand_more</v-icon>
+        <v-icon class="material-symbols-outlined" color="#1E88E5">expand_more</v-icon>
       </div>
     </div>
     <div class="login-btn" v-show="!isLogin">
@@ -159,7 +159,7 @@ export default {
   transition: .3s;
 }
 .search-btn span:hover{
-  color: dimgrey;
+  color: #1E88E5;
 }
 .login-btn{
   margin-left: 10vw;
@@ -174,7 +174,7 @@ export default {
   transition: .3s;
 }
 .login-btn span:hover{
-  color: dimgrey;
+  color: #1E88E5;
 }
 .user-box{
   margin-left: 7vw;
