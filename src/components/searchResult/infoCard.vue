@@ -190,7 +190,7 @@
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click="toDocument(item.title, item.id)">
                     详情<v-icon color="#64B5F6">mdi-link-variant</v-icon>
                 </v-btn>
-              <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click="getCollect(item.title, item.id)">
+              <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" >
                 收藏<v-icon color="#64B5F6">mdi-star-plus-outline</v-icon>
               </v-btn>
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click="pdf(item.pdf)" v-show="item.haspdf">
@@ -229,6 +229,7 @@
 import request from '@/utils/request';
 import axios from 'axios';
 
+
     export default{
 
         data:()=>({
@@ -250,6 +251,8 @@ import axios from 'axios';
             keyword:"gan",
             TypeNum:[],
             tagData:[],
+            posturl:"",
+            formdata:"",
 
         }),
         methods:{
@@ -294,17 +297,19 @@ import axios from 'axios';
 
                 //获取我们自己的数据
                 // this.orderBy = JSON.stringify(this.orderBy)
-                let url = 'api/PaperBrowser/searchPaper/'
-                var formdata = new FormData();
-                formdata.append("page", this.page);
-                formdata.append("pagesize", this.pageSize);
-                formdata.append("keyword", this.keyword);
-                formdata.append("orderby", this.orderBy);
+                // let url = 'api/PaperBrowser/searchPaper/'
+                // var formdata = new FormData();
+                // formdata.append("page", this.page);
+                // formdata.append("pagesize", this.pageSize);
+                // formdata.append("keyword", this.keyword);
+                // formdata.append("orderby", this.orderBy);
+
                 axios({
                     method:"post",
-                    url:url,
-                    data:formdata
+                    url:this.posturl,
+                    data:this.formdata
                 }).then(res=>{
+                    console.log(res.data)
                     this.Num = res.data.total
                     this.pageNum = Math.ceil(this.Num/this.pageSize)
                     this.CurrentPageData = res.data.articles_list
@@ -395,8 +400,30 @@ import axios from 'axios';
             this.Num = this.paperInfo.length;
             this.pageNum =  Math.ceil(this.Num/this.pageSize);
             console.log("page:"+this.pageNum)
-            this.keyword = this.$route.query.keyword
-            this.getCurrentPageData()
+            
+            
+            if("keyword" in this.$route.query){
+                this.posturl = '/api/PaperBrowser/searchPaper/'
+                this.keyword = this.$route.query.keyword
+                var formdata0 = new FormData();
+                formdata0.append("page", this.page);
+                formdata0.append("pagesize", this.pageSize);
+                formdata0.append("keyword", this.keyword);
+                formdata0.append("orderby", this.orderBy);
+                this.formdata = formdata0
+                this.getCurrentPageData()
+                
+            }else{
+              this.posturl = this.$route.query.url
+              this.formdata = this.$route.query.formdata
+                this.formdata.page = this.page
+                this.formdata.pagesize = this.pageSize
+                this.formdata.orderby = this.orderBy
+                console.log(this.posturl)
+                console.log(this.formdata)
+                this.getCurrentPageData()
+            }
+            
         },
         //监听page的变化
         watch:{
