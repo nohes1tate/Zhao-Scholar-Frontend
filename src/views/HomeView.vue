@@ -55,7 +55,7 @@
                   </v-text-field>
                   </template>
                   <v-list v-if="items.length > 0" class="border-list" dense>
-                    <v-list-item v-for="(i, index) in items" :key="index" @click="searchTag(i.name)">
+                    <v-list-item v-for="(i, index) in items" :key="index" @click="searchType(i.name,i.type,i.id)">
                       <v-list-item-title><h3 :style="{color:'grey'}">{{i.type}}: </h3><h3>{{i.name}}</h3></v-list-item-title>
                     </v-list-item>
                   </v-list>
@@ -275,7 +275,7 @@
             <v-list dense>
               <v-list-item-group v-model="item" color="primary">
                 <v-list-item
-                  v-for="(item, i) in TopAffiliations"
+                  v-for="(item, i) in ShowAffiliations"
                   :key="i"
                   :style="{ 'margin-left': '10px', 'margin-right': '10px' }"
                  
@@ -345,7 +345,7 @@
             <v-list dense>
               <v-list-item-group v-model="item" color="primary">
                 <v-list-item
-                  v-for="(item, i) in TopJournals"
+                  v-for="(item, i) in ShowJournals"
                   :key="i"
                   :style="{ 'margin-left': '10px', 'margin-right': '10px' }"
                   inactive
@@ -462,6 +462,14 @@ export default {
       if (search == "") return;
       this.$router.push({ path: "/search", query: { keyword: search } });
     },
+    searchType(search,type,id) {
+      this.search=search
+      if (search == "") return;
+      if(type=="Author"){this.$router.push({path:'/scholar', query: {id:id}})}
+      if(type=="Paper"){this.$router.push({path:"/document", query:{Title:search, Id:id}})}
+      if(type=="Affiliation"){this.$router.push({path:"/institution", params:{institutionID:id}})}
+      if(type=="Venue"){this.$router.push()}
+    },
     goto(url) {
       console.log("url: "+url);
     },
@@ -517,8 +525,8 @@ export default {
           this.TopAuthors=response.TopAuthors;
           this.ShowAuthors=this.TopAuthors.slice(0,10)
           for(i=0;i<this.TopAuthors.length;i++){
-            if(this.TopAuthors[i].name.length>16){
-              this.TopAuthors[i].name=this.TopAuthors[i].name.slice(0,16)+"..."
+            if(this.TopAuthors[i].name.length>15){
+              this.TopAuthors[i].name=this.TopAuthors[i].name.slice(0,15)+"..."
             }
           }
           
@@ -537,8 +545,8 @@ export default {
           this.TopAffiliations=response.TopAffiliations;
           this.ShowAffiliations=this.TopAffiliations.slice(0,10)
           for(i=0;i<this.TopAffiliations.length;i++){
-            if(this.TopAffiliations[i].name.length>16){
-              this.TopAffiliations[i].name=this.TopAffiliations[i].name.slice(0,16)+"..."
+            if(this.TopAffiliations[i].name.length>15){
+              this.TopAffiliations[i].name=this.TopAffiliations[i].name.slice(0,15)+"..."
             }
           }
           
@@ -557,8 +565,8 @@ export default {
           this.TopJournals=response.TopJournals;
           this.ShowJournals=this.TopJournals.slice(0,10)
           for(i=0;i<this.TopJournals.length;i++){
-            if(this.TopJournals[i].name.length>16){
-              this.TopJournals[i].name=this.TopJournals[i].name.slice(0,16)+"..."
+            if(this.TopJournals[i].name.length>15){
+              this.TopJournals[i].name=this.TopJournals[i].name.slice(0,15)+"..."
             }
           }
           
@@ -581,14 +589,14 @@ export default {
   watch: {
     search:'inputHandle',
     page1:'changeShowAuthor',
-    // page2:'changeShowAffiliation',
-    // page3:'changeShowJournal',
+    page2:'changeShowAffiliation',
+    page3:'changeShowJournal',
   },
   created(){
     this.getAll()
     this.getAuthors()
-    // this.getAffiliations()
-    // this.getJournals()
+    this.getAffiliations()
+    this.getJournals()
   }
 };
 </script>

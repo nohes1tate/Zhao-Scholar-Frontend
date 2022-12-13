@@ -313,13 +313,14 @@ export default {
     applySettle2() {
       let data = new FormData();
       data.append("workplace", this.form1.workplace);
+      data.append("name", this.form1.name);
       data.append("email", this.form1.email);
       data.append("field", this.form1.field);
       if (this.form1.homepage.trim()!= "") {
         data.append("homepage", this.form1.homepage);
       }
       data.append("id", this.selectedId);
-      console.log(this.selectedId)
+      console.log(this.selectedId+"sss");
       request('POST', "/api/PortalManager/ConfirmSubmit/",data)
         .then(response => {
           console.log(response)
