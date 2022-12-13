@@ -217,7 +217,6 @@ export default {
           })
     },
     handleDelete(item){
-      //console.log(111)
       const userInfo = user.getters.getUser(user.state);
       const formData = new FormData();
       const self = this;
@@ -225,17 +224,18 @@ export default {
       formData.append("userID", userInfo.user.userId)
       formData.append("collectID", this.tagID)
       formData.append("paperID", item.id)
-      console.log(item.id)
-      console.log(this.tagID)
-      console.log(userInfo.user.userId)
       self.$axios({
         method: 'post',
         url: 'api/UserManager/discollectPaper/',
         data: formData,
       })
           .then(res => {
-            console.log(res.data.error)
-            console.log(res.data.msg)
+              if(res.data.error===0){
+                this.$message.success("成功移出收藏夹！")
+                location.reload()
+              }
+              else
+                this.$message.warning(res.data.msg)
           })
           .catch(err => {
             console.log(err);

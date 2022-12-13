@@ -16,7 +16,7 @@
                 <v-btn text :style="{ 'font-weight': 'bold', color: 'white' }" @click="$router.push({path: '/login'})" v-show="!state"
                   >登录</v-btn
                 >
-                <v-btn text :style="{ 'font-weight': 'bold', color: 'white' }" @click="$router.push({path: '/login'})" v-show="state"
+                <v-btn text :style="{ 'font-weight': 'bold', color: 'white' }" @click="$router.push({path: '/user'})" v-show="state"
                   >个人中心</v-btn
                 >
               </div>
@@ -39,7 +39,7 @@
                 </v-col>
                 <v-col cols="12" md="12" sm="1" />
                 <v-col cols="12" md="12" sm="5" class="d-flex align-center">
-                 <v-menu offset-y> 
+                 <v-menu offset-y>
                   <template v-slot:activator="{ on }">
                   <v-text-field
                     class="material-symbols-outlined"
@@ -69,7 +69,7 @@
         <v-col cols="12" md="12" sm="3" />
         <v-col cols="12" md="12" sm="1" :style="{'max-height':'150px'}">
         <v-row>
-     
+
       <v-col cols="12" md="1" sm="12"/>
       <v-col cols="12" md="10" sm="12" >
         <div :style="{'opacity': '0.8'}">
@@ -183,7 +183,7 @@
             max-width="300"
             tile
           >
-          <v-card color="#e1e7e7" 
+          <v-card color="#e1e7e7"
           elevation=0
           :style="{'border-radius':'0px'}">
               <v-row>
@@ -214,7 +214,7 @@
                     <v-col
                       class="d-flex justify-space-between"
                       :style="{ 'padding-top': '0px', 'padding-bottom': '0px' }"
-                      
+
                     >
                       <div class="d-flex justify-space-between" @click="$router.push({path:'/scholar', query: { id: item.id } })">
                         {{ item.name }}
@@ -252,7 +252,7 @@
             max-width="300"
             tile
           >
-          <v-card color="#e1e7e7" 
+          <v-card color="#e1e7e7"
           elevation=0
           :style="{'border-radius':'0px'}">
               <v-row>
@@ -278,7 +278,7 @@
                   v-for="(item, i) in TopAffiliations"
                   :key="i"
                   :style="{ 'margin-left': '10px', 'margin-right': '10px' }"
-                 
+
                 >
                   <v-row>
                     <v-col
@@ -322,7 +322,7 @@
             max-width="300"
             tile
           >
-          <v-card color="#e1e7e7" 
+          <v-card color="#e1e7e7"
           elevation=0
           :style="{'border-radius':'0px'}">
               <v-row>
@@ -384,7 +384,7 @@
             </div>
           </v-card>
         </v-col>
-        
+
       </v-row>
     </div>
     <div :style="{ 'background-color': '#FFFFFF', 'min-height': '50vh' }">
@@ -521,7 +521,7 @@ export default {
               this.TopAuthors[i].name=this.TopAuthors[i].name.slice(0,16)+"..."
             }
           }
-          
+
         })
         .catch(error => {
           console.error(error);
@@ -541,7 +541,7 @@ export default {
               this.TopAffiliations[i].name=this.TopAffiliations[i].name.slice(0,16)+"..."
             }
           }
-          
+
         })
         .catch(error => {
           console.error(error);
@@ -561,7 +561,7 @@ export default {
               this.TopJournals[i].name=this.TopJournals[i].name.slice(0,16)+"..."
             }
           }
-          
+
         })
         .catch(error => {
           console.error(error);
@@ -576,7 +576,7 @@ export default {
     changeShowJournal(page1){
       this.ShowJournals=this.TopJournals.slice((page1-1)*10,page1*10)
     },
-    
+
     },
   watch: {
     search:'inputHandle',

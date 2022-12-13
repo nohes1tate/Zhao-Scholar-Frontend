@@ -343,7 +343,7 @@
         request('POST', "/api/PaperBrowser/getPaperInfo/", data)
         .then(data => {
           console.log(data)
-          if(data.articles_list[0].url[0]){
+          if(data.articles_list[0].url){
              this.url = data.articles_list[0].url[0]
           }
           this.title = data.articles_list[0].title
