@@ -55,8 +55,8 @@
                   </v-text-field>
                   </template>
                   <v-list v-if="items.length > 0" class="border-list" dense>
-                    <v-list-item v-for="(i, index) in items" :key="index" @click="searchTag(i.key)">
-                      <v-list-item-title>{{ i.name }}</v-list-item-title>
+                    <v-list-item v-for="(i, index) in items" :key="index" @click="searchTag(i.name)">
+                      <v-list-item-title><h3 :style="{color:'grey'}">{{i.type}}: </h3><h3>{{i.name}}</h3></v-list-item-title>
                     </v-list-item>
                   </v-list>
                   </v-menu>
@@ -438,7 +438,7 @@ export default {
       state:user.getters.getUser(user.state),
       showSelect:false,
       general:{},
-      items:[{key: '1234',name: '1234'},],
+      items:[],
       TopAuthors: [],
       TopAffiliations: [],
       TopJournals: [],
@@ -474,13 +474,25 @@ export default {
       }
     },
     getEntity () {
-      this.items = [
-        {key: '1234',name: '1234',type:''},
-        {key: 'abc',name: 'abc',type:''},
-        {key: 'def',name: 'def',type:''},
-        {key: 'ccc',name: 'ccc',type:''},
-        {key: 'ccc',name: 'ccc',type:''},
-        {key: 'ccc',name: 'ccc',type:''}]
+      let data=new FormData();
+      let i=0;
+      if(this.search.trim().length>=3){
+      data.append('search',this.search)
+       request('POST', "/api/SearchManager/SearchByRealTime/",data)
+        .then(response => {
+          console.log(response)
+          this.items=response.result
+          this.items=this.items.slice(0,10)
+          for(i=0;i<this.items.length;i++){
+            if(this.items[i].name.length>30){
+              this.items[i].name=this.items[i].name.slice(0,30)+"..."
+            }
+          }
+        })
+        .catch(error => {
+          console.error(error);
+        });
+      }
     },
     getAll(){
       let data=new FormData();
@@ -494,24 +506,92 @@ export default {
     },
     getAuthors(){
       let data=new FormData();
+      let i=0
       data.append('count','40')
        request('POST', "/api/PortalManager/getTopAuthor/",data)
         .then(response => {
           console.log(response)
           this.TopAuthors=response.TopAuthors;
-          this.ShowAuthors=this.TopAuthors.slice(0,10)
+          this.changeShowAuthor(1);
+          for(i=0;i<this.TopAuthors.length;i++){
+            if(this.TopAuthors[i].name.length>16){
+              this.TopAuthors[i].name=this.TopAuthors[i].name.slice(0,16)+"..."
+            }
+          }
+          
         })
         .catch(error => {
           console.error(error);
         });
     },
+    getAffiliations(){
+      let data=new FormData();
+      let i=0
+      data.append('count','40')
+       request('POST', "/api/PortalManager/getTopAffiliation/",data)
+        .then(response => {
+          console.log(response)
+          this.TopAffiliations=response.TopAffiliations;
+          this.changeShowAffiliation(1);
+          for(i=0;i<this.TopAffiliations.length;i++){
+            if(this.TopAffiliations[i].name.length>16){
+              this.TopAffiliations[i].name=this.TopAffiliations[i].name.slice(0,16)+"..."
+            }
+          }
+          
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
+    getJournals(){
+      let data=new FormData();
+      let i=0
+      data.append('count','40')
+       request('POST', "/api/PaperBrowser/getTopVenue/",data)
+        .then(response => {
+          console.log(response)
+          this.TopJournals=response.TopJournals;
+          this.changeShowJournal(1);
+          for(i=0;i<this.TopJournals.length;i++){
+            if(this.TopJournals[i].name.length>16){
+              this.TopJournals[i].name=this.TopJournals[i].name.slice(0,16)+"..."
+            }
+          }
+          
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
+    changeShowAuthor(page1){
+      this.ShowAuthors=this.TopAuthors.slice((page1-1)*10,page1*10)
+    },
+    changeShowAffiliation(page1){
+      this.ShowAffiliations=this.TopAffiliations.slice((page1-1)*10,page1*10)
+    },
+    changeShowJournal(page1){
+      this.ShowJournals=this.TopJournals.slice((page1-1)*10,page1*10)
+    },
+    
     },
   watch: {
-    search:'inputHandle'
+    search:'inputHandle',
+    page1:'changeShowAuthor',
+    page2:'changeShowAffiliation',
+    page3:'changeShowJournal',
   },
   mounted(){
     this.getAll()
     this.getAuthors()
+    this.getAffiliations()
+    this.getJournals()
+  },
+  created(){
+    this.getAll()
+    this.getAuthors()
+    this.getAffiliations()
+    this.getJournals()
   }
 };
 </script>
