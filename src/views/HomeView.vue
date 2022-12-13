@@ -16,7 +16,7 @@
                 <v-btn text :style="{ 'font-weight': 'bold', color: 'white' }" @click="$router.push({path: '/login'})" v-show="!state"
                   >登录</v-btn
                 >
-                <v-btn text :style="{ 'font-weight': 'bold', color: 'white' }" @click="$router.push({path: '/user'})" v-show="state"
+                <v-btn text :style="{ 'font-weight': 'bold', color: 'white' }" @click="$router.push({path:'/user', query: {id: userId} })" v-show="state"
                   >个人中心</v-btn
                 >
               </div>
@@ -72,8 +72,8 @@
 
       <v-col cols="12" md="1" sm="12"/>
       <v-col cols="12" md="10" sm="12" >
-        <div :style="{'opacity': '0.8'}">
-          <v-card text :style="{'background-color':'#333333',color:'white',height:'100px'}">
+        <div :style="{'opacity': '0.7'}">
+          <v-card text :style="{'background-color':'#000000',color:'white',height:'100px'}">
             <v-row>
               <v-col>
                 <v-row>
@@ -285,7 +285,7 @@
                       class="d-flex justify-space-between"
                       :style="{ 'padding-top': '0px', 'padding-bottom': '0px' }"
                     >
-                      <div class="d-flex justify-space-between">
+                      <div class="d-flex justify-space-between" @click="$router.push({name:'institutionPortal', params:{ institutionID:item.id } } )">
                         {{ item.name }}
                       </div>
                       <div class="d-flex justify-end">
@@ -355,7 +355,7 @@
                       class="d-flex justify-space-between"
                       :style="{ 'padding-top': '0px', 'padding-bottom': '0px' }"
                     >
-                      <div class="d-flex justify-space-between">
+                      <div class="d-flex justify-space-between" @click="$router.push({ path: '/search', query: { keyword: item.name } })">
                         {{ item.name }}
                       </div>
                       <div class="d-flex justify-end">
@@ -387,7 +387,7 @@
 
       </v-row>
     </div>
-    <div :style="{ 'background-color': '#FFFFFF', 'min-height': '50vh' }">
+    <!-- <div :style="{ 'background-color': '#FFFFFF', 'min-height': '50vh' }">
       <v-row>
         <v-col cols="12" md="3" sm="12">
           <v-card class="mx-auto" max-width="300" :style="{ 'margin-top': '50px' }">
@@ -420,7 +420,7 @@
         <v-col cols="12" md="3" sm="12"></v-col>
         <v-col cols="12" md="3" sm="12"></v-col>
       </v-row>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -435,6 +435,7 @@ export default {
       page1:1,
       page2:1,
       page3:1,
+      userId:"",
       state:user.getters.getUser(user.state),
       showSelect:false,
       general:{},
@@ -445,6 +446,7 @@ export default {
       ShowAuthors:[],
       ShowAffiliations:[],
       ShowJournals:[],
+      
       Conference: [
         {name:"CVPR 2020",url:"www.baidu.com"},
         {name:"CVPR 2019",url:"www.baidu.com"},
@@ -467,8 +469,7 @@ export default {
       if (search == "") return;
       if(type=="Author"){this.$router.push({path:'/scholar', query: {id:id}})}
       if(type=="Paper"){this.$router.push({path:"/document", query:{Title:search, Id:id}})}
-      if(type=="Affiliation"){this.$router.push({path:"/institution", params:{institutionID:id}})}
-      if(type=="Venue"){this.$router.push()}
+      if(type=="Affiliation"){this.$router.push({name:"institutionPortal", params:{ institutionID:id } } ) }
     },
     goto(url) {
       console.log("url: "+url);
@@ -478,18 +479,41 @@ export default {
         this.showSelect = true
         setTimeout(() => {
           this.getEntity()
-        }, 300)
+        }, 1000)
       }
     },
     getEntity () {
       let data=new FormData();
       let i=0;
+      
       if(this.search.trim().length>=3){
       data.append('search',this.search)
        request('POST', "/api/SearchManager/SearchByRealTime/",data)
         .then(response => {
           console.log(response)
-          this.items=response.result
+          let temporary=[]
+          temporary=response.result;
+          this.items=[]
+          this.items1=[],
+          this.items2=[],
+          this.items3=[]
+          
+          for(i=0;i<temporary.length;i++){
+            if(temporary[i].type=="Affiliation"){
+              this.items.push({name:temporary[i].name, type:temporary[i].type, id:temporary[i].id})
+            }
+          }
+          for(i=0;i<temporary.length;i++){
+            if(temporary[i].type=="Author"){
+              this.items.push({name:temporary[i].name, type:temporary[i].type, id:temporary[i].id})
+            }
+          }
+          i=0
+          while(this.items.length<10){
+              if(temporary[i].type=="Paper")
+              this.items.push({name:temporary[i].name, type:temporary[i].type, id:temporary[i].id})
+              i++
+          }
           this.items=this.items.slice(0,10)
           for(i=0;i<this.items.length;i++){
             if(this.items[i].name.length>30){
@@ -575,6 +599,7 @@ export default {
           console.error(error);
         });
     },
+    
     changeShowAuthor(page1){
       this.ShowAuthors=this.TopAuthors.slice((page1-1)*10,page1*10)
     },
@@ -597,12 +622,19 @@ export default {
     this.getAuthors()
     this.getAffiliations()
     this.getJournals()
+    const userInfo = user.getters.getUser(user.state());
+    if (userInfo)
+    {
+        this.userId=userInfo.user.userId;
+        console.log(this.userId)
+    }
+    
   }
 };
 </script>
 <style scoped>
 .bgimg {
-  background-image: url("../assets/bg.png");
+  background-image: url("../assets/bg-i.jpg");
   background-size: cover;
 }
 .span-line:hover{
