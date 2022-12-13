@@ -61,7 +61,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-              <v-btn color="blue darken-1" text @click="dialog = false">Save</v-btn>
+              <v-btn color="blue darken-1" text @click="update">Save</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -289,7 +289,7 @@
       keywords:[
 
       ],
-      abstract:'well meaning and kindly."a benevolent smile"well meaning and kindly.well meand kindly."a benevolent smile"well meaning and kindly.well meand kindly."a benevolent smile"well meaning and kindly.well meand kindly."a benevolent smile"well meaning and kindly.well mean',
+      abstract:'well meaning and kindly."a benevolent smile"well meaning and kindly.',
       references:[
         ['computer scienc45e'],
         ['cv'],
@@ -338,7 +338,8 @@
     },
     methods:{
       update(){
-        this.dialog=true;
+        this.dialog=false;
+        this.abstract=this.dialogAbstract;
       },
       delet(){
 
