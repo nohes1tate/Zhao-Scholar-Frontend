@@ -1,5 +1,11 @@
 <template>
     <div>
+            <CollectDialog
+                :collect-show="collectShow"
+                :paperID="paperID"
+                :isCollect="isCollect"
+                :taglist="tag_list"
+                @closeChildDialog="closeChildDialog"></CollectDialog>
     <div style="font-size: 18px; height: 80px;">
         <span style="float:left; text-align:right;margin-top: 20px;color: grey;font-size: 15px;margin-left: 18px;">
             找到{{Num}}条结果
@@ -74,12 +80,7 @@
         </v-tabs-items>
       </v-card>
     </v-overlay>
-      <CollectDialog
-          :collect-show="collectShow"
-          :paperID="id"
-          :isCollect="isCollect"
-          :taglist="tag_list"
-          @closeChildDialog="closeChildDialog"></CollectDialog>
+
 
         <v-list-item
         v-for="(item, i) in this.CurrentPageData"
@@ -204,9 +205,15 @@ import axios from 'axios';
             tagData:[],
             posturl:"gan",
             formdata:{},
+            paperID:'',
+            isCollect:false,
+            tag_list:'',
 
         }),
         methods:{
+          closeChildDialog() {
+            this.collectShow = false;
+          },
           changeCollectIconToTrue(id){
             this.collectShow=true;
           },
@@ -289,10 +296,12 @@ import axios from 'axios';
                         let Author = this.CurrentPageData[i].authors
                         let j=0;
                         let str="作者："
-                        str=Author[0].name
-                        for(j=1;j<Author.length;j++){
+                        if(Author.length!==0){
+                          str=Author[0].name
+                          for(j=1;j<Author.length;j++){
                             str =  str+", "+Author[j].name
 
+                          }
                         }
                         this.CurrentPageData[i].author = str
                         // if(this.CurrentPageData[i])
