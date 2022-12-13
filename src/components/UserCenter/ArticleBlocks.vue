@@ -76,20 +76,26 @@
               </v-list-item-title>
               <div style="display: flex; flex-direction: row">
                 <div v-for="(j,index) in item.authors" :key="j" style="color: #1E88E5;display: flex;flex-direction: row">
-                  <div style="cursor: pointer" @click="toAuthor(j.id)">{{j.name}}</div>
+                  <div class="author-name" @click="toAuthor(j.id)">{{j.name}}</div>
                   <div v-show="index!==(item.authors.length-1)">,</div>
                 </div>
               </div>
-              <div v-text="item.year" style="color: grey;font-size: 14px"></div>
+              <div v-text="'发表年份:'+item.year" style="color: black;font-size: 15px;font-weight: 1000;padding-top: 5px;padding-bottom: 5px"></div>
               <div v-text="item.abstract" class="text-ellipsis-two" style="font-weight: 350;margin-bottom: 10px;">
               </div>
               <div>
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click="cite(item)">
                   <v-icon color="#64B5F6"> mdi-format-quote-close-outline</v-icon>引用
                 </v-btn>
-                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click="handleDelete(item)">
-                  <v-icon color="#64B5F6" >mdi-trash-can-outline</v-icon>删除
-                </v-btn>
+                <v-tooltip right>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click="handleDelete(item)" v-bind="attrs"
+                           v-on="on">
+                      <v-icon color="#64B5F6" >mdi-trash-can-outline</v-icon>删除
+                    </v-btn>
+                  </template>
+                  <span>从“{{tag_name}}”收藏夹中移出</span>
+                </v-tooltip>
                 <span style="float:right; text-align:right;margin-top: 8px;color: grey;font-size: 15px;">
                 被引次数：
                 <span style="color: #2d94d4;">
@@ -112,7 +118,7 @@ import user from "@/store/user";
 
 export default {
   name: "ArticleBlocks",
-  props: ['articles','tagID'],
+  props: ['articles','tagID','tag_name'],
   data() {
     return {
       overlay:false,
@@ -255,5 +261,11 @@ export default {
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+}
+.author-name{
+  cursor: pointer;
+}
+.author-name:hover{
+  text-decoration: underline;
 }
 </style>

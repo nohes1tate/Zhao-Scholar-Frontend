@@ -1,5 +1,11 @@
 <template>
   <div>
+    <CollectDialog
+        :collect-show="collectShow"
+        :paperID="paperID"
+        :isCollect="isCollect"
+        :taglist="tag_list"
+        @closeChildDialog="closeChildDialog"></CollectDialog>
     <div style="margin-top: 20px;font-size: 18px;">
       <div style="margin-left: 20px;float: left;margin-top: 10px">学者文献共<span style="font-size: 30px">{{Num}}</span>篇</div>
 <!--      <div style="float: right;margin-right: 20px;">-->
@@ -131,12 +137,38 @@
               </div>
               <div style="float: right;">
 
-                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" >收藏<v-icon color="#64B5F6">mdi-star-plus-outline</v-icon></v-btn>
+                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" @click="collectPaper(item)">收藏<v-icon color="#64B5F6">mdi-star</v-icon></v-btn>
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" @click=cite(item)>引用<v-icon color="#64B5F6"> mdi-format-quote-close-outline</v-icon></v-btn>
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" @click="pdf(item.pdf)" v-show="item.haspdf">下载<v-icon color="#64B5F6">mdi-download</v-icon></v-btn>
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" @click="toDocument(item.title, item.id)">详情<v-icon color="#64B5F6">mdi-link-variant</v-icon></v-btn>
-                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" @click="pdf(item.pdf)" v-show="isMine">下载<v-icon color="#64B5F6">mdi-download</v-icon></v-btn>
+                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" @click="deleteDialog=true" v-show="isMine">下架<v-icon color="#64B5F6">mdi-delete</v-icon></v-btn>
               </div>
+              <v-dialog
+                  v-model="deleteDialog"
+                  max-width="290"
+              >
+                <v-card>
+                  <v-card-title class="headline">确定下架该论文?</v-card-title>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        color="green darken-1"
+                        text
+                        @click="deleteDialog = false"
+                    >
+                      取消
+                    </v-btn>
+
+                    <v-btn
+                        color="green darken-1"
+                        text
+                        @click="delet(item.id)"
+                    >
+                      确定
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
             </div>
           </v-list-item-content>
         </v-card>
@@ -155,10 +187,16 @@
 <script>
 import request from '@/utils/request';
 import axios from 'axios';
+import CollectDialog from "@/components/UserCenter/collectDialog";
+import user from "@/store/user";
 
 export default{
-
+  components: {CollectDialog},
   data:()=>({
+    collectShow:false,
+    paperID:'',
+    isCollect:false,
+    tag_list:'',
     tab:null,
     page: 1,
     pageSize:10,
@@ -174,9 +212,55 @@ export default{
     opacity: 0.5,//透明度
     citeStyle:[{name:"引用类型", text:"引用文本"}],
     TypeNum:[],
-
+    isMine:false,
+    deleteDialog:false,
   }),
   methods:{
+    delet(id){
+      this.deleteDialog=false;
+      let data = new FormData();
+      data.append("paperID", id);
+      request("POST", "/api/PortalManager/deletePaper/", data)
+          .then(res => {
+            this.$message({
+              message: '下架成功',
+              type: 'success'
+            });
+          })
+          .catch(err => {
+            console.log(err);
+          });
+    },
+    getCollectInfo(){
+      const userInfo = user.getters.getUser(user.state);
+      const formData = new FormData();
+      formData.append("userID", userInfo.user.userId);
+      formData.append("authorization", userInfo.user.Authorization)
+      formData.append("paperID", this.paperID)
+      this.$axios({
+        method: 'post',
+        url: 'api/UserManager/isCollect/',
+        data: formData,
+      })
+          .then(res => {
+            if(res.data.error=== 0){
+              this.isCollect=res.data.isCollect;
+              if(this.isCollect)
+                this.tag_list=res.data.tag_list;
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          })
+    },
+    collectPaper(item){
+      this.collectShow=true;
+      this.paperID=item.id;
+      this.getCollectInfo();
+    },
+    closeChildDialog() {
+      this.collectShow = false;
+    },
     toscholar(id){
       if(id){
         this.$router.push({path:"/scholar", query:{id:id}})
@@ -223,6 +307,7 @@ export default{
         console.log("scholar paperInfo")
         console.log(res)
           this.Num = res.Num
+          this.isMine = res.isMine
           this.pageNum = Math.ceil(this.Num/this.pageSize)
           this.CurrentPageData = res.articles_list
           let i=0
