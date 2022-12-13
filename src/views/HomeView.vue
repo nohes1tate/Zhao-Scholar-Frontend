@@ -634,7 +634,7 @@ export default {
 </script>
 <style scoped>
 .bgimg {
-  background-image: url("../assets/bg-i.jpg");
+  background-image: url("../assets/bg-2.png");
   background-size: cover;
 }
 .span-line:hover{

@@ -1,11 +1,12 @@
-<template>
-  <div class="about">
+<template >
+  <div class="about" :style="{'background-color':'#EEEEEE','height':'100%'}">
+    <page-header :show-search="true" :is-login="true"></page-header>
     <v-stepper
       v-model="now"
       class="mx-auto"
       width="80vw"
       value="3"
-      :style="{ 'margin-top': '100px' }"
+      :style="{ 'margin-top': '40px','margin-bottom':'100px'}"
     >
       <template>
         <v-stepper-header
@@ -172,7 +173,7 @@
                   <div v-for="(s, index) in n.content" :key="index">
                     <v-row :style="{ 'margin-left': '50px' }">
                       <v-col cols="12" md="11" sm="12" >
-                        <h2>{{ s.title }}</h2>
+                        <h2>· {{ s.title }}</h2>
                         <h5>{{s.abstract || null}}</h5>
                         <h4 :style="{color:'grey'}">{{ s.teams }}</h4>
                       </v-col>
@@ -231,8 +232,10 @@
 
 <script>
 import request from "@/utils/request";
+import PageHeader from "@/components/UserCenter/PageHeader";
 export default {
   name: "ApplySettle",
+  components: {PageHeader},
   data() {
     return {
       steps: [
