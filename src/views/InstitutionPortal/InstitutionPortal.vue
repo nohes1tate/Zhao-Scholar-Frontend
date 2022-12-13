@@ -2152,7 +2152,7 @@ export default {
           });
     },
     toAuthorCenter(id) {
-      this.$message.success(id)
+      this.$router.push({path:'/scholar', query: {id: id}})
     },
     closeGraphDialog() {
 
