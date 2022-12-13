@@ -1,5 +1,11 @@
 <template>
   <div>
+    <CollectDialog
+        :collect-show="collectShow"
+        :paperID="paperID"
+        :isCollect="isCollect"
+        :taglist="tag_list"
+        @closeChildDialog="closeChildDialog"></CollectDialog>
     <div style="margin-top: 20px;font-size: 18px;">
       <div style="margin-left: 20px;float: left;margin-top: 10px">学者文献共<span style="font-size: 30px">{{Num}}</span>篇</div>
 <!--      <div style="float: right;margin-right: 20px;">-->
@@ -131,7 +137,7 @@
               </div>
               <div style="float: right;">
 
-                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" >收藏<v-icon color="#64B5F6">mdi-star-plus-outline</v-icon></v-btn>
+                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" @click="collectPaper(item)">收藏<v-icon color="#64B5F6">mdi-star</v-icon></v-btn>
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" @click=cite(item)>引用<v-icon color="#64B5F6"> mdi-format-quote-close-outline</v-icon></v-btn>
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" @click="pdf(item.pdf)" v-show="item.haspdf">下载<v-icon color="#64B5F6">mdi-download</v-icon></v-btn>
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" @click="toDocument(item.title, item.id)">详情<v-icon color="#64B5F6">mdi-link-variant</v-icon></v-btn>
@@ -155,10 +161,16 @@
 <script>
 import request from '@/utils/request';
 import axios from 'axios';
+import CollectDialog from "@/components/UserCenter/collectDialog";
+import user from "@/store/user";
 
 export default{
-
+  components: {CollectDialog},
   data:()=>({
+    collectShow:false,
+    paperID:'',
+    isCollect:false,
+    tag_list:'',
     tab:null,
     page: 1,
     pageSize:10,
@@ -177,6 +189,36 @@ export default{
 
   }),
   methods:{
+    getCollectInfo(){
+      const userInfo = user.getters.getUser(user.state);
+      const formData = new FormData();
+      formData.append("userID", userInfo.user.userId);
+      formData.append("authorization", userInfo.user.Authorization)
+      formData.append("paperID", this.paperID)
+      this.$axios({
+        method: 'post',
+        url: 'api/UserManager/isCollect/',
+        data: formData,
+      })
+          .then(res => {
+            if(res.data.error=== 0){
+              this.isCollect=res.data.isCollect;
+              if(this.isCollect)
+                this.tag_list=res.data.tag_list;
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          })
+    },
+    collectPaper(item){
+      this.collectShow=true;
+      this.paperID=item.id;
+      this.getCollectInfo();
+    },
+    closeChildDialog() {
+      this.collectShow = false;
+    },
     toscholar(id){
       if(id){
         this.$router.push({path:"/scholar", query:{id:id}})
