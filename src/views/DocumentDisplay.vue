@@ -33,8 +33,34 @@
             <!-- 找一个引号图标放到引用后面 -->
 
             <v-btn color="primary" dark text class="ml-4" @click="share">分享<v-icon>mdi-arrow-top-right-bold-box-outline</v-icon></v-btn>
-            <v-btn color="primary" dark text class="ml-4" v-show="!isMine" @click="dialog=true">更新<v-icon>mdi-arrow-u-up-right</v-icon></v-btn>
-            <v-btn color="red" dark text class="ml-4" v-show="isMine" @click="delet">下架<v-icon>mdi-delete</v-icon></v-btn>
+            <v-btn color="primary" dark text class="ml-4" v-show="isMine" @click="dialog=true">更新<v-icon>mdi-arrow-u-up-right</v-icon></v-btn>
+            <v-btn color="red" dark text class="ml-4" v-show="isMine" @click="deleteDialog=true">下架<v-icon>mdi-delete</v-icon></v-btn>
+        <v-dialog
+            v-model="deleteDialog"
+            max-width="290"
+        >
+          <v-card>
+            <v-card-title class="headline">确定下架该论文?</v-card-title>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                  color="green darken-1"
+                  text
+                  @click="deleteDialog = false"
+              >
+                取消
+              </v-btn>
+
+              <v-btn
+                  color="green darken-1"
+                  text
+                  @click="delet"
+              >
+                确定
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
         <v-dialog v-model="dialog" max-width="600px">
           <v-card>
             <v-card-title>
@@ -327,6 +353,7 @@
       dialogUrl:'',
       dialogAbstract:'',
       reloadKey:false,
+      deleteDialog:false,
     }),
     created(){
       var title = this.$route.query.Title
@@ -342,9 +369,38 @@
       update(){
         this.dialog=false;
         this.abstract=this.dialogAbstract;
-        this.reloadKey=!this.reloadKey;
+        let data = new FormData();
+        data.append("paperID", this.id);
+        data.append("abstract", this.dialogAbstract);
+        data.append("url", this.dialogUrl);
+        data.append("change", "all")
+        request("POST", "/api/PortalManager/updatePaper/", data)
+            .then(res => {
+              this.$message({
+                message: '更新成功',
+                type: 'success'
+              });
+              this.reloadKey=!this.reloadKey;
+            })
+            .catch(err => {
+              console.log(err);
+            });
+
       },
       delet(){
+        this.deleteDialog=false;
+        let data = new FormData();
+        data.append("paperID", this.id);
+        request("POST", "/api/PortalManager/deletePaper/", data)
+          .then(res => {
+            this.$message({
+              message: '下架成功',
+              type: 'success'
+            });
+          })
+          .catch(err => {
+            console.log(err);
+          });
 
       },
       checkPaperIsCollect(){
@@ -397,6 +453,7 @@
           this.dialogAbstract = this.abstract
           this.DOI = data.articles_list[0].doi
           this.stars = data.stars
+          this.isMine = data.isMine
           this.n_citation = data.articles_list[0].n_citation
           var new_authors = data.articles_list[0].authors
           this.author = ""
