@@ -5,90 +5,97 @@
         width="1000px"
         style="float: left;box-shadow: none;"
     >
+      <v-overlay
+          :absolute="absolute"
+          :value="overlay"
+          :opacity="opacity"
+      >
+        <v-card style="width: 700px;background-color: white;margin-top: 150px;">
+          <v-toolbar
+              color="blue darken-1"
+              dark
+          >
+            <v-toolbar-title>引用格式</v-toolbar-title>
+            <v-spacer>
+            </v-spacer>
+            <v-btn icon
+                   @click="overlay = false"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+            <template v-slot:extension>
+              <v-tabs
+                  v-model="tab"
+                  align-with-title
+              >
+                <v-tabs-slider color="yellow"></v-tabs-slider>
 
+                <v-tab
+                    v-for="cite in citation_msg"
+                    :key="cite.name"
+                >
+                  {{ cite.name }}
+                </v-tab>
+              </v-tabs>
+            </template>
+          </v-toolbar>
+          <v-tabs-items v-model="tab">
+            <v-tab-item
+                v-for="citeContent in citation_msg"
+                :key="citeContent.name"
+            >
+              <v-textarea
+                  :value=citeContent.text
+                  auto-grow
+                  row-height="15"
+                  readonly
+              ></v-textarea>
+              <v-btn
+                  depressed
+                  color="primary"
+                  @click="copyVal(citeContent.text)"
+                  style="width: 10%;float: right;margin-right: 10px;margin-bottom: 10px;"
+              >复制</v-btn>
+            </v-tab-item>
+          </v-tabs-items>
+        </v-card>
+      </v-overlay>
         <v-list-item
             v-for="item in articles"
             :key="item"
             three-line
         >
           <v-card
-              style="width: 100%;margin-bottom: 20px;"
+              style="margin-bottom: 20px;"
+              width="900"
           >
-            <v-overlay
-                :absolute="absolute"
-                :value="overlay"
-                :opacity="opacity"
-            >
-              <v-card style="width: 700px;background-color: white;margin-top: 150px;">
-                <v-toolbar
-                    color="blue darken-1"
-                    dark
-                >
-                  <v-toolbar-title>引用格式</v-toolbar-title>
-                  <v-spacer>
-                  </v-spacer>
-                  <v-btn icon
-                         @click="overlay = false"
-                  >
-                    <v-icon>mdi-close</v-icon>
-                  </v-btn>
-                  <template v-slot:extension>
-                    <v-tabs
-                        v-model="tab"
-                        align-with-title
-                    >
-                      <v-tabs-slider color="yellow"></v-tabs-slider>
 
-                      <v-tab
-                          v-for="cite in citation_msg"
-                          :key="cite.name"
-                      >
-                        {{ cite.name }}
-                      </v-tab>
-                    </v-tabs>
-                  </template>
-                </v-toolbar>
-                <v-tabs-items v-model="tab">
-                  <v-tab-item
-                      v-for="citeContent in citation_msg"
-                      :key="citeContent.name"
-                  >
-                    <v-textarea
-                        :value=citeContent.text
-                        auto-grow
-                        row-height="15"
-                        readonly
-                    ></v-textarea>
-                    <v-btn
-                        depressed
-                        color="primary"
-                        @click="copyVal(citeContent.text)"
-                        style="width: 10%;float: right;margin-right: 10px;margin-bottom: 10px;"
-                    >复制</v-btn>
-                  </v-tab-item>
-                </v-tabs-items>
-              </v-card>
-            </v-overlay>
             <v-list-item-content style="margin-left: 30px;margin-right: 30px;margin-top: 20px">
 
               <v-list-item-title class="headline mb-2" v-text="item.title" style="cursor: pointer" @click="toDocument(item.id)">
               </v-list-item-title>
               <div style="display: flex; flex-direction: row">
                 <div v-for="(j,index) in item.authors" :key="j" style="color: #1E88E5;display: flex;flex-direction: row">
-                  <div style="cursor: pointer" @click="toAuthor(j.id)">{{j.name}}</div>
+                  <div class="author-name" @click="toAuthor(j.id)">{{j.name}}</div>
                   <div v-show="index!==(item.authors.length-1)">,</div>
                 </div>
               </div>
-              <div v-text="item.year" style="color: grey;font-size: 14px"></div>
+              <div v-text="'发表年份:'+item.year" style="color: black;font-size: 15px;font-weight: 1000;padding-top: 5px;padding-bottom: 5px"></div>
               <div v-text="item.abstract" class="text-ellipsis-two" style="font-weight: 350;margin-bottom: 10px;">
               </div>
               <div>
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click="cite(item)">
                   <v-icon color="#64B5F6"> mdi-format-quote-close-outline</v-icon>引用
                 </v-btn>
-                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click="handleDelete(item)">
-                  <v-icon color="#64B5F6" >mdi-trash-can-outline</v-icon>删除
-                </v-btn>
+                <v-tooltip right>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click="handleDelete(item)" v-bind="attrs"
+                           v-on="on">
+                      <v-icon color="#64B5F6" >mdi-trash-can-outline</v-icon>删除
+                    </v-btn>
+                  </template>
+                  <span>从“{{tag_name}}”收藏夹中移出</span>
+                </v-tooltip>
                 <span style="float:right; text-align:right;margin-top: 8px;color: grey;font-size: 15px;">
                 被引次数：
                 <span style="color: #2d94d4;">
@@ -111,7 +118,7 @@ import user from "@/store/user";
 
 export default {
   name: "ArticleBlocks",
-  props: ['articles','tagID'],
+  props: ['articles','tagID','tag_name'],
   data() {
     return {
       overlay:false,
@@ -184,16 +191,17 @@ export default {
         this.$message.error("引用格式为空");
       }
     },
-    changePaperID(item) {
-      this.quote_paperId = item.id;
-      // console.log(this.quote_paperId);
-      this.getCita();
-    },
     toDocument(ID){
+      if(ID)
       this.$router.push({path:"/document", query: {Id: ID} })
+      else
+        this.$message.error('没有该文献信息');
     },
     toAuthor(ID){
+      if(ID)
       this.$router.push({path:"/scholar", query: {id: ID} })
+      else
+        this.$message.error('没有该学者信息');
     },
     getCita() {
       this.$axios({
@@ -217,7 +225,6 @@ export default {
           })
     },
     handleDelete(item){
-      //console.log(111)
       const userInfo = user.getters.getUser(user.state);
       const formData = new FormData();
       const self = this;
@@ -225,17 +232,18 @@ export default {
       formData.append("userID", userInfo.user.userId)
       formData.append("collectID", this.tagID)
       formData.append("paperID", item.id)
-      console.log(item.id)
-      console.log(this.tagID)
-      console.log(userInfo.user.userId)
       self.$axios({
         method: 'post',
         url: 'api/UserManager/discollectPaper/',
         data: formData,
       })
           .then(res => {
-            console.log(res.data.error)
-            console.log(res.data.msg)
+              if(res.data.error===0){
+                this.$message.success("成功移出收藏夹！")
+                location.reload()
+              }
+              else
+                this.$message.warning(res.data.msg)
           })
           .catch(err => {
             console.log(err);
@@ -253,5 +261,11 @@ export default {
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+}
+.author-name{
+  cursor: pointer;
+}
+.author-name:hover{
+  text-decoration: underline;
 }
 </style>

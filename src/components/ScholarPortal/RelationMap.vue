@@ -27,12 +27,13 @@ export default {
     data.append("scholarID", this.$route.query.id);
     request("POST", "/api/PortalManager/getScholarMap/", data)
       .then((res) => {
-        console.log("relation map", res);
+        this.graph.nodes = res.nodes;
+        this.graph.links = res.links;
+        this.setChart(this.$refs.myChart)
       })
       .catch((err) => {
         console.log(err);
       });
-    this.setChart(this.$refs.myChart)
   },
   methods: {
     setChart(chart) {
@@ -47,7 +48,9 @@ export default {
         },
         legend: [
           {
-            data: []
+            data: this.graph.categories.map(function (a) {
+              return a.name;
+            })
           }
         ],
         series: [
@@ -138,9 +141,10 @@ export default {
           }
         ],
         "categories": [
-          {},
-          {},
-          {}
+          {name: "本人"},
+          {name: "合著学者"},
+          {name: "同机构学者"},
+          {name: "同领域学者"}
         ]
       },
       showDialog: false,

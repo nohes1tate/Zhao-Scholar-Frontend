@@ -1,12 +1,11 @@
 <template>
   <div class="institution-chart-card">
     <v-card height="45vh" width="30vw" elevation="2" @click="showChart" v-if="chartType === 1">
-      <div>{{ title }}</div>
+      <div>{{ title }}{{chartType}}</div>
       <div :id='"charts-"+ id' style="height: 100%; width: 100%; cursor: pointer"></div>
     </v-card>
     <v-card height="45vh" width="30vw" elevation="2" @click="showGraph" v-else>
-      <div>{{ title }}</div>
-      <div ref="insRelation" style="width: 100%; height: 40vh; cursor: pointer"></div>
+      <div ref="insRelation" style="width: 100%; height: 100%; cursor: pointer"></div>
     </v-card>
   </div>
 </template>
@@ -55,44 +54,42 @@ export default {
   },
   watch: {
     graph(newVal, oldVal){
-      console.log('update graph',newVal, oldVal)
-      if (this.chartType===1)
-        this.initEcharts()
-      else {
-        this.initRelation()
-      }
+       console.log('update graph',newVal, oldVal)
+         setTimeout(() => {
+           this.initRelation()
+         }, 500)
     },
     yData(newVal, oldVal){
-      console.log('update yData',newVal, oldVal)
-      if (this.chartType===1)
+      // console.log('update yData',newVal, oldVal)
         this.initEcharts()
-      else {
-        this.initRelation()
-      }
     }
   },
   methods: {
     showGraph() {
-      this.$emit("showGraph",this.graph)
+      this.$emit("showGraph",this.graph,"学者关系网络")
     },
     showChart() {
       this.$emit("showChart",this.xAxis, this.yData, this.title)
     },
     initRelation() {
-      var myChart = this.$echarts.init(this.$refs.insRelation)
-      var option = {
-        tooltip: {},
+      let myChart = this.$echarts.init(this.$refs.insRelation)
+      let option = {
+        tooltip: {
+        },
+        title: {
+          text: '学者关系网络',
+          top: 'top',
+          left: 'left'
+        },
         legend: [
           {
-            data: this.graph.categories.map(function (a) {
-              return a.name;
-            })
+            data: []
           }
         ],
         series: [
           {
             type: 'graph',
-            layout: 'none',
+            layout: 'circular',
             data: this.graph.nodes,
             links: this.graph.links,
             categories: this.graph.categories,

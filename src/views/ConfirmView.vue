@@ -23,7 +23,7 @@ export default {
     codeForm.append("code", this.$route.query.code);  // this.$route.query.code获取url中?code=后的参数
     this.$axios({
       method: 'post',
-      url: '/Weblogin/confirm/',
+      url: 'api/UserManager/confirm/',
       data: codeForm,
     })
         .then(res => {

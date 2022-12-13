@@ -30,7 +30,7 @@
         </div>
       </v-card-text>
       <v-card-actions>
-        <div style="float: left">
+        <div style="float: left" v-show="!isCollect">
           <v-dialog
               max-width="600"
           >

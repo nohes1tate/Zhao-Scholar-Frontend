@@ -3,10 +3,6 @@
     <div class="left-tabs">
       <v-card>
         <v-tabs vertical>
-          <v-tab @click="showInfo">
-            <v-icon left>mdi-information-outline</v-icon>
-            平台概况
-          </v-tab>
           <v-tab @click="showVerify">
             <v-icon left>mdi-account-multiple-plus-outline</v-icon>
             审核入驻
@@ -19,9 +15,6 @@
       </v-card>
     </div>
     <div class="right-info">
-      <v-card v-if="showInfoTab">
-        info
-      </v-card>
       <v-card v-if="showVerifyTab">
         <v-data-table
             v-model="selected"
@@ -59,8 +52,7 @@ export default {
   name: "AdminView",
   data() {
     return {
-      showInfoTab: true,
-      showVerifyTab: false,
+      showVerifyTab: true,
       showScholarTab: false,
       selected: [],
       applyHeaders: [
@@ -168,18 +160,11 @@ export default {
     }
   },
   methods: {
-    showInfo() {
-      this.showInfoTab = true;
-      this.showVerifyTab = false;
-      this.showScholarTab = false;
-    },
     showVerify() {
-      this.showInfoTab = false;
       this.showVerifyTab = true;
       this.showScholarTab = false;
     },
     showScholar() {
-      this.showInfoTab = false;
       this.showVerifyTab = false;
       this.showScholarTab = true;
     },
