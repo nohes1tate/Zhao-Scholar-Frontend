@@ -248,10 +248,10 @@ import axios from 'axios';
             absolute: false,
             opacity: 0.5,//透明度
             citeStyle:[{name:"引用类型", text:"引用文本"}],
-            keyword:"gan",
+            keyword:"",
             TypeNum:[],
             tagData:[],
-            posturl:"",
+            posturl:"gan",
             formdata:"",
 
         }),
@@ -309,6 +309,7 @@ import axios from 'axios';
                     url:this.posturl,
                     data:this.formdata
                 }).then(res=>{
+                    console.log(this.formdata)
                     console.log(res.data)
                     this.Num = res.data.total
                     this.pageNum = Math.ceil(this.Num/this.pageSize)
@@ -401,8 +402,10 @@ import axios from 'axios';
             this.pageNum =  Math.ceil(this.Num/this.pageSize);
             console.log("page:"+this.pageNum)
             
-            
+            console.log("当前携带参数:")
+            console.log(this.$route.query)
             if("keyword" in this.$route.query){
+                
                 this.posturl = '/api/PaperBrowser/searchPaper/'
                 this.keyword = this.$route.query.keyword
                 var formdata0 = new FormData();
@@ -446,9 +449,16 @@ import axios from 'axios';
             },
             $route(to, from){
                 console.log(to)
-                this.keyword = to.query.keyword
-                console.log(this.keyword)
-                console.log("更新页面")
+                this.keyword=to.query.keyword
+                console.log("更新页面"+this.keyword)
+                console.log(to)
+                console.log(from)
+                var formdata0 = new FormData();
+                formdata0.append("page", this.page);
+                formdata0.append("pagesize", this.pageSize);
+                formdata0.append("keyword", this.keyword);
+                formdata0.append("orderby", this.orderBy);
+                this.formdata = formdata0
                 this.getCurrentPageData()
             }
         }
