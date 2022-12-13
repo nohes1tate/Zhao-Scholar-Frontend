@@ -12,7 +12,7 @@
             </v-col>
             <v-col style="margin-left: 2vw">
               <v-row>
-                <div class="institution-name">
+                <div class="institution-name">`
                   {{ institutionName }}
                 </div>
               </v-row>
@@ -68,21 +68,6 @@
     </div>
     <div class="institution-detail">
       <v-row>
-<!--        <v-col cols="2">-->
-<!--          <v-card elevation="2" class="institution-detail-filter">-->
-<!--            <el-tree :data="achievements"-->
-<!--                     show-checkbox-->
-<!--                     ref="tree"-->
-<!--                     node-key="id"-->
-<!--                     :default-checked-keys="[0]"-->
-<!--                     @check="handleCheck"-->
-<!--                     default-expand-all>-->
-<!--            <span class="custom-tree-node" slot-scope="{ node, data }">-->
-<!--        <span>[{{ data.num }}]{{ node.label }}</span>-->
-<!--      </span>-->
-<!--            </el-tree>-->
-<!--          </v-card>-->
-<!--        </v-col>-->
         <v-col>
           <v-card elevation="2" class="institution-detail-info">
             <div>
@@ -129,7 +114,7 @@
               <v-data-table
                   :headers="authorHeaders"
                   :items="authorData"
-                  hide-default-footer
+                  :items-per-page="5"
                   class="author-table"
               >
                 <template v-slot:[`item.name`]="{ item }">
@@ -156,7 +141,6 @@
     >
 
       <v-card style="height: 80vh">
-        <div>{{ chartTitle }}</div>
         <div id="showchart" style="height: 75vh; width: 55vw; cursor: pointer"></div>
       </v-card>
     </v-dialog>
@@ -169,7 +153,6 @@
     >
 
       <v-card style="height: 80vh">
-        <div>{{ chartTitle }}</div>
         <div ref="graphchart" style="height: 75vh; width: 55vw; cursor: pointer"></div>
       </v-card>
     </v-dialog>
@@ -2127,6 +2110,7 @@ export default {
       data.append("institutionId", institutionID);
       request('POST', "/api/PortalManager/getChartInfo/", data)
       .then(res => {
+        console.log('chart:',res)
         this.charts = res.charts
       })
     },
@@ -2135,7 +2119,7 @@ export default {
       const data = new FormData()
       let institutionID = this.$route.params.institutionID
       data.append("institutionId", institutionID);
-      data.append("scholarNum", 10)
+      data.append("scholarNum", 50)
       request('POST', "/api/PortalManager/detailInfo/",data)
       .then(res => {
         console.log('detailInfo:', res)
@@ -2143,16 +2127,10 @@ export default {
         this.paperInfoXAxis = res.paperInfoXAxis
         this.paperInfoData = res.paperInfoData
         this.initPaperInfo()
-
-      })
-    },
-    searchInfo() {
-      const data = new FormData()
-      let searchInfo = "BUAA"
-      let url = "https://baike.baidu.com/api/second/video/list?lemmaId=3350958&isSensitive=0&scene=pc_top&filterId=52650380&rn=12"
-      axios.get(url).then((res) => {
-        console.log("searchRes:", res)
-
+        this.institutionData = []
+        this.institutionData.push(res.institutionData)
+         console.log(res.institutionData)
+         console.log(this.institutionData)
       })
     },
     initInstitutionInfo() {
@@ -2188,7 +2166,7 @@ export default {
 
       let option = {
         title: {
-          text: '已报名门店行政分布',
+          text: '',
           x: 'center'
         },
         xAxis: {
@@ -2198,12 +2176,6 @@ export default {
         yAxis: {
           type: 'value'
         },
-        series: [
-          {
-            data: [],
-            type: 'bar'
-          }
-        ],
       };
 
       option && myChart.setOption(option);
@@ -2286,24 +2258,29 @@ export default {
 
       option && myChart.setOption(option);
     },
-    displayGraph(graph) {
-      console.log(graph)
+    displayGraph(graph, title) {
+      console.log("display:",graph)
       this.graphDialog = true
+      this.chartTitle = title
       setTimeout(() => {
         var myChart = this.$echarts.init(this.$refs.graphchart)
-        var option = {
-          tooltip: {},
+        let option = {
+          tooltip: {
+          },
+          title: {
+            text: '学者关系网络',
+            top: 'top',
+            left: 'left'
+          },
           legend: [
             {
-              data: graph.categories.map(function (a) {
-                return a.name;
-              })
+              data: []
             }
           ],
           series: [
             {
               type: 'graph',
-              layout: 'none',
+              layout: 'circular',
               data: graph.nodes,
               links: graph.links,
               categories: graph.categories,
@@ -2339,6 +2316,10 @@ export default {
         let myChart = echarts.init(chartDom);
         let option;
         option = {
+          title: {
+            text: title,
+            x: 'center'
+          },
           xAxis: {
             type: 'category',
             data: chartXAxis
@@ -2451,8 +2432,6 @@ export default {
 }
 
 .author-table {
-  max-height: 50vh;
-  overflow: scroll;
 }
 
 .tab-name {
