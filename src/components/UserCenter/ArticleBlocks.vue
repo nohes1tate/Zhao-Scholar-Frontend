@@ -71,17 +71,9 @@
           >
 
             <v-list-item-content style="margin-left: 30px;margin-right: 30px;margin-top: 20px">
-              <v-tooltip top>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-list-item-title class="headline mb-2" v-text="item.title" style="cursor: pointer" @click="toDocument(item.id)"
-                                     v-bind="attrs"
-                                     v-on="on">
-                  </v-list-item-title>
-                </template>
-                <span>查看文章详情</span>
-              </v-tooltip>
-<!--              <v-list-item-title class="headline mb-2" v-text="item.title" style="cursor: pointer" @click="toDocument(item.id)">-->
-<!--              </v-list-item-title>-->
+
+              <v-list-item-title class="headline mb-2" v-text="item.title" style="cursor: pointer" @click="toDocument(item.id)">
+              </v-list-item-title>
               <div style="display: flex; flex-direction: row">
                 <div v-for="(j,index) in item.authors" :key="j" style="color: #1E88E5;display: flex;flex-direction: row">
                   <div class="author-name" @click="toAuthor(j.id)">{{j.name}}</div>
