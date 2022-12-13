@@ -1,5 +1,8 @@
 <template>
-    <div>
+
+<div>
+ 
+   <div style="float: left;">
             <CollectDialog
                 :collect-show="collectShow"
                 :paperID="paperID"
@@ -179,6 +182,8 @@
       ></v-pagination>
     </v-card>
 </div>
+
+</div>
 </template>
 <script>
 import request from '@/utils/request';
@@ -187,7 +192,7 @@ import collectDialog from "@/components/UserCenter/collectDialog";
 import CollectDialog from "@/components/UserCenter/collectDialog";
 import PageHeader from "@/components/UserCenter/PageHeader";
 import user from "@/store/user";
-
+import selectBannerVue from './selectBanner.vue';
 
     export default{
       components: {CollectDialog},
@@ -215,6 +220,8 @@ import user from "@/store/user";
             paperID:'',
             isCollect:false,
             tag_list:'',
+            
+
 
         }),
         methods:{
