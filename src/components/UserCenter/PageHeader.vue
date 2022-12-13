@@ -90,8 +90,7 @@ export default {
     searchTag() {
       if (this.search === "") return false;
       console.log(this.search);
-      this.$router.push({path:'/search', query:{keyword:this.search}})
-      location.reload();
+      this.$router.push({path:'/search', query:{keyword:this.search}}, {})
     },
     goToLogin(){
       this.$router.push('/login')
