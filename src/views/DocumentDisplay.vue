@@ -33,7 +33,7 @@
             <!-- 找一个引号图标放到引用后面 -->
 
             <v-btn color="primary" dark text class="ml-4" @click="share">分享<v-icon>mdi-arrow-top-right-bold-box-outline</v-icon></v-btn>
-            <v-btn color="primary" dark text class="ml-4" v-show="!isMine" @click="update">更新<v-icon>mdi-arrow-u-up-right</v-icon></v-btn>
+            <v-btn color="primary" dark text class="ml-4" v-show="!isMine" @click="dialog=true">更新<v-icon>mdi-arrow-u-up-right</v-icon></v-btn>
             <v-btn color="red" dark text class="ml-4" v-show="isMine" @click="delet">下架<v-icon>mdi-delete</v-icon></v-btn>
         <v-dialog v-model="dialog" max-width="600px">
           <v-card>
@@ -52,7 +52,7 @@
                         filled
                         label="摘要"
                         auto-grow
-                        :value="dialogAbstract"
+                        v-model="dialogAbstract"
                     ></v-textarea>
                   </v-col>
                 </v-row>
@@ -70,10 +70,11 @@
 
       </div>
 
-      <div id="cards-left" class="mt-8">
+      <div id="cards-left" class="mt-8" :key="reloadKey">
         <v-card
         class="mx=auto"
         width = "full"
+
       >
         <v-card-text>
           <p class="card-title" >
@@ -289,7 +290,7 @@
       keywords:[
 
       ],
-      abstract:'well meaning and kindly."a benevolent smile"well meaning and kindly.',
+      abstract:"",
       references:[
         ['computer scienc45e'],
         ['cv'],
@@ -325,6 +326,7 @@
       dialog:false,
       dialogUrl:'',
       dialogAbstract:'',
+      reloadKey:false,
     }),
     created(){
       var title = this.$route.query.Title
@@ -340,6 +342,7 @@
       update(){
         this.dialog=false;
         this.abstract=this.dialogAbstract;
+        this.reloadKey=!this.reloadKey;
       },
       delet(){
 
