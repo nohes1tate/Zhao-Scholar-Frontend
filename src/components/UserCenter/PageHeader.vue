@@ -14,7 +14,6 @@
           @keyup.enter="searchTag"
           hide-details
           filled
-          label="Search something"
           v-model="search"
           v-show="showSearch"
           style="margin-top: 1.5vh;"

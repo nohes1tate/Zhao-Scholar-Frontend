@@ -74,61 +74,12 @@
         </v-tabs-items>
       </v-card>
     </v-overlay>
-      <v-overlay
-          :absolute="absolute"
-          :value="collectShow"
-          :opacity="opacity"
-      >
-        <v-card style="width: 700px;background-color: white;margin-top: 150px;">
-          <v-toolbar
-              color="blue darken-1"
-              dark
-          >
-            <v-toolbar-title>引用格式</v-toolbar-title>
-            <v-spacer>
-            </v-spacer>
-            <v-btn icon
-                   @click="collectShow = false"
-            >
-              <v-icon>mdi-close</v-icon>
-            </v-btn>
-            <template v-slot:extension>
-              <v-tabs
-                  v-model="tab"
-                  align-with-title
-              >
-                <v-tabs-slider color="yellow"></v-tabs-slider>
-
-                <v-tab
-                    v-for="cite in citeStyle"
-                    :key="cite.name"
-                >
-                  {{ cite.name }}
-                </v-tab>
-              </v-tabs>
-            </template>
-          </v-toolbar>
-          <v-tabs-items v-model="tab">
-            <v-tab-item
-                v-for="citeContent in citeStyle"
-                :key="citeContent.name"
-            >
-              <v-textarea
-                  :value=citeContent.text
-                  auto-grow
-                  row-height="15"
-                  readonly
-              ></v-textarea>
-              <v-btn
-                  depressed
-                  color="primary"
-                  @click="copyVal(citeContent.text)"
-                  style="width: 10%;float: right;margin-right: 10px;margin-bottom: 10px;"
-              >复制</v-btn>
-            </v-tab-item>
-          </v-tabs-items>
-        </v-card>
-      </v-overlay>
+      <CollectDialog
+          :collect-show="collectShow"
+          :paperID="id"
+          :isCollect="isCollect"
+          :taglist="tag_list"
+          @closeChildDialog="closeChildDialog"></CollectDialog>
 
         <v-list-item
         v-for="(item, i) in this.CurrentPageData"
@@ -190,7 +141,7 @@
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click="toDocument(item.title, item.id)">
                     详情<v-icon color="#64B5F6">mdi-link-variant</v-icon>
                 </v-btn>
-              <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" >
+              <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click="changeCollectIconToTrue(item.id)">
                 收藏<v-icon color="#64B5F6">mdi-star-plus-outline</v-icon>
               </v-btn>
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click="pdf(item.pdf)" v-show="item.haspdf">
@@ -256,6 +207,9 @@ import axios from 'axios';
 
         }),
         methods:{
+          changeCollectIconToTrue(id){
+            this.collectShow=true;
+          },
           getCollect(title,id){
             this.collectShow=true;
           },
@@ -266,7 +220,7 @@ import axios from 'axios';
               this.$message.error('没有该学者信息');
             }
           },
-         
+
           copyVal(val) {
             let aux = document.createElement("input");
             aux.setAttribute("value", val);
@@ -415,12 +369,12 @@ import axios from 'axios';
             this.Num = this.paperInfo.length;
             this.pageNum =  Math.ceil(this.Num/this.pageSize);
             console.log("page:"+this.pageNum)
-            
+
             console.log("当前携带参数:")
             console.log(this.$route.query.formdata)
             this.getCurrentPageData()
             // if("keyword" in this.$route.query){
-                
+
             //     this.posturl = '/api/PaperBrowser/searchPaper/'
             //     this.keyword = this.$route.query.keyword
             //     var formdata0 = new FormData();
@@ -430,7 +384,7 @@ import axios from 'axios';
             //     formdata0.append("orderby", this.orderBy);
             //     this.formdata = formdata0
             //     this.getCurrentPageData()
-                
+
             // }else{
             //   console.log("采用高级检索")
             //   this.posturl = this.$route.query.url
@@ -442,13 +396,16 @@ import axios from 'axios';
             //     console.log(this.formdata)
             //     this.getCurrentPageData()
             // }
-            
+
+
+
+
         },
         //监听page的变化
         watch:{
             page(){
                 console.log("page:"+this.page)
-                
+
                 this.getCurrentPageData()
             },
             selectMethod(){
