@@ -14,7 +14,6 @@
           @keyup.enter="searchTag"
           hide-details
           filled
-          label="Search something"
           v-model="search"
           v-show="showSearch"
           style="margin-top: 1.5vh;"
@@ -90,7 +89,7 @@ export default {
     searchTag() {
       if (this.search === "") return false;
       console.log(this.search);
-      this.$router.push({path:'/search', query:{keyword:this.search}}, {})
+      this.$router.push({path:'/search', query:{keyword:this.search}, url:"/api/PaperBrowser/searchPaper/"}, {})
     },
     goToLogin(){
       this.$router.push('/login')

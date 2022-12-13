@@ -190,7 +190,7 @@ export default {
       this.getCita();
     },
     toDocument(ID){
-      this.$router.push({path:"/document", query: {id: ID} })
+      this.$router.push({path:"/document", query: {Id: ID} })
     },
     toAuthor(ID){
       this.$router.push({path:"/scholar", query: {id: ID} })
