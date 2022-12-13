@@ -164,6 +164,8 @@
               min-height="300px"
               elevation="0"
             >
+            <div class="d-flex justify-center" v-if="show"><h1>请选择以下一项</h1></div>
+            <div class="d-flex justify-center" v-else><h1>无法找到对应人员</h1></div>
               <v-radio-group v-model="selectedId" :style="{'margin-left':'10px'}">
                 <div v-for="(n, index) in allAchievements" :key="index">
                   <v-radio :label="n.name" :value="n.id"></v-radio>
@@ -187,7 +189,7 @@
               elevation="0"
             >
               <v-container>
-                <h1>添加成功！</h1>
+                <div class="d-flex justify-center"><h1>添加成功！</h1></div>
               </v-container>
             </v-card>
           </v-stepper-content>
@@ -206,7 +208,7 @@
           <div class="d-flex justify-end">
             <v-btn
               color="primary"
-              v-show="now != 3"
+              v-show="(now==2&&show==true)||(now==1)"
               @click="nextStep(now)"
               class="align-right"
             >
@@ -218,7 +220,7 @@
               @click="finish()"
               class="align-right"
             >
-              下一步
+              完成
             </v-btn>
           </div>
         </div>
@@ -240,42 +242,16 @@ export default {
       ],
       now: 1,
       selectedId: "",
+      show:false,
       form1: {
         name: "",
         workplace: "",
         email: "",
         field: "",
         homepage: "",
+        
       },
-      allAchievements: [
-        {
-          name: "11",
-          id: "122",
-          content: [
-            { title: "a1", abstract: "a1", team: "a1" },
-            { title: "a2", abstract: "a2", team: "a2" },
-            { title: "a3", abstract: "a3", team: "a3" },
-          ],
-        },
-        {
-          name: "33",
-          id: "333",
-          content: [
-            { title: "a1", abstract: "a1", team: "a1" },
-            { title: "a2", abstract: "a2", team: "a2" },
-            { title: "a3", abstract: "a3", team: "a3" },
-          ],
-        },
-        {
-          name: "44",
-          id: "555",
-          content: [
-            { title: "a1", abstract: "a1", team: "a1" },
-            { title: "a2", abstract: "a2", team: "a2" },
-            { title: "a3", abstract: "a3", team: "a3" },
-          ],
-        },
-      ],
+      allAchievements: [],
       selectedAchievements: [],
     };
   },
@@ -290,7 +266,6 @@ export default {
       if (n == 2) {
         this.applySettle2();
       }
-      this.now = n + 1;
     },
     lastStep(n) {
       if (n == 1) {
@@ -301,10 +276,29 @@ export default {
     applySettle1() {
       let data = new FormData();
       let i=0,j=0,k=0;
+      if(this.form1.name.trim()==''){
+        this.$message.error("请填写姓名");
+        return;
+      }
+      if(this.form1.workplace.trim()==''){
+        this.$message.error("请填写工作地址");
+        return;
+      }
+      if(this.form1.email.trim()==''){
+        this.$message.error("请填写邮箱");
+        return;
+      }
+      if(this.form1.field.trim()==''){
+        this.$message.error("请填写研究领域");
+        return;
+      }
       data.append("name", this.form1.name);
+      this.now = this.now+1;
       request("POST", "/api/PortalManager/SubmitApplication/", data)
         .then((response) => {
           console.log(response);
+          
+          this.show=true;
           this.allAchievements=response.allAchievements;
           for(i=0;i<this.allAchievements.length;i++){
             for(j=0;j<this.allAchievements[i].content.length;j++){
@@ -329,6 +323,8 @@ export default {
         })
         .catch((error) => {
           console.error(error);
+          this.$message.error("找不到有关人员");
+          this.show=false
         });
     },
     applySettle2() {
@@ -340,11 +336,17 @@ export default {
       if (this.form1.homepage.trim()!= "") {
         data.append("homepage", this.form1.homepage);
       }
+      if(this.selectedId.length==0){
+        this.$message.error("请选择一项");
+        return;
+      }
       data.append("id", this.selectedId);
       console.log(this.selectedId+"sss");
       request('POST', "/api/PortalManager/ConfirmSubmit/",data)
         .then(response => {
+          this.now = this.now+1;
           console.log(response)
+          this.$message.success("添加成功");
         })
         .catch(error => {
           console.error(error);
@@ -353,7 +355,9 @@ export default {
     test() {
       console.log(this.selectedAchievements);
     },
-    finish() {},
+    finish() {
+      this.$router.go(-1)
+    },
   },
 
   mounted() {},
