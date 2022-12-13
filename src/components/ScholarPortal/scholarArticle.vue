@@ -135,7 +135,7 @@
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" @click=cite(item)>引用<v-icon color="#64B5F6"> mdi-format-quote-close-outline</v-icon></v-btn>
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" @click="pdf(item.pdf)" v-show="item.haspdf">下载<v-icon color="#64B5F6">mdi-download</v-icon></v-btn>
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" @click="toDocument(item.title, item.id)">详情<v-icon color="#64B5F6">mdi-link-variant</v-icon></v-btn>
-
+                <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;" @click="pdf(item.pdf)" v-show="isMine">下载<v-icon color="#64B5F6">mdi-download</v-icon></v-btn>
               </div>
             </div>
           </v-list-item-content>
@@ -180,6 +180,7 @@ export default{
     toscholar(id){
       if(id){
         this.$router.push({path:"/scholar", query:{id:id}})
+        location.reload();
       } else {
         this.$message.error('没有该学者信息');
       }

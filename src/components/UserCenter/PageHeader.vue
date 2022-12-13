@@ -91,6 +91,7 @@ export default {
       if (this.search === "") return false;
       console.log(this.search);
       this.$router.push({path:'/search', query:{keyword:this.search}})
+      location.reload();
     },
     goToLogin(){
       this.$router.push('/login')
