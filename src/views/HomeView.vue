@@ -209,14 +209,14 @@
                   v-for="(item, i) in ShowAuthors"
                   :key="i"
                   :style="{ 'margin-left': '10px', 'margin-right': '10px' }"
-                  inactive
                 >
                   <v-row>
                     <v-col
                       class="d-flex justify-space-between"
                       :style="{ 'padding-top': '0px', 'padding-bottom': '0px' }"
+                      
                     >
-                      <div class="d-flex justify-space-between">
+                      <div class="d-flex justify-space-between" @click="$router.push({path:'/scholar', query: { id: item.id } })">
                         {{ item.name }}
                       </div>
                       <div class="d-flex justify-end">
@@ -225,7 +225,7 @@
                     </v-col>
 
                     <v-progress-linear
-                      v-model="item.percentage"
+                      :value="item.percentage"
                       color="primary"
                       rounded
                       height="8"
@@ -278,7 +278,7 @@
                   v-for="(item, i) in TopAffiliations"
                   :key="i"
                   :style="{ 'margin-left': '10px', 'margin-right': '10px' }"
-                  inactive
+                 
                 >
                   <v-row>
                     <v-col
@@ -294,7 +294,7 @@
                     </v-col>
 
                     <v-progress-linear
-                      v-model="item.percentage"
+                      :value="item.percentage"
                       color="primary"
                       rounded
                       height="8"
@@ -305,10 +305,10 @@
               </v-list-item-group>
             </v-list>
             <div class="d-flex justify-center">
-           <v-btn icon color="black" :disabled="page2==1" @click="page1=page2-1">
+           <v-btn icon color="black" :disabled="page2==1" @click="page2=page2-1">
               <v-icon>navigate_before</v-icon>
             </v-btn>
-            <v-btn icon color="black" :disabled="page2==4" @click="page1=page2+1">
+            <v-btn icon color="black" :disabled="page2==4" @click="page2=page2+1">
               <v-icon>navigate_next</v-icon>
             </v-btn>
             </div>
@@ -364,7 +364,7 @@
                     </v-col>
 
                     <v-progress-linear
-                      v-model="item.percentage"
+                      :value="item.percentage"
                       color="primary"
                       rounded
                       height="8"
@@ -375,10 +375,10 @@
               </v-list-item-group>
             </v-list>
             <div class="d-flex justify-center">
-           <v-btn icon color="black" :disabled="page3==1" @click="page1=page3-1">
+           <v-btn icon color="black" :disabled="page3==1" @click="page3=page3-1">
               <v-icon>navigate_before</v-icon>
             </v-btn>
-            <v-btn icon color="black" :disabled="page3==4" @click="page1=page3+1">
+            <v-btn icon color="black" :disabled="page3==4" @click="page3=page3+1">
               <v-icon>navigate_next</v-icon>
             </v-btn>
             </div>
@@ -493,6 +493,9 @@ export default {
           console.error(error);
         });
       }
+      else{
+        this.items=[];
+      }
     },
     getAll(){
       let data=new FormData();
@@ -512,7 +515,7 @@ export default {
         .then(response => {
           console.log(response)
           this.TopAuthors=response.TopAuthors;
-          this.changeShowAuthor(1);
+          this.ShowAuthors=this.TopAuthors.slice(0,10)
           for(i=0;i<this.TopAuthors.length;i++){
             if(this.TopAuthors[i].name.length>16){
               this.TopAuthors[i].name=this.TopAuthors[i].name.slice(0,16)+"..."
@@ -532,7 +535,7 @@ export default {
         .then(response => {
           console.log(response)
           this.TopAffiliations=response.TopAffiliations;
-          this.changeShowAffiliation(1);
+          this.ShowAffiliations=this.TopAffiliations.slice(0,10)
           for(i=0;i<this.TopAffiliations.length;i++){
             if(this.TopAffiliations[i].name.length>16){
               this.TopAffiliations[i].name=this.TopAffiliations[i].name.slice(0,16)+"..."
@@ -552,7 +555,7 @@ export default {
         .then(response => {
           console.log(response)
           this.TopJournals=response.TopJournals;
-          this.changeShowJournal(1);
+          this.ShowJournals=this.TopJournals.slice(0,10)
           for(i=0;i<this.TopJournals.length;i++){
             if(this.TopJournals[i].name.length>16){
               this.TopJournals[i].name=this.TopJournals[i].name.slice(0,16)+"..."
@@ -578,20 +581,14 @@ export default {
   watch: {
     search:'inputHandle',
     page1:'changeShowAuthor',
-    page2:'changeShowAffiliation',
-    page3:'changeShowJournal',
-  },
-  mounted(){
-    this.getAll()
-    this.getAuthors()
-    this.getAffiliations()
-    this.getJournals()
+    // page2:'changeShowAffiliation',
+    // page3:'changeShowJournal',
   },
   created(){
     this.getAll()
     this.getAuthors()
-    this.getAffiliations()
-    this.getJournals()
+    // this.getAffiliations()
+    // this.getJournals()
   }
 };
 </script>
