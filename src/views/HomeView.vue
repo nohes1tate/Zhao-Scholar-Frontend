@@ -460,7 +460,7 @@ export default {
     searchTag(search) {
       this.search=search
       if (search == "") return;
-      console.log(search);
+      this.$router.push({ path: "/search", query: { keyword: search } });
     },
     goto(url) {
       console.log("url: "+url);
