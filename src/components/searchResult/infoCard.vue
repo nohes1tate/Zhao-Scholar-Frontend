@@ -1,5 +1,11 @@
 <template>
     <div>
+            <CollectDialog
+                :collect-show="collectShow"
+                :paperID="paperID"
+                :isCollect="isCollect"
+                :taglist="tag_list"
+                @closeChildDialog="closeChildDialog"></CollectDialog>
     <div style="font-size: 18px; height: 80px;">
         <span style="float:left; text-align:right;margin-top: 20px;color: grey;font-size: 15px;margin-left: 18px;">
             找到{{Num}}条结果
@@ -74,61 +80,7 @@
         </v-tabs-items>
       </v-card>
     </v-overlay>
-      <v-overlay
-          :absolute="absolute"
-          :value="collectShow"
-          :opacity="opacity"
-      >
-        <v-card style="width: 700px;background-color: white;margin-top: 150px;">
-          <v-toolbar
-              color="blue darken-1"
-              dark
-          >
-            <v-toolbar-title>引用格式</v-toolbar-title>
-            <v-spacer>
-            </v-spacer>
-            <v-btn icon
-                   @click="collectShow = false"
-            >
-              <v-icon>mdi-close</v-icon>
-            </v-btn>
-            <template v-slot:extension>
-              <v-tabs
-                  v-model="tab"
-                  align-with-title
-              >
-                <v-tabs-slider color="yellow"></v-tabs-slider>
 
-                <v-tab
-                    v-for="cite in citeStyle"
-                    :key="cite.name"
-                >
-                  {{ cite.name }}
-                </v-tab>
-              </v-tabs>
-            </template>
-          </v-toolbar>
-          <v-tabs-items v-model="tab">
-            <v-tab-item
-                v-for="citeContent in citeStyle"
-                :key="citeContent.name"
-            >
-              <v-textarea
-                  :value=citeContent.text
-                  auto-grow
-                  row-height="15"
-                  readonly
-              ></v-textarea>
-              <v-btn
-                  depressed
-                  color="primary"
-                  @click="copyVal(citeContent.text)"
-                  style="width: 10%;float: right;margin-right: 10px;margin-bottom: 10px;"
-              >复制</v-btn>
-            </v-tab-item>
-          </v-tabs-items>
-        </v-card>
-      </v-overlay>
 
         <v-list-item
         v-for="(item, i) in this.CurrentPageData"
@@ -190,9 +142,12 @@
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click="toDocument(item.title, item.id)">
                     详情<v-icon color="#64B5F6">mdi-link-variant</v-icon>
                 </v-btn>
-              <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" >
-                收藏<v-icon color="#64B5F6">mdi-star-plus-outline</v-icon>
-              </v-btn>
+                  <v-btn
+                      style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;"
+                      @click="changeCollectIconToTrue(item.id)">
+                    收藏<v-icon color="#64B5F6">mdi-star</v-icon>
+                  </v-btn>
+
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click="pdf(item.pdf)" v-show="item.haspdf">
                     下载<v-icon color="#64B5F6">mdi-download</v-icon>
                 </v-btn>
@@ -228,14 +183,18 @@
 <script>
 import request from '@/utils/request';
 import axios from 'axios';
+import collectDialog from "@/components/UserCenter/collectDialog";
+import CollectDialog from "@/components/UserCenter/collectDialog";
+import PageHeader from "@/components/UserCenter/PageHeader";
+import user from "@/store/user";
 
 
     export default{
-
+      components: {CollectDialog},
         data:()=>({
             collectShow:false,
             tab:null,
-            page: 1,
+            page: 0,
             pageSize:10,
             pageNum:'1',
             Num:1,
@@ -248,16 +207,46 @@ import axios from 'axios';
             absolute: false,
             opacity: 0.5,//透明度
             citeStyle:[{name:"引用类型", text:"引用文本"}],
-            keyword:"",
+            keyword:null,
             TypeNum:[],
             tagData:[],
             posturl:"gan",
-            formdata:"",
+            formdata:{},
+            paperID:'',
+            isCollect:false,
+            tag_list:'',
 
         }),
         methods:{
-          getCollect(title,id){
+          closeChildDialog() {
+            this.collectShow = false;
+          },
+          getCollectInfo(){
+            const userInfo = user.getters.getUser(user.state);
+            const formData = new FormData();
+            formData.append("userID", userInfo.user.userId);
+            formData.append("authorization", userInfo.user.Authorization)
+            formData.append("paperID", this.paperID)
+            this.$axios({
+              method: 'post',
+              url: 'api/UserManager/isCollect/',
+              data: formData,
+            })
+                .then(res => {
+                  if(res.data.error=== 0){
+                    this.isCollect=res.data.isCollect;
+                    if(this.isCollect)
+                      this.tag_list=res.data.tag_list;
+                  }
+                })
+                .catch(err => {
+                  console.log(err);
+                })
+          },
+          changeCollectIconToTrue(ID){
             this.collectShow=true;
+            this.paperID=ID;
+            this.getCollectInfo();
           },
           toscholar(id){
             if(id){
@@ -266,9 +255,7 @@ import axios from 'axios';
               this.$message.error('没有该学者信息');
             }
           },
-          searchkeyword(keyword){
-            this.$router.push({path:"/search", query:{keyword:keyword}})
-          },
+
           copyVal(val) {
             let aux = document.createElement("input");
             aux.setAttribute("value", val);
@@ -294,16 +281,32 @@ import axios from 'axios';
                 this.$router.push({path:"/document", query:{Title:title, Id:id}})
             },
             getCurrentPageData(){
-
+                console.log("开始请求")
+                if("keyword" in this.$route.query){
+                this.keyword = this.$route.query.keyword
+                this.formdata = new FormData();
+                this.formdata.append("page", this.page);
+                this.formdata.append("pagesize", this.pageSize);
+                this.formdata.append("keyword", this.keyword);
+                this.formdata.append("orderby", this.orderBy);
+                this.posturl="/api/PaperBrowser/searchPaper/"
+                }else if("formdata" in this.$route.query){
+                  console.log("高级检索")
+                  console.log()
+                  this.formdata = this.$route.query.formdata
+                  this.formdata.page = this.page
+                  this.formdata.pagesize = this.pageSize
+                  this.formdata.orderby = this.orderBy
+                  console.log(this.formdata)
+                  this.posturl = this.$route.query.url
+                }else{
+                  return
+                }
                 //获取我们自己的数据
                 // this.orderBy = JSON.stringify(this.orderBy)
                 // let url = 'api/PaperBrowser/searchPaper/'
-                // var formdata = new FormData();
-                // formdata.append("page", this.page);
-                // formdata.append("pagesize", this.pageSize);
-                // formdata.append("keyword", this.keyword);
-                // formdata.append("orderby", this.orderBy);
-
+                console.log("请求路径")
+                console.log(this.posturl)
                 axios({
                     method:"post",
                     url:this.posturl,
@@ -321,10 +324,12 @@ import axios from 'axios';
                         let Author = this.CurrentPageData[i].authors
                         let j=0;
                         let str="作者："
-                        str=Author[0].name
-                        for(j=1;j<Author.length;j++){
+                        if(Author.length!==0){
+                          str=Author[0].name
+                          for(j=1;j<Author.length;j++){
                             str =  str+", "+Author[j].name
 
+                          }
                         }
                         this.CurrentPageData[i].author = str
                         // if(this.CurrentPageData[i])
@@ -401,37 +406,43 @@ import axios from 'axios';
             this.Num = this.paperInfo.length;
             this.pageNum =  Math.ceil(this.Num/this.pageSize);
             console.log("page:"+this.pageNum)
-            
+
             console.log("当前携带参数:")
-            console.log(this.$route.query)
-            if("keyword" in this.$route.query){
-                
-                this.posturl = '/api/PaperBrowser/searchPaper/'
-                this.keyword = this.$route.query.keyword
-                var formdata0 = new FormData();
-                formdata0.append("page", this.page);
-                formdata0.append("pagesize", this.pageSize);
-                formdata0.append("keyword", this.keyword);
-                formdata0.append("orderby", this.orderBy);
-                this.formdata = formdata0
-                this.getCurrentPageData()
-                
-            }else{
-              this.posturl = this.$route.query.url
-              this.formdata = this.$route.query.formdata
-                this.formdata.page = this.page
-                this.formdata.pagesize = this.pageSize
-                this.formdata.orderby = this.orderBy
-                console.log(this.posturl)
-                console.log(this.formdata)
-                this.getCurrentPageData()
-            }
-            
+            console.log(this.$route.query.formdata)
+            this.getCurrentPageData()
+            // if("keyword" in this.$route.query){
+
+            //     this.posturl = '/api/PaperBrowser/searchPaper/'
+            //     this.keyword = this.$route.query.keyword
+            //     var formdata0 = new FormData();
+            //     formdata0.append("page", this.page);
+            //     formdata0.append("pagesize", this.pageSize);
+            //     formdata0.append("keyword", this.keyword);
+            //     formdata0.append("orderby", this.orderBy);
+            //     this.formdata = formdata0
+            //     this.getCurrentPageData()
+
+            // }else{
+            //   console.log("采用高级检索")
+            //   this.posturl = this.$route.query.url
+            //   this.formdata = this.$route.query.formdata
+            //     this.formdata.page = this.page
+            //     this.formdata.pagesize = this.pageSize
+            //     this.formdata.orderby = this.orderBy
+            //     console.log(this.posturl)
+            //     console.log(this.formdata)
+            //     this.getCurrentPageData()
+            // }
+
+
+
+
         },
         //监听page的变化
         watch:{
             page(){
                 console.log("page:"+this.page)
+
                 this.getCurrentPageData()
             },
             selectMethod(){
@@ -449,16 +460,8 @@ import axios from 'axios';
             },
             $route(to, from){
                 console.log(to)
-                this.keyword=to.query.keyword
+                // this.keyword=to.query.keyword
                 console.log("更新页面"+this.keyword)
-                console.log(to)
-                console.log(from)
-                var formdata0 = new FormData();
-                formdata0.append("page", this.page);
-                formdata0.append("pagesize", this.pageSize);
-                formdata0.append("keyword", this.keyword);
-                formdata0.append("orderby", this.orderBy);
-                this.formdata = formdata0
                 this.getCurrentPageData()
             }
         }

@@ -4,7 +4,12 @@
     <page-header :show-search="true"></page-header>
       <!-- <v-input persistant-hint="输入你想了解的论文" absolute right>input</v-input> -->
 <!--      <v-btn  @click="jump2login" tile color="indigo" dark absolute right>登录/注册</v-btn>-->
-      <CollectDialog :collect-show="collectShow" :paperID="id" :isCollect="isCollect" @closeChildDialog="closeChildDialog"></CollectDialog>
+      <CollectDialog
+          :collect-show="collectShow"
+          :paperID="id"
+          :isCollect="isCollect"
+          :taglist="tag_list"
+          @closeChildDialog="closeChildDialog"></CollectDialog>
       <div id="allcontent">
 
 
@@ -19,7 +24,10 @@
 
             <v-btn color="primary" dark @click="read">阅读<v-icon class="ml-2">mdi-eye</v-icon></v-btn>
 
-            <v-btn color="primary" dark outlined class="ml-4" @click="changeCollectIconToTrue">收藏<v-icon class="ml-2">mdi-star-plus-outline</v-icon></v-btn>
+            <v-btn color="primary" dark outlined class="ml-4" @click="changeCollectIconToTrue">收藏
+              <v-icon v-show="!isCollect" class="ml-2">mdi-star-plus-outline</v-icon>
+              <v-icon v-show="isCollect" class="ml-2">mdi-star</v-icon>
+            </v-btn>
 
             <v-btn color="primary" dark text class="ml-4" @click="cite">引用<v-icon>mdi-format-quote-close-outline</v-icon></v-btn>
             <!-- 找一个引号图标放到引用后面 -->
@@ -281,22 +289,44 @@
       chooseTag:[],
       collectShow:false,
       isCollect:false,
+      tag_list:[],
     }),
     created(){
       var title = this.$route.query.Title
       var id=this.$route.query.Id
       console.log("进入详情页")
-      console.log(title)
-      console.log(id)
       this.id = id;
       this.title = title;
 
       this.get_paper_info()
+      this.checkPaperIsCollect();
     },
     methods:{
+      checkPaperIsCollect(){
+        const userInfo = user.getters.getUser(user.state);
+        const formData = new FormData();
+        formData.append("userID", userInfo.user.userId);
+        formData.append("authorization", userInfo.user.Authorization)
+        formData.append("paperID", this.id)
+        this.$axios({
+          method: 'post',
+          url: 'api/UserManager/isCollect/',
+          data: formData,
+        })
+            .then(res => {
+              if(res.data.error=== 0){
+                console.log(res.data)
+                this.isCollect=res.data.isCollect;
+                if(this.isCollect)
+                  this.tag_list=res.data.tag_list;
+              }
+            })
+            .catch(err => {
+              console.log(err);
+            })
+      },
       changeCollectIconToTrue(){
         this.collectShow=true;
-        this.isCollect=true;
       },
       closeChildDialog() {
         this.collectShow = false;
@@ -310,9 +340,9 @@
         data.append("paperID",this.id);
         // data.append("paperID","53e9ac48b7602d97036198e6");
 
-        const url = '/api/PaperBrowser/getPaperInfo/' ;
-        request('POST', url, data)
+        request('POST', "/api/PaperBrowser/getPaperInfo/", data)
         .then(data => {
+          console.log(data)
           if(data.articles_list[0].url[0]){
              this.url = data.articles_list[0].url[0]
           }
