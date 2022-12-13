@@ -5,70 +5,71 @@
         width="1000px"
         style="float: left;box-shadow: none;"
     >
+      <v-overlay
+          :absolute="absolute"
+          :value="overlay"
+          :opacity="opacity"
+      >
+        <v-card style="width: 700px;background-color: white;margin-top: 150px;">
+          <v-toolbar
+              color="blue darken-1"
+              dark
+          >
+            <v-toolbar-title>引用格式</v-toolbar-title>
+            <v-spacer>
+            </v-spacer>
+            <v-btn icon
+                   @click="overlay = false"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+            <template v-slot:extension>
+              <v-tabs
+                  v-model="tab"
+                  align-with-title
+              >
+                <v-tabs-slider color="yellow"></v-tabs-slider>
 
+                <v-tab
+                    v-for="cite in citation_msg"
+                    :key="cite.name"
+                >
+                  {{ cite.name }}
+                </v-tab>
+              </v-tabs>
+            </template>
+          </v-toolbar>
+          <v-tabs-items v-model="tab">
+            <v-tab-item
+                v-for="citeContent in citation_msg"
+                :key="citeContent.name"
+            >
+              <v-textarea
+                  :value=citeContent.text
+                  auto-grow
+                  row-height="15"
+                  readonly
+              ></v-textarea>
+              <v-btn
+                  depressed
+                  color="primary"
+                  @click="copyVal(citeContent.text)"
+                  style="width: 10%;float: right;margin-right: 10px;margin-bottom: 10px;"
+              >复制</v-btn>
+            </v-tab-item>
+          </v-tabs-items>
+        </v-card>
+      </v-overlay>
         <v-list-item
             v-for="item in articles"
             :key="item"
             three-line
         >
           <v-card
-              style="width: 100%;margin-bottom: 20px;"
+              style="margin-bottom: 20px;"
+              width="900"
           >
-            <v-overlay
-                :absolute="absolute"
-                :value="overlay"
-                :opacity="opacity"
-            >
-              <v-card style="width: 700px;background-color: white;margin-top: 150px;">
-                <v-toolbar
-                    color="blue darken-1"
-                    dark
-                >
-                  <v-toolbar-title>引用格式</v-toolbar-title>
-                  <v-spacer>
-                  </v-spacer>
-                  <v-btn icon
-                         @click="overlay = false"
-                  >
-                    <v-icon>mdi-close</v-icon>
-                  </v-btn>
-                  <template v-slot:extension>
-                    <v-tabs
-                        v-model="tab"
-                        align-with-title
-                    >
-                      <v-tabs-slider color="yellow"></v-tabs-slider>
 
-                      <v-tab
-                          v-for="cite in citation_msg"
-                          :key="cite.name"
-                      >
-                        {{ cite.name }}
-                      </v-tab>
-                    </v-tabs>
-                  </template>
-                </v-toolbar>
-                <v-tabs-items v-model="tab">
-                  <v-tab-item
-                      v-for="citeContent in citation_msg"
-                      :key="citeContent.name"
-                  >
-                    <v-textarea
-                        :value=citeContent.text
-                        auto-grow
-                        row-height="15"
-                        readonly
-                    ></v-textarea>
-                    <v-btn
-                        depressed
-                        color="primary"
-                        @click="copyVal(citeContent.text)"
-                        style="width: 10%;float: right;margin-right: 10px;margin-bottom: 10px;"
-                    >复制</v-btn>
-                  </v-tab-item>
-                </v-tabs-items>
-              </v-card>
-            </v-overlay>
             <v-list-item-content style="margin-left: 30px;margin-right: 30px;margin-top: 20px">
 
               <v-list-item-title class="headline mb-2" v-text="item.title" style="cursor: pointer" @click="toDocument(item.id)">
@@ -184,16 +185,17 @@ export default {
         this.$message.error("引用格式为空");
       }
     },
-    changePaperID(item) {
-      this.quote_paperId = item.id;
-      // console.log(this.quote_paperId);
-      this.getCita();
-    },
     toDocument(ID){
+      if(ID)
       this.$router.push({path:"/document", query: {Id: ID} })
+      else
+        this.$message.error('没有该文献信息');
     },
     toAuthor(ID){
+      if(ID)
       this.$router.push({path:"/scholar", query: {id: ID} })
+      else
+        this.$message.error('没有该学者信息');
     },
     getCita() {
       this.$axios({
