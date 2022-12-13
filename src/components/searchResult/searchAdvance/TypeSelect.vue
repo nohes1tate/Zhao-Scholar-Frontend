@@ -163,9 +163,9 @@ export default{
         Form:"高级搜索表单",
         methodOptions:[{value:"term", label:"精确"}, {value:"match", label:"匹配"}, {value:"fuzzy", label:"模糊"}]
         ,
-        minyear:1900,
+        minyear:1723,
         maxyear:2022,
-        year:[1900, 2022]
+        year:[]
     }),
     methods:{
         Search(){
@@ -197,6 +197,12 @@ export default{
             // this.SearchRequest = this.SearchRequest.slice(0, i-1)
             this.SearchRequest.splice(i, 1)
             
+        }
+    },
+    created(){
+        for(var i=0;i<300;i++){
+            var j=2022-i
+            this.year.push(j)
         }
     }
 }
