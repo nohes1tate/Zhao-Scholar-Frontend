@@ -187,11 +187,10 @@
             </v-menu>
           </div>
         </div>
-        <div class="page-select-box">
-          <ArticleBlocks v-if="userdata.length>0"
+        <div class="page-select-box" v-if="userdata.length>0" :key="reloadKey3">
+          <ArticleBlocks
                          :articles="userdata"
                          :tagID="thisTagId"
-                         :key="reloadKey3"
                          flag="schLib"></ArticleBlocks>
 
           <div class="text-center">
@@ -204,6 +203,9 @@
                 @input="handleCurrentChange"
             ></v-pagination>
           </div>
+        </div>
+        <div class="page-select-box" v-else>
+          <el-empty :image-size="200" description="您的个人图书馆空荡荡" ></el-empty>
         </div>
       </div>
 
@@ -249,23 +251,23 @@ export default {
       ],
 
       articles: [
-        {
-          authors: [
-            {
-              name: "John Lee",
-              id:1,
-            },
-            {
-              name: "Zuo_zuo",
-              id:2
-            },
-          ],
-          id: "4cd223df721b722b1c40689caa52932a41fcc223",
-          title: "Computer-assisted composition of Chinese couplets",
-          abstract: "Recent research effort in poem composition has focused on the use of automatic language generation to produce a polished poem. A less explored question is how effectively a computer can serve as an interactive assistant to a poet. For this purpose, we built a web application that combines rich linguistic knowledge from classical Chinese philology with statistical natural language processing techniques. The application assists users in composing a ‘couplet’—a pair of lines in a traditional Chinese poem—by making suggestions for the next and corresponding characters. A couplet must meet a complicated set of requirements on phonology, syntax, and parallelism, which are challenging for an amateur poet to master. The application checks conformance to these requirements and makes suggestions for characters based on lexical, syntactic, and semantic properties. A distinguishing feature of the application is its extensive use of linguistic knowledge, enabling it to inform users of specific phonological principles in detail, and to explicitly model semantic parallelism, an essential characteristic of Chinese poetry. We evaluate the quality of poems composed solely with characters suggested by the application, and the coverage of its character suggestions.",
-          n_citation: 3288,
-          year:2021,
-        },
+        // {
+        //   authors: [
+        //     {
+        //       name: "John Lee",
+        //       id:1,
+        //     },
+        //     {
+        //       name: "Zuo_zuo",
+        //       id:2
+        //     },
+        //   ],
+        //   id: "4cd223df721b722b1c40689caa52932a41fcc223",
+        //   title: "Computer-assisted composition of Chinese couplets",
+        //   abstract: "Recent research effort in poem composition has focused on the use of automatic language generation to produce a polished poem. A less explored question is how effectively a computer can serve as an interactive assistant to a poet. For this purpose, we built a web application that combines rich linguistic knowledge from classical Chinese philology with statistical natural language processing techniques. The application assists users in composing a ‘couplet’—a pair of lines in a traditional Chinese poem—by making suggestions for the next and corresponding characters. A couplet must meet a complicated set of requirements on phonology, syntax, and parallelism, which are challenging for an amateur poet to master. The application checks conformance to these requirements and makes suggestions for characters based on lexical, syntactic, and semantic properties. A distinguishing feature of the application is its extensive use of linguistic knowledge, enabling it to inform users of specific phonological principles in detail, and to explicitly model semantic parallelism, an essential characteristic of Chinese poetry. We evaluate the quality of poems composed solely with characters suggested by the application, and the coverage of its character suggestions.",
+        //   n_citation: 3288,
+        //   year:2021,
+        // },
       ],
 
       newTagInputVisible: true,
