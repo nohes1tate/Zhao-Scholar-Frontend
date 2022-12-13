@@ -191,6 +191,7 @@
           <ArticleBlocks
                          :articles="userdata"
                          :tagID="thisTagId"
+                         :tag_name="thisTagName"
                          flag="schLib"></ArticleBlocks>
 
           <div class="text-center">
