@@ -289,7 +289,7 @@
                         {{ item.name }}
                       </div>
                       <div class="d-flex justify-end">
-                        {{ item.progress }} 篇论文
+                        {{ item.progress }} 篇
                       </div>
                     </v-col>
 
@@ -359,7 +359,7 @@
                         {{ item.name }}
                       </div>
                       <div class="d-flex justify-end">
-                        {{ item.progress }} 篇论文
+                        {{ item.progress }} 篇
                       </div>
                     </v-col>
 
