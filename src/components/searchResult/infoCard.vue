@@ -29,7 +29,7 @@
     <v-divider></v-divider>
     
     <v-subheader>期刊</v-subheader>
-    <v-text-field
+    <!-- <v-text-field
           class="material-symbols-outlined"
           append-icon="search"
           @click:append="choosejournal"
@@ -39,7 +39,7 @@
           v-model="pickjournal"
           style="width: 200px;margin-left: 20px;"
       >
-      </v-text-field>
+      </v-text-field> -->
     <v-list-item
                 v-for="item in journalList"
                 :key=item.name
