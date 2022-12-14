@@ -250,6 +250,13 @@
                     收藏<v-icon color="#64B5F6">mdi-star</v-icon>
                   </v-btn>
 
+                  <v-btn
+                      style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;"
+                      @click="gourl(item)">
+                    来源<v-icon color="#64B5F6">mdi-star</v-icon>
+                  </v-btn>
+
+
                 <v-btn style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;" @click="pdf(item.pdf)" v-show="item.haspdf">
                     下载<v-icon color="#64B5F6">mdi-download</v-icon>
                 </v-btn>
@@ -336,6 +343,15 @@ import Vue from 'vue'
           searchkeyword(type){
             var url="https://www.baidu.com/s?wd="+type
             window.open(url, "_blank")
+          },
+          gourl(item){
+            window.alert("跳转来源")
+            if("url" in item){
+              if(item.url.length>0){
+                window.alert(item.url[0])
+                window.open(item.url[0], "_blank")
+              }
+            }
           },
           chooseminyear(){
             window.alert(this.minyear)
@@ -584,7 +600,12 @@ import Vue from 'vue'
                 if(!("journal_filter" in this.formdata)){
                   this.formdata.journal_filter="no"
                 }
-                
+                if(!("minyear" in this.formdata)){
+                  this.formdata.minyear=0
+                }
+                if(!("maxyear" in this.formdata)){
+                  this.formdata.maxyear=2022
+                }
                 //获取我们自己的数据
                 // this.orderBy = JSON.stringify(this.orderBy)
                 // let url = 'api/PaperBrowser/searchPaper/'
