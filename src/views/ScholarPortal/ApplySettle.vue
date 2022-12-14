@@ -1,5 +1,5 @@
 <template >
-  <div class="about" :style="{'background-color':'#EEEEEE','height':'100%'}">
+  <div class="about" :style="{'background-color':'#EEEEEE','height':'100%'}" v-title data-title='申请入住 - ZScholar'>
     <page-header :show-search="true" :is-login="true"></page-header>
     <v-stepper
       v-model="now"
@@ -252,7 +252,7 @@ export default {
         email: "",
         field: "",
         homepage: "",
-        
+
       },
       allAchievements: [],
       selectedAchievements: [],
@@ -300,7 +300,7 @@ export default {
       request("POST", "/api/PortalManager/SubmitApplication/", data)
         .then((response) => {
           console.log(response);
-          
+
           this.show=true;
           this.allAchievements=response.allAchievements;
           for(i=0;i<this.allAchievements.length;i++){

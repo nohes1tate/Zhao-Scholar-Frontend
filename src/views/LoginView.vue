@@ -1,5 +1,5 @@
 <template>
-<div class="main">
+<div class="main" v-title data-title='登录 - ZScholar'>
   <!-- 创建封装容器 -->
   <div class="container" id="container">
 

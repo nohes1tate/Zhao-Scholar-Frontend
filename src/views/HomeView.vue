@@ -1,5 +1,5 @@
 <template>
-  <div height="100vh">
+  <div height="100vh" v-title data-title='学术平台 - ZScholar'>
     <div width="100vw" class="bgimg" :style="{ 'min-height': '60vh' }">
       <!-- <v-card   background="linear-gradient(red, blue)"> -->
       <v-row :style="{ height: '80vh' }">
