@@ -426,20 +426,20 @@ import Vue from 'vue'
         },
         choosejournal(){
           // window.alert(this.pickjournal)
-        //   var has=0
-        //   for(var i=0;i<this.formdata.keyword.length;i++){{
-        //     if("journal" in this.formdata.keyword[i]){
-        //       has=1
-        //       this.formdata.keyword[i].keyword=this.pickjournal
-        //     }
-        //   }
-        // }
-        // if(has==0){
-        //   this.formdata.keyword.push({keyword:this.pickjournal, op:"and", method:"term", type:"venue.name",journal:true})        
-        // }
-        this.formdata.journal_filter="yes"
-            this.formdata.journal=this.pickjournal
-            this.formdata.author_filter="no"
+          var has=0
+          for(var i=0;i<this.formdata.keyword.length;i++){{
+            if("journal" in this.formdata.keyword[i]){
+              has=1
+              this.formdata.keyword[i].keyword=this.pickjournal
+            }
+          }
+        }
+        if(has==0){
+          this.formdata.keyword.push({keyword:this.pickjournal, op:"and", method:"term", type:"venue.name",journal:true})        
+        }
+        // this.formdata.journal_filter="yes"
+        //     this.formdata.journal=this.pickjournal
+        //     this.formdata.author_filter="no"
         this.getCurrentPageData()
         },
         //类型选择----变更为期刊选择
