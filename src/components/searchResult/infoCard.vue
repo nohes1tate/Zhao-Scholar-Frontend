@@ -251,9 +251,10 @@
                   </v-btn>
 
                   <v-btn
+                  v-show="item.hasurl"
                       style="background-color: transparent;box-shadow: none;font-weight: 300;float:left; text-align:left;"
                       @click="gourl(item)">
-                    来源<v-icon color="#64B5F6">mdi-star</v-icon>
+                    来源<v-icon color="#64B5F6">mdi-origin</v-icon>
                   </v-btn>
 
 
@@ -345,11 +346,13 @@ import Vue from 'vue'
             window.open(url, "_blank")
           },
           gourl(item){
-            window.alert("跳转来源")
+            // window.alert("跳转来源")
             if("url" in item){
               if(item.url.length>0){
-                window.alert(item.url[0])
+                // window.alert(item.url[0])
                 window.open(item.url[0], "_blank")
+              }else{
+                window.alert("不知来源")
               }
             }
           },
@@ -626,6 +629,13 @@ import Vue from 'vue'
                     let j=0
                     //对数据逐个进行处理
                     for(i=0;i<this.CurrentPageData.length;i++){
+                       //判断是否有url
+                      //  if("url" in this.CurrentPageData.length[i]){
+                      //     this.CurrentPageData[i].hasurl=true
+                      //     // window.alert(this.CurrentPageData[i].title)
+                      //  }else{
+                      //   this.CurrentPageData[i].hasurl=false
+                      //  }
                         let Author = this.CurrentPageData[i].authors
                         let j=0;
                         let str="作者："
@@ -637,6 +647,13 @@ import Vue from 'vue'
                           }
                         }
                         this.CurrentPageData[i].author = str
+                        //url
+                        if("url" in this.CurrentPageData[i]){
+                            this.CurrentPageData[i].hasurl=1
+                        }else{
+                            this.CurrentPageData[i].hasurl=0
+                        }
+                        
                         // if(this.CurrentPageData[i])
                         if("pdf" in this.CurrentPageData[i]){
                             this.CurrentPageData[i].haspdf=1
@@ -663,6 +680,7 @@ import Vue from 'vue'
                           this.newselect()
                           this.new=1
                         }
+                       
 
                     }
                 })
