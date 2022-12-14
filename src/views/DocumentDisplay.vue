@@ -338,8 +338,7 @@
 
       ],
       tabs:[{tab:"引用文献",content:"[1] Arya, S. and Mount, D.M. 1993. Approximate nearest neighbor searching. In Proc. 4th Annual ACM-SIAM Symposium on Dis- crete Algorithms, pp. 271-280."},
-            {tab:"参考文献",content:"cankao"},
-            {tab:"相似文献",content:"xiangsi"}],
+],
       tabpointer:null,
       tab:null,
       citeStyle:[{name:"引用类型", text:"引用文本"}],

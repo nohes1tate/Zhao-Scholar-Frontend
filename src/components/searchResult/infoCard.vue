@@ -4,28 +4,42 @@
   <div style="float: left;width:250px;margin-left: 150px;margin-right: 20px;">
       <div style="font-size: 18px; height: 80px;">
         <span style="float:left; text-align:right;margin-top: 20px;color: grey;font-size: 15px;margin-left: 0px;">
-            筛选
+            筛选方式
         </span>
       </div>
     <v-card 
     width=""
     height=""
     >
-    <v-subheader>作者</v-subheader>
-    <v-list-item
-                v-for="item in authorList"
-                :key=item.name
-               
-            >
-            <v-list-item-content>
-                  <v-list-item-title >
-                    <span @click="ChooseAuthor(item.name, item.status, item.id)" class="clickchange">{{item.name}} </span> </v-list-item-title>
-                </v-list-item-content>
-               
-        </v-list-item>
-      <v-divider></v-divider>
+    <v-subheader>时间</v-subheader>
+    <v-select
+        v-model="maxyear"
+        :items="year"
+        style="margin-top: 0%;width: 150px;margin-left: 30px;"
+        label="最晚年份"
+        
+        ></v-select>
+        <v-select
+        v-model="minyear"
+        :items="year"
+        style="margin-top: 0%;width: 150px;margin-left: 30px;"
+        label="最早年份"
+       
+        ></v-select>
+    <v-divider></v-divider>
+    
     <v-subheader>期刊</v-subheader>
-  
+    <v-text-field
+          class="material-symbols-outlined"
+          append-icon="search"
+          @click:append="choosejournal"
+        
+          hide-details
+        
+          v-model="pickjournal"
+          style="width: 200px;margin-left: 20px;"
+      >
+      </v-text-field>
     <v-list-item
                 v-for="item in journalList"
                 :key=item.name
@@ -48,7 +62,24 @@
             </v-list-item-action>
     </v-list-item> -->
     <v-divider></v-divider>
-    
+    <v-subheader>作者</v-subheader>
+
+
+
+      
+ 
+    <v-list-item
+                v-for="item in authorList"
+                :key=item.name
+               
+            >
+            <v-list-item-content>
+                  <v-list-item-title >
+                    <span @click="ChooseAuthor(item.name, item.status, item.id)" class="clickchange">{{item.name}} </span> </v-list-item-title>
+                </v-list-item-content>
+               
+        </v-list-item>
+      <v-divider></v-divider>
 
 
     </v-card>
@@ -67,12 +98,29 @@
         <span style="float:left; text-align:right;margin-top: 20px;color: grey;font-size: 15px;margin-left: 30px;">
             第{{page}}页
         </span>
+        
+        
         <v-select
             :items="selects"
             label="排序方式"
             v-model="selectMethod"
             style="float:right;margin-top: 0%;"
-          ></v-select></div>
+          ></v-select> 
+          <!-- <v-select
+        v-model="maxyear"
+        :items="year"
+        style="float:right;margin-top: 0%;"
+        label="最晚年份"
+        
+        ></v-select>
+        <v-select
+        v-model="minyear"
+        :items="year"
+        style="float:right;margin-top: 0%;"
+        label="最早年份"
+       
+        ></v-select> -->
+        </div>
 
     <v-card
     width="1000px"
@@ -276,10 +324,21 @@ import Vue from 'vue'
             new:0,
             journal:"",
             author:"",
-
+            minyear:"",
+            maxyear:"",
+            year:[],
+            pickauthor:"",
+            pickjournal:"",
+            
 
         }),
         methods:{
+          chooseminyear(){
+            window.alert(this.minyear)
+          },
+          choosemaxyear(){
+            console.log(this.maxyear)
+          },
           //刷新authorlist
           newselect(){
                     //对数据逐个进行处理
@@ -289,6 +348,9 @@ import Vue from 'vue'
                     var i=0
                     var j=0
                     for(i=0;i<this.CurrentPageData.length;i++){
+                        if(i>7){
+                          break
+                        }
                         if("venue" in this.CurrentPageData[i] ){
                           if("name" in this.CurrentPageData[i].venue){
                             var e = this.CurrentPageData[i].venue
@@ -338,6 +400,21 @@ import Vue from 'vue'
         ChooseConference(name, status){
             console.log("选择会议："+name)
             console.log('状态：'+status)//每点击一次 该item的status会发生改变
+        },
+        choosejournal(){
+          // window.alert(this.pickjournal)
+          var has=0
+          for(var i=0;i<this.formdata.keyword.length;i++){{
+            if("journal" in this.formdata.keyword[i]){
+              has=1
+              this.formdata.keyword[i].keyword=this.pickjournal
+            }
+          }
+        }
+        if(has==0){
+          this.formdata.keyword.push({keyword:this.pickjournal, op:"and", method:"term", type:"venue.name",journal:true})        
+        }
+        this.getCurrentPageData()
         },
         //类型选择----变更为期刊选择
         ChooseType(name, status){
@@ -489,9 +566,11 @@ import Vue from 'vue'
                 this.formdata.orderby = this.orderBy
                 if(!("author" in this.formdata)){
                   this.formdata.author=""
+                  this.formdata.author_filter="no"
                 }
                 if(!("journal" in this.formdata)){
                   this.formdata.journal=""
+                  this.formdata.journal_filter="no"
                 }
                 if(!("author_filter" in this.formdata)){
                   this.formdata.author_filter="no"
@@ -618,7 +697,11 @@ import Vue from 'vue'
             console.log("当前携带参数:")
             console.log(this.$route.query.formdata)
             this.getCurrentPageData()
-         
+            for(var i=0;i<300;i++){
+            var j=2022-i
+            this.year.push(j)
+        }
+          
         },
         //监听page的变化
         watch:{
@@ -649,6 +732,14 @@ import Vue from 'vue'
                 console.log("更新页面"+this.keyword)
                 this.getCurrentPageData()
                
+            },
+            minyear(){
+              this.formdata.minyear = this.minyear
+              this.getCurrentPageData()
+            },
+            maxyear(){
+              this.formdata.maxyear = this.maxyear
+              this.getCurrentPageData()
             }
         }
     }
