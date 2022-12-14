@@ -19,8 +19,8 @@
           <p >DOI:<span class="blue--text text--lighten-2">{{DOI}}</span></p>
           <h2>{{title}}</h2>
           <p class="mt-2">{{paperConference}}</p>
-          <p class="blue--text text--lighten-2 mt-0">{{author}}
-          </p>
+        <p><span v-for="item in authorList" v-bind:key="item.id" class="blue--text text--lighten-2 mt-0"> <span class="text-btn" @click="toAuthor(item.id)">{{item.name}},{{item.org}}</span>;
+          </span></p>
 
             <v-btn color="primary" dark @click="read">阅读<v-icon class="ml-2">mdi-eye</v-icon></v-btn>
 
@@ -309,6 +309,7 @@
       title:"TimeTraveler: Reinforcement Learning for Temporal Knowledge Graph Forecasting",
       paperConference:"CCF-A",
       author:"Haofan WangZifan WangMengnan DuFan YangZijian ZhangSirui DingPiotr MardzielXia Hu",
+      authorList: [],
       url:"",
 
       stars:"36",
@@ -426,6 +427,9 @@
               console.log(err);
             })
       },
+      toAuthor(id) {
+        this.$router.push({path:'/scholar', query: {id: id}})
+      },
       changeCollectIconToTrue(){
         this.collectShow=true;
       },
@@ -455,15 +459,7 @@
           this.stars = data.stars
           this.isMine = data.isMine
           this.n_citation = data.articles_list[0].n_citation
-          var new_authors = data.articles_list[0].authors
-          this.author = ""
-          for(var i in new_authors){
-            this.author += new_authors[i].name
-            if(new_authors[i].org){
-              this.author += "  " + new_authors[i].org
-            }
-            this.author += "; "
-          }
+          this.authorList = data.articles_list[0].authors
           this.paperConference = data.articles_list[0].venue.name
           var new_keywords = data.articles_list[0].keywords
           for(var j in new_keywords){
@@ -628,6 +624,14 @@
 .cite{
   text-align: justify;
   font-family: Georgia, fantasy;
+}
+
+.text-btn {
+  cursor: pointer;
+}
+
+.text-btn:hover {
+  border-bottom: solid 2px;
 }
 
 </style>
