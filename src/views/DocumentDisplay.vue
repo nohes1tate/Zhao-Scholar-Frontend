@@ -34,7 +34,7 @@
 
             <v-btn color="primary" dark text class="ml-4" @click="share">分享<v-icon>mdi-arrow-top-right-bold-box-outline</v-icon></v-btn>
             <v-btn color="primary" dark text class="ml-4" v-show="isMine" @click="dialog=true">更新<v-icon>mdi-arrow-u-up-right</v-icon></v-btn>
-            <v-btn color="red" dark text class="ml-4" v-show="isMine" @click="deleteDialog=true">下架<v-icon>mdi-delete</v-icon></v-btn>
+            <v-btn color="red" dark text class="ml-4" v-show="isMine" @click="deleteDialog=true">下架<v-icon>mdi-trash-can-outline</v-icon></v-btn>
         <v-dialog
             v-model="deleteDialog"
             max-width="290"
