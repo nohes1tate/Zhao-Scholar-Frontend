@@ -446,7 +446,7 @@ export default {
       ShowAuthors:[],
       ShowAffiliations:[],
       ShowJournals:[],
-      
+
       Conference: [
         {name:"CVPR 2020",url:"www.baidu.com"},
         {name:"CVPR 2019",url:"www.baidu.com"},
@@ -461,15 +461,15 @@ export default {
   methods: {
     searchTag(search) {
       this.search=search
-      if (search == "") return;
+      if (search === "") return;
       this.$router.push({ path: "/search", query: { keyword: search } });
     },
     searchType(search,type,id) {
       this.search=search
-      if (search == "") return;
-      if(type=="Author"){this.$router.push({path:'/scholar', query: {id:id}})}
-      if(type=="Paper"){this.$router.push({path:"/document", query:{Title:search, Id:id}})}
-      if(type=="Affiliation"){this.$router.push({name:"institutionPortal", params:{ institutionID:id } } ) }
+      if (search === "") return;
+      if(type==="Author"){this.$router.push({path:'/scholar', query: {id:id}})}
+      if(type==="Paper"){this.$router.push({path:"/document", query:{Title:search, Id:id}})}
+      if(type==="Affiliation"){this.$router.push({name:"institutionPortal", params:{ institutionID:id } } ) }
     },
     goto(url) {
       console.log("url: "+url);
@@ -485,7 +485,7 @@ export default {
     getEntity () {
       let data=new FormData();
       let i=0;
-      
+
       if(this.search.trim().length>=3){
       data.append('search',this.search)
        request('POST', "/api/SearchManager/SearchByRealTime/",data)
@@ -497,20 +497,20 @@ export default {
           this.items1=[],
           this.items2=[],
           this.items3=[]
-          
+
           for(i=0;i<temporary.length;i++){
-            if(temporary[i].type=="Affiliation"){
+            if(temporary[i].type==="Affiliation"){
               this.items.push({name:temporary[i].name, type:temporary[i].type, id:temporary[i].id})
             }
           }
           for(i=0;i<temporary.length;i++){
-            if(temporary[i].type=="Author"){
+            if(temporary[i].type==="Author"){
               this.items.push({name:temporary[i].name, type:temporary[i].type, id:temporary[i].id})
             }
           }
           i=0
           while(this.items.length<10){
-              if(temporary[i].type=="Paper")
+              if(temporary[i].type==="Paper")
               this.items.push({name:temporary[i].name, type:temporary[i].type, id:temporary[i].id})
               i++
           }
@@ -2067,7 +2067,7 @@ export default {
       //     console.error(error);
       //   });
     },
-    
+
     changeShowAuthor(page1){
       this.ShowAuthors=this.TopAuthors.slice((page1-1)*10,page1*10)
     },
@@ -2096,7 +2096,7 @@ export default {
         this.userId=userInfo.user.userId;
         console.log(this.userId)
     }
-    
+
   }
 };
 </script>
