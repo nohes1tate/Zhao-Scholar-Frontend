@@ -16,11 +16,6 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/confirm',
-    name: 'Confirm',
-    component: () => import('../views/ConfirmView'),
-  },
-  {
     path: '/',
     name: 'home',
     component: HomeView
