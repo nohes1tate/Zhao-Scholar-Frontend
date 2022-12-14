@@ -467,9 +467,9 @@ export default {
     searchType(search,type,id) {
       this.search=search
       if (search === "") return;
-      if(type==="Author"){this.$router.push({path:'/scholar', query: {id:id}})}
-      if(type==="Paper"){this.$router.push({path:"/document", query:{Title:search, Id:id}})}
-      if(type==="Affiliation"){this.$router.push({name:"institutionPortal", params:{ institutionID:id } } ) }
+      if(type==="作者"){this.$router.push({path:'/scholar', query: {id:id}})}
+      if(type==="论文"){this.$router.push({path:"/document", query:{Title:search, Id:id}})}
+      if(type==="机构"){this.$router.push({name:"institutionPortal", params:{ institutionID:id } } ) }
     },
     goto(url) {
       console.log("url: "+url);
