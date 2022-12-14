@@ -4,13 +4,29 @@
   <div style="float: left;width:250px;margin-left: 150px;margin-right: 20px;">
       <div style="font-size: 18px; height: 80px;">
         <span style="float:left; text-align:right;margin-top: 20px;color: grey;font-size: 15px;margin-left: 0px;">
-            筛选
+            筛选方式
         </span>
       </div>
     <v-card 
     width=""
     height=""
     >
+    <v-subheader>时间</v-subheader>
+    <v-select
+        v-model="maxyear"
+        :items="year"
+        style="margin-top: 0%;width: 150px;margin-left: 30px;"
+        label="最晚年份"
+        
+        ></v-select>
+        <v-select
+        v-model="minyear"
+        :items="year"
+        style="margin-top: 0%;width: 150px;margin-left: 30px;"
+        label="最早年份"
+       
+        ></v-select>
+    <v-divider></v-divider>
     <v-subheader>作者</v-subheader>
     <v-list-item
                 v-for="item in authorList"
@@ -67,12 +83,29 @@
         <span style="float:left; text-align:right;margin-top: 20px;color: grey;font-size: 15px;margin-left: 30px;">
             第{{page}}页
         </span>
+        
+        
         <v-select
             :items="selects"
             label="排序方式"
             v-model="selectMethod"
             style="float:right;margin-top: 0%;"
-          ></v-select></div>
+          ></v-select> 
+          <!-- <v-select
+        v-model="maxyear"
+        :items="year"
+        style="float:right;margin-top: 0%;"
+        label="最晚年份"
+        
+        ></v-select>
+        <v-select
+        v-model="minyear"
+        :items="year"
+        style="float:right;margin-top: 0%;"
+        label="最早年份"
+       
+        ></v-select> -->
+        </div>
 
     <v-card
     width="1000px"
@@ -276,10 +309,18 @@ import Vue from 'vue'
             new:0,
             journal:"",
             author:"",
-
+            minyear:"",
+            maxyear:"",
+            year:[],
 
         }),
         methods:{
+          chooseminyear(){
+            window.alert(this.minyear)
+          },
+          choosemaxyear(){
+            console.log(this.maxyear)
+          },
           //刷新authorlist
           newselect(){
                     //对数据逐个进行处理
@@ -489,9 +530,11 @@ import Vue from 'vue'
                 this.formdata.orderby = this.orderBy
                 if(!("author" in this.formdata)){
                   this.formdata.author=""
+                  this.formdata.author_filter="no"
                 }
                 if(!("journal" in this.formdata)){
                   this.formdata.journal=""
+                  this.formdata.journal_filter="no"
                 }
                 if(!("author_filter" in this.formdata)){
                   this.formdata.author_filter="no"
@@ -618,7 +661,11 @@ import Vue from 'vue'
             console.log("当前携带参数:")
             console.log(this.$route.query.formdata)
             this.getCurrentPageData()
-         
+            for(var i=0;i<300;i++){
+            var j=2022-i
+            this.year.push(j)
+        }
+          
         },
         //监听page的变化
         watch:{
@@ -649,6 +696,14 @@ import Vue from 'vue'
                 console.log("更新页面"+this.keyword)
                 this.getCurrentPageData()
                
+            },
+            minyear(){
+              this.formdata.minyear = this.minyear
+              this.getCurrentPageData()
+            },
+            maxyear(){
+              this.formdata.maxyear = this.maxyear
+              this.getCurrentPageData()
             }
         }
     }

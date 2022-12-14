@@ -20,19 +20,14 @@
             v-model="selected"
             :headers="applyHeaders"
             :items="applications"
-            item-key="name"
+            item-key="submitID"
             show-select
             class="elevation-1"
         >
-          <template v-slot:[`item.pass`]>
-            <v-btn outlined small color="primary">通过</v-btn>
-          </template>
-          <template v-slot:[`item.reject`]>
-            <v-btn outlined small color="error">拒绝</v-btn>
-          </template>
+
           <template v-slot:top>
-            <v-btn color="primary" class="pass-btn">一键通过</v-btn>
-            <v-btn color="error" class="pass-btn">一键拒绝</v-btn>
+            <v-btn color="primary" class="pass-btn" @click="pass(1)">一键通过</v-btn>
+            <v-btn color="error" class="pass-btn" @click="pass(0)">一键拒绝</v-btn>
           </template>
         </v-data-table>
       </v-card>
@@ -48,8 +43,21 @@
 </template>
 
 <script>
+import request from "@/utils/request";
+import axios from "axios";
+
 export default {
   name: "AdminView",
+  mounted() {
+    let data = new FormData();
+    request("GET", "/api/PortalManager/getExamineList/", data).then(res => {
+      this.applications = res.scholars;
+      console.log(res)
+    });
+    request("GET", "/api/PortalManager/getSettledAuthors/", data).then(res => {
+      this.scholars = res.scholars
+    });
+  },
   data() {
     return {
       showVerifyTab: true,
@@ -57,83 +65,16 @@ export default {
       selected: [],
       applyHeaders: [
         {text: '姓名', sortable: false, value: 'name' },
-        { text: '邮箱', sortable: false, value: 'mail' },
+        { text: '邮箱', sortable: false, value: 'email' },
         { text: '所在机构', sortable: false, value: 'institution' },
-        { text: '申请时间', sortable: false, value: 'time' },
-        { text: '通过', sortable: false, value: `pass` },
-        { text: '拒绝', sortable: false, value: 'reject' },
+        { text: '领域', sortable: false, value: 'field' },
+        { text: '个人主页', sortable: false, value: 'homepage' },
+        { text: '申请号', sortable: false, value: 'submitID' },
+        // { text: '申请时间', sortable: false, value: 'time' },
+        // { text: '通过', sortable: false, value: `pass` },
+        // { text: '拒绝', sortable: false, value: 'reject' },
       ],
-      applications: [
-        {
-          name: 'Frozen Yogurt',
-          mail: '123456@buaa.edu.cn',
-          institution: '北京航空航天大学',
-          time: '2020-01-01',
-        },
-        {
-          name: 'Froz12en Yogurt',
-          mail: '123456@buaa.edu.cn',
-          institution: '北京航空航天大学',
-          time: '2020-01-01',
-        },
-        {
-          name: 'Fro23zen Yogurt',
-          mail: '123456@buaa.edu.cn',
-          institution: '北京航空航天大学',
-          time: '2020-01-01',
-        },
-        {
-          name: 'Fro123zen Yogurt',
-          mail: '123456@buaa.edu.cn',
-          institution: '北京航空航天大学',
-          time: '2020-01-01',
-        },{
-          name: 'Froze34n Yogurt',
-          mail: '123456@buaa.edu.cn',
-          institution: '北京航空航天大学',
-          time: '2020-01-01',
-        },
-        {
-          name: 'Fro5zen Yogurt',
-          mail: '123456@buaa.edu.cn',
-          institution: '北京航空航天大学',
-          time: '2020-01-01',
-        },
-        {
-          name: 'Frozen Yogurt',
-          mail: '123456@buaa.edu.cn',
-          institution: '北京航空航天大学',
-          time: '2020-01-01',
-        },
-        {
-          name: 'Frozen Yogurt',
-          mail: '123456@buaa.edu.cn',
-          institution: '北京航空航天大学',
-          time: '2020-01-01',
-        },
-        {
-          name: 'Frozen Yogurt',
-          mail: '123456@buaa.edu.cn',
-          institution: '北京航空航天大学',
-          time: '2020-01-01',
-        },
-        {
-          name: 'Frozen Yogurt',
-          mail: '123456@buaa.edu.cn',
-          institution: '北京航空航天大学',
-          time: '2020-01-01',
-        },{
-          name: 'Frozen Yogurt',
-          mail: '123456@buaa.edu.cn',
-          institution: '北京航空航天大学',
-          time: '2020-01-01',
-        },{
-          name: 'Frozen Yogurt',
-          mail: '123456@buaa.edu.cn',
-          institution: '北京航空航天大学',
-          time: '2020-01-01',
-        },
-      ],
+      applications: [],
       scholarHeaders: [
         {text: '姓名', sortable: false, value: 'name' },
         { text: '邮箱', sortable: false, value: 'mail' },
@@ -167,6 +108,26 @@ export default {
     showScholar() {
       this.showVerifyTab = false;
       this.showScholarTab = true;
+    },
+    pass(yes) {
+      let arr = [];
+      for (let i = 0; i < this.selected.length; i++) {
+        arr.push(this.selected[i].submitID)
+      }
+      let obj = {
+        "idList": arr,
+        "pass": yes
+      };
+      //console.log(obj);
+      axios({
+        method: "POST",
+        url: "/api/PortalManager/examineSubmit/",
+        data: obj
+      }).then(response => {
+        this.$message.success("操作成功");
+        location.reload();
+      }).catch(error => {
+      })
     },
   },
 }
