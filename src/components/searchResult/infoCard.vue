@@ -499,7 +499,7 @@ import Vue from 'vue'
             
             if("journal" in this.formdata.keyword[i]){
               has=1
-              this.formdata.keyword.pop(i)
+              this.formdata.keyword.splice(i, 1)
             }
           }
         }
