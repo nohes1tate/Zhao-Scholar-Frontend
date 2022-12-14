@@ -174,7 +174,6 @@ export default {
   methods:{
     cite(item){
        this. citation_msg = item.cite
-      console.log(this. citation_msg)
       this.overlay = !this.overlay
       // this.content=this.citeStyle(0).text
     },
