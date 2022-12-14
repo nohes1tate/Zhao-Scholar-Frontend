@@ -109,7 +109,6 @@ export default {
     },
     searchTag() {
       if (this.search === "") return false;
-      console.log(this.search);
       this.$router.push({path:'/search', query:{keyword:this.search}, url:"/api/PaperBrowser/searchPaper/"}, {})
     },
     goToLogin(){
@@ -228,7 +227,6 @@ export default {
   cursor: pointer;
 }
 .select-box{
-  z-index: 2;
   position: absolute;
   top:10vh;
   right: 1vw;
