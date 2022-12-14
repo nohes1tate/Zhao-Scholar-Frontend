@@ -348,6 +348,9 @@ import Vue from 'vue'
                     var i=0
                     var j=0
                     for(i=0;i<this.CurrentPageData.length;i++){
+                        if(i>7){
+                          break
+                        }
                         if("venue" in this.CurrentPageData[i] ){
                           if("name" in this.CurrentPageData[i].venue){
                             var e = this.CurrentPageData[i].venue
