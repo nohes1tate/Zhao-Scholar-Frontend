@@ -1560,7 +1560,7 @@ export default {
     getJournals(){
       this.TopJournals=[
         {
-          "progress": 49999,
+          "progress": 49427,
           "name": "Yugoslav Journa...",
           "percentage": 100,
           "id": "5451a5cae0cf0b02b5f3c669"
