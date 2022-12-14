@@ -342,8 +342,7 @@ import Vue from 'vue'
         }),
         methods:{
           searchkeyword(type){
-            var url="https://www.baidu.com/s?wd="+type
-            window.open(url, "_blank")
+            this.$router.push({path:'/search', query:{url:this.posturl, keyword:type}}, {})
           },
           gourl(item){
             // window.alert("跳转来源")
@@ -494,6 +493,16 @@ import Vue from 'vue'
           //   if(has==0){
           //     this.formdata.keyword.push({keyword:name+'a a zevin', op:"and", method:"fuzzy", type:"authors.name.keyword"})
           //   }
+          var has=0
+          let k=0
+          for(var i=0;i<this.formdata.keyword.length;i++){{
+            
+            if("journal" in this.formdata.keyword[i]){
+              has=1
+              this.formdata.keyword.pop(i)
+            }
+          }
+        }
           this.formdata.author_filter="yes"
           this.formdata.journal_filter="no"
           this.formdata.author=id
