@@ -233,6 +233,7 @@
 <script>
 import request from "@/utils/request";
 import PageHeader from "@/components/UserCenter/PageHeader";
+import user from "@/store/user";
 export default {
   name: "ApplySettle",
   components: {PageHeader},
@@ -252,11 +253,29 @@ export default {
         email: "",
         field: "",
         homepage: "",
-        
+        authorId:'',
+        userId:'',
       },
       allAchievements: [],
       selectedAchievements: [],
     };
+  },
+  created() {
+    const userInfo = user.getters.getUser(user.state);
+    if (!userInfo)
+    {
+      this.$message.warning("请先登录！");
+      setTimeout(() => {
+        this.$router.push('/login');
+      }, 500);
+      return;
+    }
+    this.authorId=userInfo.user.authorId;
+    this.userId=userInfo.user.userId;
+    if(this.authorId!==0){
+      this.$message.warning("您已经是学者了，正在前往学者门户")
+      this.$router.push({path:'/scholar', query: {id: this.authorId}})
+    }
   },
   methods: {
     nextStep(n) {
@@ -300,7 +319,7 @@ export default {
       request("POST", "/api/PortalManager/SubmitApplication/", data)
         .then((response) => {
           console.log(response);
-          
+
           this.show=true;
           this.allAchievements=response.allAchievements;
           for(i=0;i<this.allAchievements.length;i++){
