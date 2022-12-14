@@ -1,5 +1,5 @@
 <template>
-  <div height="100vh">
+  <div height="100vh" v-title data-title='学术平台 - ZScholar'>
     <div width="100vw" class="bgimg" :style="{ 'min-height': '60vh' }">
       <!-- <v-card   background="linear-gradient(red, blue)"> -->
       <v-row :style="{ height: '80vh' }">
@@ -289,7 +289,7 @@
                         {{ item.name }}
                       </div>
                       <div class="d-flex justify-end">
-                        {{ item.progress }} 篇论文
+                        {{ item.progress }} 篇
                       </div>
                     </v-col>
 
@@ -359,7 +359,7 @@
                         {{ item.name }}
                       </div>
                       <div class="d-flex justify-end">
-                        {{ item.progress }} 篇论文
+                        {{ item.progress }} 篇
                       </div>
                     </v-col>
 
@@ -467,9 +467,9 @@ export default {
     searchType(search,type,id) {
       this.search=search
       if (search === "") return;
-      if(type==="Author"){this.$router.push({path:'/scholar', query: {id:id}})}
-      if(type==="Paper"){this.$router.push({path:"/document", query:{Title:search, Id:id}})}
-      if(type==="Affiliation"){this.$router.push({name:"institutionPortal", params:{ institutionID:id } } ) }
+      if(type==="作者"){this.$router.push({path:'/scholar', query: {id:id}})}
+      if(type==="论文"){this.$router.push({path:"/document", query:{Title:search, Id:id}})}
+      if(type==="机构"){this.$router.push({name:"institutionPortal", params:{ institutionID:id } } ) }
     },
     goto(url) {
       console.log("url: "+url);

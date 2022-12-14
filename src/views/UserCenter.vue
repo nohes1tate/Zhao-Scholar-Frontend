@@ -1,5 +1,5 @@
 <template>
-  <div class="userCenter">
+  <div class="userCenter" v-title data-title='个人中心 - ZScholar'>
     <page-header :show-search="true"></page-header>
     <div class="main-body">
       <v-row class="header">

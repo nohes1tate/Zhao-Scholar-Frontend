@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-title data-title='机构门户 - ZScholar'>
     <page-header :show-search="true" style="z-index: 50"></page-header>
     <div class="institution-top">
       <div class="top-left">

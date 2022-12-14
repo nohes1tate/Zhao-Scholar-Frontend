@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div v-title data-title='搜索结果 - ZScholar'>
     <PageHeaderVue :show-search="true" style="width: 100%;"></PageHeaderVue>
     <div>
- 
+
     <!-- <selectBannerVue style="float:left;margin-left: 100px;width: 250px;" :keyword="keyword"></selectBannerVue> -->
     <infoCardVue style="float: left;" ></infoCardVue>
     </div>

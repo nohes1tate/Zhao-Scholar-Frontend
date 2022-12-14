@@ -1,5 +1,5 @@
 <template >
-  <div class="about" :style="{'background-color':'#EEEEEE','height':'100%'}">
+  <div class="about" :style="{'background-color':'#EEEEEE','height':'100%'}" v-title data-title='申请入住 - ZScholar'>
     <page-header :show-search="true" :is-login="true"></page-header>
     <v-stepper
       v-model="now"
