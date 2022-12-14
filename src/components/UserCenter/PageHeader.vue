@@ -45,6 +45,20 @@
                 v-for="(item, i) in items"
                 :key="i"
                 @click="goTo(i)"
+                v-show="!isAdmin"
+            >
+              <v-list-item-icon>
+                <v-icon v-text="item.icon"></v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title v-text="item.text"></v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item
+                v-for="(item, i) in items2"
+                :key="i"
+                @click="goTo(i)"
+                v-show="isAdmin"
             >
               <v-list-item-icon>
                 <v-icon v-text="item.icon"></v-icon>
@@ -68,6 +82,7 @@ export default {
   props: ['showSearch'],
   data(){
     return{
+      isAdmin:false,
       isLogin:false,
       search: "",
       hover:false,
@@ -75,6 +90,12 @@ export default {
       items: [
         { text: '个人图书馆',icon:'mdi-library'},
         { text: '我的门户', icon:'mdi-folder-account-outline' },
+        {text: '退出',icon:'mdi-location-exit'},
+      ],
+      items2: [
+        { text: '个人图书馆',icon:'mdi-library'},
+        { text: '我的门户', icon:'mdi-folder-account-outline' },
+        {text:'管理网站',icon:'mdi-shield-crown-outline'},
         {text: '退出',icon:'mdi-location-exit'},
       ],
       username:'username',
@@ -110,6 +131,18 @@ export default {
           this.$router.push({path:'/scholar', query: {id: this.authorId}})
       }
       else if(i===2){
+        if(this.isAdmin){
+          this.$router.push({path:'/admin'})
+        }
+        else{
+          this.$store.dispatch('clear');
+          this.$message.success("退出成功！");
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+        }
+      }
+      else if(i===3){
           this.$store.dispatch('clear');
           this.$message.success("退出成功！");
           setTimeout(() => {
@@ -126,6 +159,8 @@ export default {
       this.username = userInfo.user.username;
       this.authorId=userInfo.user.authorId;
       this.userId=userInfo.user.userId;
+      if(this.userId===3)
+        this.isAdmin=true
     }
   },
 }
