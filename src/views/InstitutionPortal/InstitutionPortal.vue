@@ -616,7 +616,7 @@ export default {
   z-index: 0;
   margin-top: 10vh;
   width: 62vw;
-  height: 40vh;
+  min-height: 40vh;
 }
 
 .top-right {
@@ -632,6 +632,7 @@ export default {
   font-size: 40px;
   font-weight: bold;
   cursor: pointer;
+  max-width: 50vw;
 }
 
 .institution-name:hover {
@@ -703,7 +704,6 @@ export default {
 }
 
 .tab-data {
-  width: 58%;
   color: #0274b3;
   font-size: 24px;
   text-align: center;
