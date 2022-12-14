@@ -120,7 +120,7 @@
             ></v-text-field>
             <div style="display: flex;flex-direction: row;width: 80%;margin: auto">
               <v-text-field
-                  v-model="checkCode"
+                  v-model="confirmCode"
                   label="验证码"
                   required
                   color="black"
@@ -199,7 +199,6 @@ export default {
       confirmCode:"",
       forgetEmail:"",
       newPassword:"",
-      checkCode:"",
       usernameCheck:false,
       emailCheck:false,
       passwordCheck:false,
@@ -296,8 +295,6 @@ export default {
         data: formData,
       })
           .then(res => {
-            // console.log(res.data.error)
-            // console.log(res.data.msg)
             switch (res.data.error) {
               case 0:
                 // 前端保存用户信息
