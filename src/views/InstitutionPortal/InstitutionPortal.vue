@@ -70,36 +70,36 @@
         <v-col>
           <v-card elevation="2" class="institution-detail-info">
             <div>
-              <v-data-table
-                  :headers="headers"
-                  :items="institutionData"
-                  hide-default-footer
-              >
-                <template v-slot:[`header.name`]="{ header }">
-                  <div style="font-size: 20px">{{ header.text }}</div>
-                </template>
-                <template v-slot:[`header.papers`]="{ header }">
-                  <div style="font-size: 20px">{{ header.text }}</div>
-                </template>
-                <template v-slot:[`header.citation`]="{ header }">
-                  <div style="font-size: 20px">{{ header.text }}</div>
-                </template>
-                <template v-slot:[`header.H_index`]="{ header }">
-                  <div style="font-size: 20px">{{ header.text }}</div>
-                </template>
-                <template v-slot:[`item.name`]="{ item }">
-                  <div style="font-size: 18px;font-weight: bold">{{ item.name }}</div>
-                </template>
-                <template v-slot:[`item.papers`]="{ item }">
-                  <div style="font-size: 18px">{{ item.papers }}</div>
-                </template>
-                <template v-slot:[`item.citation`]="{ item }">
-                  <div style="font-size: 18px">{{ item.citation }}</div>
-                </template>
-                <template v-slot:[`item.H_index`]="{ item }">
-                  <div style="font-size: 18px">{{ item.H_index }}</div>
-                </template>
-              </v-data-table>
+<!--              <v-data-table-->
+<!--                  :headers="headers"-->
+<!--                  :items="institutionData"-->
+<!--                  hide-default-footer-->
+<!--              >-->
+<!--                <template v-slot:[`header.name`]="{ header }">-->
+<!--                  <div style="font-size: 20px">{{ header.text }}</div>-->
+<!--                </template>-->
+<!--                <template v-slot:[`header.papers`]="{ header }">-->
+<!--                  <div style="font-size: 20px">{{ header.text }}</div>-->
+<!--                </template>-->
+<!--                <template v-slot:[`header.citation`]="{ header }">-->
+<!--                  <div style="font-size: 20px">{{ header.text }}</div>-->
+<!--                </template>-->
+<!--                <template v-slot:[`header.H_index`]="{ header }">-->
+<!--                  <div style="font-size: 20px">{{ header.text }}</div>-->
+<!--                </template>-->
+<!--                <template v-slot:[`item.name`]="{ item }">-->
+<!--                  <div style="font-size: 18px;font-weight: bold">{{ item.name }}</div>-->
+<!--                </template>-->
+<!--                <template v-slot:[`item.papers`]="{ item }">-->
+<!--                  <div style="font-size: 18px">{{ item.papers }}</div>-->
+<!--                </template>-->
+<!--                <template v-slot:[`item.citation`]="{ item }">-->
+<!--                  <div style="font-size: 18px">{{ item.citation }}</div>-->
+<!--                </template>-->
+<!--                <template v-slot:[`item.H_index`]="{ item }">-->
+<!--                  <div style="font-size: 18px">{{ item.H_index }}</div>-->
+<!--                </template>-->
+<!--              </v-data-table>-->
               <v-row>
                 <v-col>
                   <div id="paperInfo" style="width: 80%;height: 50vh;margin-left: 10%">
