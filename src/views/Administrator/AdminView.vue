@@ -45,10 +45,23 @@
 <script>
 import request from "@/utils/request";
 import axios from "axios";
+import user from "@/store/user";
 
 export default {
   name: "AdminView",
   mounted() {
+    const userInfo = user.getters.getUser(user.state);
+    if(userInfo.user.userId!==3){
+      this.$message.warning("您不是管理员！");
+      const history_pth = localStorage.getItem('preRoute');
+      setTimeout(() => {
+        if (history_pth == null || history_pth === '/login') {
+          this.$router.push('/');
+        } else {
+          this.$router.push({ path: history_pth });
+        }
+      }, 1000);
+    }
     let data = new FormData();
     request("GET", "/api/PortalManager/getExamineList/", data).then(res => {
       this.applications = res.scholars;
