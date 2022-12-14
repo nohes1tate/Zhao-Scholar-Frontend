@@ -1,5 +1,5 @@
 <template>
-  <div class="admin">
+  <div class="admin" v-title data-title='管理中心 - ZScholar'>
     <div class="left-tabs">
       <v-card>
         <v-tabs vertical>

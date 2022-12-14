@@ -1,6 +1,6 @@
 <template>
   <!-- <h1>文献展示页面</h1> -->
-  <div class="root">
+  <div class="root" v-title data-title='论文页面 - ZScholar'>
     <page-header :show-search="true"></page-header>
       <!-- <v-input persistant-hint="输入你想了解的论文" absolute right>input</v-input> -->
 <!--      <v-btn  @click="jump2login" tile color="indigo" dark absolute right>登录/注册</v-btn>-->
@@ -34,7 +34,7 @@
 
             <v-btn color="primary" dark text class="ml-4" @click="share">分享<v-icon>mdi-arrow-top-right-bold-box-outline</v-icon></v-btn>
             <v-btn color="primary" dark text class="ml-4" v-show="isMine" @click="dialog=true">更新<v-icon>mdi-arrow-u-up-right</v-icon></v-btn>
-            <v-btn color="red" dark text class="ml-4" v-show="isMine" @click="deleteDialog=true">下架<v-icon>mdi-delete</v-icon></v-btn>
+            <v-btn color="red" dark text class="ml-4" v-show="isMine" @click="deleteDialog=true">下架<v-icon>mdi-trash-can-outline</v-icon></v-btn>
         <v-dialog
             v-model="deleteDialog"
             max-width="290"

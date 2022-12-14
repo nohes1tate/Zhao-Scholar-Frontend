@@ -1,5 +1,5 @@
 <template>
-  <div class="scholar-page">
+  <div class="scholar-page" v-title data-title='学者门户 - ZScholar'>
     <page-header :show-search="true" :is-login="isLogin"></page-header>
     <div class="top-info-and-map">
       <ScholarInfoBox />

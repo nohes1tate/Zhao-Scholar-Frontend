@@ -18,12 +18,18 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    component: HomeView,
+    meta:{
+      title:"ZScholar"
+    },
   },
   {
     path: '/login',
     name: 'login',
-    component: LoginView
+    component: LoginView,
+    meta:{
+      title:"登录 - ZScholar"
+    },
   },
   {
     path: '/about',
@@ -36,47 +42,74 @@ const routes = [
   {
     path: '/search',
     name: 'searchResult',
-    component: SearchResult
+    component: SearchResult,
+    meta:{
+      title:"搜索结果 - ZScholar"
+    },
   },
   {
     path: '/document',
     name: 'documentDisplay',
-    component: DocumentDisplay
+    component: DocumentDisplay,
+    meta:{
+      title:"论文详情 - ZScholar"
+    },
   },
   {
     path: '/institution/:institutionID',
     name: 'institutionPortal',
-    component: InstitutionPortal
+    component: InstitutionPortal,
+    meta:{
+      title:"机构门户 - ZScholar"
+    },
   },
   {
     path: '/scholar',
     name: 'scholarPortal',
-    component: ScholarPortal
+    component: ScholarPortal,
+    meta:{
+      title:"学者门户 - ZScholar"
+    },
   },
   {
     path: '/apply',
     name: 'applySettle',
-    component: ApplySettle
+    component: ApplySettle,
+    meta:{
+      title:"申请入住 - ZScholar"
+    },
   },
   {
     path: '/user',
     name: 'userCenter',
-    component: UserCenter
+    component: UserCenter,
+    meta:{
+      title:"个人图书馆 - ZScholar"
+    },
   },
   {
     path: '/confirm',
     name: 'confirm',
-    component: confirmView
+    component: confirmView,
+    meta:{
+      title:"账号验证 - ZScholar"
+    },
   },
   {
     path: '/admin',
     name: 'adminView',
-    component: adminView
+    component: adminView,
+    meta:{
+      title:"管理中心 - ZScholar"
+    },
   },
   {
     path: '/searchAdvance',
     name: 'searchAdvance',
-    component: () => import('../components/searchResult/searchAdvance/AdvanceMain.vue')
+    component: () => import('../components/searchResult/searchAdvance/AdvanceMain.vue'),
+    meta:{
+      title:"高级搜索 - ZScholar"
+    },
   },
 ]
 

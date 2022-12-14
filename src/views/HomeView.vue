@@ -1,5 +1,5 @@
 <template>
-  <div height="100vh">
+  <div height="100vh" v-title data-title='学术平台 - ZScholar'>
     <div width="100vw" class="bgimg" :style="{ 'min-height': '60vh' }">
       <!-- <v-card   background="linear-gradient(red, blue)"> -->
       <v-row :style="{ height: '80vh' }">
@@ -1560,7 +1560,7 @@ export default {
     getJournals(){
       this.TopJournals=[
         {
-          "progress": 49999,
+          "progress": 49427,
           "name": "Yugoslav Journa...",
           "percentage": 100,
           "id": "5451a5cae0cf0b02b5f3c669"
