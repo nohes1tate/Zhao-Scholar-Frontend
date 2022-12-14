@@ -540,64 +540,1532 @@ export default {
         });
     },
     getAuthors(){
-      let data=new FormData();
-      let i=0
-      data.append('count','40')
-       request('POST', "/api/PortalManager/getTopAuthor/",data)
-        .then(response => {
-          console.log(response)
-          this.TopAuthors=response.TopAuthors;
-          this.ShowAuthors=this.TopAuthors.slice(0,10)
-          for(i=0;i<this.TopAuthors.length;i++){
-            if(this.TopAuthors[i].name.length>15){
-              this.TopAuthors[i].name=this.TopAuthors[i].name.slice(0,15)+"..."
-            }
-          }
-
-        })
-        .catch(error => {
-          console.error(error);
-        });
+      this.TopAuthors=[
+        {
+          "progress": 8080,
+          "name": "Linus Pauling",
+          "percentage": 100,
+          "id": "548824c0dabfaed7b5fa34f6"
+        },
+        {
+          "progress": 8005,
+          "name": "Sibylle Schwart...",
+          "percentage": 99.07178217821783,
+          "id": "53f3aea6dabfae4b34b0dc04"
+        },
+        {
+          "progress": 6984,
+          "name": "S. I. Sukhoruch...",
+          "percentage": 86.43564356435644,
+          "id": "53f45182dabfaee43eca9cea"
+        },
+        {
+          "progress": 6962,
+          "name": "Z. N. Soroko",
+          "percentage": 86.16336633663366,
+          "id": "53f439a7dabfaeee229c95b0"
+        },
+        {
+          "progress": 6050,
+          "name": "Human Rights",
+          "percentage": 74.87623762376238,
+          "id": "53f436d5dabfaeee229aed3d"
+        },
+        {
+          "progress": 6000,
+          "name": "Erasmus Univers...",
+          "percentage": 74.25742574257426,
+          "id": "53f434c7dabfaeee2299c098"
+        },
+        {
+          "progress": 5209,
+          "name": "Kia Silverbrook",
+          "percentage": 64.46782178217822,
+          "id": "53f426c4dabfaec09f0d5401"
+        },
+        {
+          "progress": 5034,
+          "name": "Not Available N...",
+          "percentage": 62.301980198019805,
+          "id": "5430061bdabfaeca69bbd556"
+        },
+        {
+          "progress": 4931,
+          "name": "Alberta Agricul...",
+          "percentage": 61.02722772277228,
+          "id": "53f42799dabfaeb22f3cba19"
+        },
+        {
+          "progress": 4603,
+          "name": "Lei Wang",
+          "percentage": 56.96782178217822,
+          "id": "5429cf62dabfaec7081ba5f8"
+        },
+        {
+          "progress": 4351,
+          "name": "Wei Zhang",
+          "percentage": 53.8490099009901,
+          "id": "53f4b8f6dabfaed83b77b41e"
+        },
+        {
+          "progress": 4120,
+          "name": "Jing Zhang",
+          "percentage": 50.99009900990099,
+          "id": "542a61a5dabfae2b4e0fd344"
+        },
+        {
+          "progress": 4093,
+          "name": "Natural Resourc...",
+          "percentage": 50.6559405940594,
+          "id": "53f43407dabfaeee229939e4"
+        },
+        {
+          "progress": 3574,
+          "name": "Y. Xie",
+          "percentage": 44.23267326732673,
+          "id": "5406c70cdabfae44f085a3a1"
+        },
+        {
+          "progress": 3532,
+          "name": "Y. Liu",
+          "percentage": 43.71287128712871,
+          "id": "5432960adabfaeb54215f5a2"
+        },
+        {
+          "progress": 3526,
+          "name": "Ricardo A. Hane...",
+          "percentage": 43.63861386138614,
+          "id": "543270ccdabfaeb4c6a84f07"
+        },
+        {
+          "progress": 3522,
+          "name": "K. Tanaka",
+          "percentage": 43.58910891089109,
+          "id": "53f55beadabfae4e24f8045b"
+        },
+        {
+          "progress": 3519,
+          "name": "Dileep R. Yavag...",
+          "percentage": 43.551980198019805,
+          "id": "53f358f3dabfae4b34967778"
+        },
+        {
+          "progress": 3505,
+          "name": "Jue Wang",
+          "percentage": 43.37871287128713,
+          "id": "53f565c4dabfae61fef8045d"
+        },
+        {
+          "progress": 3495,
+          "name": "J. Li",
+          "percentage": 43.254950495049506,
+          "id": "5433c99ddabfaeb4c6acf42d"
+        },
+        {
+          "progress": 3492,
+          "name": "M. A. Cazalilla",
+          "percentage": 43.21782178217822,
+          "id": "53f45f17dabfaee1c0b4d1fc"
+        },
+        {
+          "progress": 3480,
+          "name": "Us Epa",
+          "percentage": 43.06930693069307,
+          "id": "53f42842dabfaeb22f3ceee1"
+        },
+        {
+          "progress": 3424,
+          "name": "Weiwei Zhang",
+          "percentage": 42.37623762376238,
+          "id": "5447fe3fdabfae87b7dbda37"
+        },
+        {
+          "progress": 3257,
+          "name": "Lijun Zhang",
+          "percentage": 40.30940594059406,
+          "id": "54409f34dabfae805a6df627"
+        },
+        {
+          "progress": 3254,
+          "name": "Lili Liu",
+          "percentage": 40.272277227722775,
+          "id": "53f55b8edabfae4db6f8045d"
+        },
+        {
+          "progress": 3209,
+          "name": "Richard M. Schu...",
+          "percentage": 39.71534653465347,
+          "id": "53f4cf59dabfaeedd477d0d0"
+        },
+        {
+          "progress": 3203,
+          "name": "Barry E. Gidal",
+          "percentage": 39.64108910891089,
+          "id": "53f4574bdabfaee0d9bf79e0"
+        },
+        {
+          "progress": 3195,
+          "name": "Erik K. St. Lou...",
+          "percentage": 39.54207920792079,
+          "id": "53f448b7dabfaee1c0af64d4"
+        },
+        {
+          "progress": 3173,
+          "name": "John M. Stern",
+          "percentage": 39.26980198019802,
+          "id": "53f3988fdabfae4b34a8338d"
+        },
+        {
+          "progress": 3165,
+          "name": "Thomas R. Henry",
+          "percentage": 39.17079207920792,
+          "id": "53f42c54dabfaedce54b54bc"
+        },
+        {
+          "progress": 3159,
+          "name": "Allan Krumholz",
+          "percentage": 39.09653465346535,
+          "id": "53f43509dabfaee4dc776eeb"
+        },
+        {
+          "progress": 3145,
+          "name": "Georgia D. Mont...",
+          "percentage": 38.92326732673268,
+          "id": "53f3830adabfae4b34a01722"
+        },
+        {
+          "progress": 3135,
+          "name": "Brien J. Smith",
+          "percentage": 38.79950495049505,
+          "id": "53f4593bdabfaeecd69f5ee9"
+        },
+        {
+          "progress": 3134,
+          "name": "William R. Garn...",
+          "percentage": 38.78712871287129,
+          "id": "53f45930dabfaeecd69f5bca"
+        },
+        {
+          "progress": 3132,
+          "name": "William E. Rose...",
+          "percentage": 38.76237623762376,
+          "id": "53f433eadabfaec09f164f8f"
+        },
+        {
+          "progress": 3119,
+          "name": "B. Stugu",
+          "percentage": 38.601485148514854,
+          "id": "54855a31dabfaed7b5fa20ad"
+        },
+        {
+          "progress": 3113,
+          "name": "Xiaojun Li",
+          "percentage": 38.52722772277228,
+          "id": "53f45411dabfaee2a1d6b03f"
+        },
+        {
+          "progress": 3018,
+          "name": "Saudi Arabia",
+          "percentage": 37.351485148514854,
+          "id": "54851fcedabfae9b4013339e"
+        },
+        {
+          "progress": 3004,
+          "name": "Wei Wang",
+          "percentage": 37.17821782178218,
+          "id": "542992e2dabfaec88b4d13ff"
+        },
+        {
+          "progress": 3000,
+          "name": "Seik Weng Ng",
+          "percentage": 37.12871287128713,
+          "id": "53f46ddddabfaeecd6a29a7e"
+        }
+      ];
+      this.ShowAuthors=this.TopAuthors.slice(0,10)
+      for(let i=0;i<this.TopAuthors.length;i++){
+        if(this.TopAuthors[i].name.length>15){
+          this.TopAuthors[i].name=this.TopAuthors[i].name.slice(0,15)+"..."
+        }
+      }
+      // let data=new FormData();
+      // let i=0
+      // data.append('count','40')
+      //  request('POST', "/api/PortalManager/getTopAuthor/",data)
+      //   .then(response => {
+      //     console.log("authors", response)
+      //     this.TopAuthors=[
+      //       {
+      //         "progress": 8080,
+      //         "name": "Linus Pauling",
+      //         "percentage": 100,
+      //         "id": "548824c0dabfaed7b5fa34f6"
+      //       },
+      //       {
+      //         "progress": 8005,
+      //         "name": "Sibylle Schwart...",
+      //         "percentage": 99.07178217821783,
+      //         "id": "53f3aea6dabfae4b34b0dc04"
+      //       },
+      //       {
+      //         "progress": 6984,
+      //         "name": "S. I. Sukhoruch...",
+      //         "percentage": 86.43564356435644,
+      //         "id": "53f45182dabfaee43eca9cea"
+      //       },
+      //       {
+      //         "progress": 6962,
+      //         "name": "Z. N. Soroko",
+      //         "percentage": 86.16336633663366,
+      //         "id": "53f439a7dabfaeee229c95b0"
+      //       },
+      //       {
+      //         "progress": 6050,
+      //         "name": "Human Rights",
+      //         "percentage": 74.87623762376238,
+      //         "id": "53f436d5dabfaeee229aed3d"
+      //       },
+      //       {
+      //         "progress": 6000,
+      //         "name": "Erasmus Univers...",
+      //         "percentage": 74.25742574257426,
+      //         "id": "53f434c7dabfaeee2299c098"
+      //       },
+      //       {
+      //         "progress": 5209,
+      //         "name": "Kia Silverbrook",
+      //         "percentage": 64.46782178217822,
+      //         "id": "53f426c4dabfaec09f0d5401"
+      //       },
+      //       {
+      //         "progress": 5034,
+      //         "name": "Not Available N...",
+      //         "percentage": 62.301980198019805,
+      //         "id": "5430061bdabfaeca69bbd556"
+      //       },
+      //       {
+      //         "progress": 4931,
+      //         "name": "Alberta Agricul...",
+      //         "percentage": 61.02722772277228,
+      //         "id": "53f42799dabfaeb22f3cba19"
+      //       },
+      //       {
+      //         "progress": 4603,
+      //         "name": "Lei Wang",
+      //         "percentage": 56.96782178217822,
+      //         "id": "5429cf62dabfaec7081ba5f8"
+      //       },
+      //       {
+      //         "progress": 4351,
+      //         "name": "Wei Zhang",
+      //         "percentage": 53.8490099009901,
+      //         "id": "53f4b8f6dabfaed83b77b41e"
+      //       },
+      //       {
+      //         "progress": 4120,
+      //         "name": "Jing Zhang",
+      //         "percentage": 50.99009900990099,
+      //         "id": "542a61a5dabfae2b4e0fd344"
+      //       },
+      //       {
+      //         "progress": 4093,
+      //         "name": "Natural Resourc...",
+      //         "percentage": 50.6559405940594,
+      //         "id": "53f43407dabfaeee229939e4"
+      //       },
+      //       {
+      //         "progress": 3574,
+      //         "name": "Y. Xie",
+      //         "percentage": 44.23267326732673,
+      //         "id": "5406c70cdabfae44f085a3a1"
+      //       },
+      //       {
+      //         "progress": 3532,
+      //         "name": "Y. Liu",
+      //         "percentage": 43.71287128712871,
+      //         "id": "5432960adabfaeb54215f5a2"
+      //       },
+      //       {
+      //         "progress": 3526,
+      //         "name": "Ricardo A. Hane...",
+      //         "percentage": 43.63861386138614,
+      //         "id": "543270ccdabfaeb4c6a84f07"
+      //       },
+      //       {
+      //         "progress": 3522,
+      //         "name": "K. Tanaka",
+      //         "percentage": 43.58910891089109,
+      //         "id": "53f55beadabfae4e24f8045b"
+      //       },
+      //       {
+      //         "progress": 3519,
+      //         "name": "Dileep R. Yavag...",
+      //         "percentage": 43.551980198019805,
+      //         "id": "53f358f3dabfae4b34967778"
+      //       },
+      //       {
+      //         "progress": 3505,
+      //         "name": "Jue Wang",
+      //         "percentage": 43.37871287128713,
+      //         "id": "53f565c4dabfae61fef8045d"
+      //       },
+      //       {
+      //         "progress": 3495,
+      //         "name": "J. Li",
+      //         "percentage": 43.254950495049506,
+      //         "id": "5433c99ddabfaeb4c6acf42d"
+      //       },
+      //       {
+      //         "progress": 3492,
+      //         "name": "M. A. Cazalilla",
+      //         "percentage": 43.21782178217822,
+      //         "id": "53f45f17dabfaee1c0b4d1fc"
+      //       },
+      //       {
+      //         "progress": 3480,
+      //         "name": "Us Epa",
+      //         "percentage": 43.06930693069307,
+      //         "id": "53f42842dabfaeb22f3ceee1"
+      //       },
+      //       {
+      //         "progress": 3424,
+      //         "name": "Weiwei Zhang",
+      //         "percentage": 42.37623762376238,
+      //         "id": "5447fe3fdabfae87b7dbda37"
+      //       },
+      //       {
+      //         "progress": 3257,
+      //         "name": "Lijun Zhang",
+      //         "percentage": 40.30940594059406,
+      //         "id": "54409f34dabfae805a6df627"
+      //       },
+      //       {
+      //         "progress": 3254,
+      //         "name": "Lili Liu",
+      //         "percentage": 40.272277227722775,
+      //         "id": "53f55b8edabfae4db6f8045d"
+      //       },
+      //       {
+      //         "progress": 3209,
+      //         "name": "Richard M. Schu...",
+      //         "percentage": 39.71534653465347,
+      //         "id": "53f4cf59dabfaeedd477d0d0"
+      //       },
+      //       {
+      //         "progress": 3203,
+      //         "name": "Barry E. Gidal",
+      //         "percentage": 39.64108910891089,
+      //         "id": "53f4574bdabfaee0d9bf79e0"
+      //       },
+      //       {
+      //         "progress": 3195,
+      //         "name": "Erik K. St. Lou...",
+      //         "percentage": 39.54207920792079,
+      //         "id": "53f448b7dabfaee1c0af64d4"
+      //       },
+      //       {
+      //         "progress": 3173,
+      //         "name": "John M. Stern",
+      //         "percentage": 39.26980198019802,
+      //         "id": "53f3988fdabfae4b34a8338d"
+      //       },
+      //       {
+      //         "progress": 3165,
+      //         "name": "Thomas R. Henry",
+      //         "percentage": 39.17079207920792,
+      //         "id": "53f42c54dabfaedce54b54bc"
+      //       },
+      //       {
+      //         "progress": 3159,
+      //         "name": "Allan Krumholz",
+      //         "percentage": 39.09653465346535,
+      //         "id": "53f43509dabfaee4dc776eeb"
+      //       },
+      //       {
+      //         "progress": 3145,
+      //         "name": "Georgia D. Mont...",
+      //         "percentage": 38.92326732673268,
+      //         "id": "53f3830adabfae4b34a01722"
+      //       },
+      //       {
+      //         "progress": 3135,
+      //         "name": "Brien J. Smith",
+      //         "percentage": 38.79950495049505,
+      //         "id": "53f4593bdabfaeecd69f5ee9"
+      //       },
+      //       {
+      //         "progress": 3134,
+      //         "name": "William R. Garn...",
+      //         "percentage": 38.78712871287129,
+      //         "id": "53f45930dabfaeecd69f5bca"
+      //       },
+      //       {
+      //         "progress": 3132,
+      //         "name": "William E. Rose...",
+      //         "percentage": 38.76237623762376,
+      //         "id": "53f433eadabfaec09f164f8f"
+      //       },
+      //       {
+      //         "progress": 3119,
+      //         "name": "B. Stugu",
+      //         "percentage": 38.601485148514854,
+      //         "id": "54855a31dabfaed7b5fa20ad"
+      //       },
+      //       {
+      //         "progress": 3113,
+      //         "name": "Xiaojun Li",
+      //         "percentage": 38.52722772277228,
+      //         "id": "53f45411dabfaee2a1d6b03f"
+      //       },
+      //       {
+      //         "progress": 3018,
+      //         "name": "Saudi Arabia",
+      //         "percentage": 37.351485148514854,
+      //         "id": "54851fcedabfae9b4013339e"
+      //       },
+      //       {
+      //         "progress": 3004,
+      //         "name": "Wei Wang",
+      //         "percentage": 37.17821782178218,
+      //         "id": "542992e2dabfaec88b4d13ff"
+      //       },
+      //       {
+      //         "progress": 3000,
+      //         "name": "Seik Weng Ng",
+      //         "percentage": 37.12871287128713,
+      //         "id": "53f46ddddabfaeecd6a29a7e"
+      //       }
+      //     ];
+      //     this.ShowAuthors=this.TopAuthors.slice(0,10)
+      //     for(i=0;i<this.TopAuthors.length;i++){
+      //       if(this.TopAuthors[i].name.length>15){
+      //         this.TopAuthors[i].name=this.TopAuthors[i].name.slice(0,15)+"..."
+      //       }
+      //     }
+      //
+      //   })
+      //   .catch(error => {
+      //     console.error(error);
+      //   });
     },
     getAffiliations(){
-      let data=new FormData();
-      let i=0
-      data.append('count','40')
-       request('POST', "/api/PortalManager/getTopAffiliation/",data)
-        .then(response => {
-          console.log(response)
-          this.TopAffiliations=response.TopAffiliations;
-          this.ShowAffiliations=this.TopAffiliations.slice(0,10)
-          for(i=0;i<this.TopAffiliations.length;i++){
-            if(this.TopAffiliations[i].name.length>15){
-              this.TopAffiliations[i].name=this.TopAffiliations[i].name.slice(0,15)+"..."
-            }
-          }
-
-        })
-        .catch(error => {
-          console.error(error);
-        });
+      this.TopAffiliations=[
+        {
+          "progress": 9915,
+          "name": "Angelo Rodrigue...",
+          "percentage": 100,
+          "id": "5f0c137dfaabae14decd659f"
+        },
+        {
+          "progress": 9865,
+          "name": "Oblate School o...",
+          "percentage": 99.4957135653051,
+          "id": "5f0c1374faabae14decd618d"
+        },
+        {
+          "progress": 9836,
+          "name": "FHB Mortgage Ba...",
+          "percentage": 99.20322743318205,
+          "id": "5f0c1374faabae14decd6194"
+        },
+        {
+          "progress": 9758,
+          "name": "ING Bank Śląski",
+          "percentage": 98.416540595058,
+          "id": "5f0c1372faabae14decd614d"
+        },
+        {
+          "progress": 9710,
+          "name": "China Hualu Gro...",
+          "percentage": 97.93242561775088,
+          "id": "5f0c137dfaabae14decd6593"
+        },
+        {
+          "progress": 9668,
+          "name": "Friends of Wome...",
+          "percentage": 97.50882501260716,
+          "id": "5f0c1377faabae14decd630e"
+        },
+        {
+          "progress": 9615,
+          "name": "Melco",
+          "percentage": 96.97428139183056,
+          "id": "5f0c1380faabae14decd6740"
+        },
+        {
+          "progress": 9608,
+          "name": "Kewego",
+          "percentage": 96.90368129097328,
+          "id": "5f0c1358faabae14decd608d"
+        },
+        {
+          "progress": 9532,
+          "name": "Alberni Distric...",
+          "percentage": 96.13716591023702,
+          "id": "5f0c1376faabae14decd62c3"
+        },
+        {
+          "progress": 9438,
+          "name": "BOSCO-Uganda",
+          "percentage": 95.18910741301059,
+          "id": "5f0c1374faabae14decd61d0"
+        },
+        {
+          "progress": 9070,
+          "name": "Miramichi Valle...",
+          "percentage": 91.47755925365607,
+          "id": "5f0c1372faabae14decd60e7"
+        },
+        {
+          "progress": 8961,
+          "name": "InterOil Explor...",
+          "percentage": 90.37821482602118,
+          "id": "5f0c1374faabae14decd61bd"
+        },
+        {
+          "progress": 8839,
+          "name": "Scandinavian Bu...",
+          "percentage": 89.14775592536562,
+          "id": "5f0c137dfaabae14decd65ac"
+        },
+        {
+          "progress": 8733,
+          "name": "Bergenshalvøens...",
+          "percentage": 88.0786686838124,
+          "id": "5f0c1378faabae14decd637a"
+        },
+        {
+          "progress": 8725,
+          "name": "Base One Intern...",
+          "percentage": 87.99798285426122,
+          "id": "5f0c1374faabae14decd61a7"
+        },
+        {
+          "progress": 8655,
+          "name": "Intermountain I...",
+          "percentage": 87.29198184568835,
+          "id": "5f0c1376faabae14decd62e9"
+        },
+        {
+          "progress": 8631,
+          "name": "Behr GmbH & Co....",
+          "percentage": 87.0499243570348,
+          "id": "5f0c1372faabae14decd60e3"
+        },
+        {
+          "progress": 8532,
+          "name": "CERGE-EI",
+          "percentage": 86.05143721633888,
+          "id": "5f0c1381faabae14decd6795"
+        },
+        {
+          "progress": 8494,
+          "name": "CASA de Marylan...",
+          "percentage": 85.66817952597076,
+          "id": "5f0c1375faabae14decd6209"
+        },
+        {
+          "progress": 8144,
+          "name": "Verso Corporati...",
+          "percentage": 82.13817448310641,
+          "id": "5f0c137efaabae14decd6670"
+        },
+        {
+          "progress": 8100,
+          "name": "Madeira Brewery",
+          "percentage": 81.69440242057489,
+          "id": "5f0c1380faabae14decd672e"
+        },
+        {
+          "progress": 8099,
+          "name": "CIB Bank",
+          "percentage": 81.68431669188098,
+          "id": "5f0c1374faabae14decd61c0"
+        },
+        {
+          "progress": 8093,
+          "name": "Little Chute Hi...",
+          "percentage": 81.6238023197176,
+          "id": "5f0c1374faabae14decd6192"
+        },
+        {
+          "progress": 8072,
+          "name": "Tealeaf",
+          "percentage": 81.41200201714574,
+          "id": "5f0c1378faabae14decd63af"
+        },
+        {
+          "progress": 8047,
+          "name": "Assuranceforeni...",
+          "percentage": 81.15985879979829,
+          "id": "5f0c137bfaabae14decd6519"
+        },
+        {
+          "progress": 8011,
+          "name": "Lucile Packard ...",
+          "percentage": 80.79677256681795,
+          "id": "5f0c1372faabae14decd6112"
+        },
+        {
+          "progress": 7992,
+          "name": "Johnston Senior...",
+          "percentage": 80.6051437216339,
+          "id": "5f0c137efaabae14decd664c"
+        },
+        {
+          "progress": 7988,
+          "name": "Good Times Burg...",
+          "percentage": 80.5648008068583,
+          "id": "5f0c137dfaabae14decd65c4"
+        },
+        {
+          "progress": 7887,
+          "name": "Sherman High Sc...",
+          "percentage": 79.54614220877458,
+          "id": "5f0c1372faabae14decd60de"
+        },
+        {
+          "progress": 7706,
+          "name": "Smart & Final",
+          "percentage": 77.72062531517902,
+          "id": "5f0c1373faabae14decd6176"
+        },
+        {
+          "progress": 7577,
+          "name": "Smorgon Steel",
+          "percentage": 76.41956631366617,
+          "id": "5f0c1380faabae14decd670d"
+        },
+        {
+          "progress": 7566,
+          "name": "Faktor Eiendom",
+          "percentage": 76.30862329803328,
+          "id": "5f0c137afaabae14decd648c"
+        },
+        {
+          "progress": 7337,
+          "name": "Prestonsburg Hi...",
+          "percentage": 73.9989914271306,
+          "id": "5f0c137efaabae14decd6671"
+        },
+        {
+          "progress": 7250,
+          "name": "Bath Local Scho...",
+          "percentage": 73.12153303076147,
+          "id": "5f0c1372faabae14decd616c"
+        },
+        {
+          "progress": 7119,
+          "name": "Larry Flynt Pub...",
+          "percentage": 71.80030257186083,
+          "id": "5f0c1372faabae14decd60fb"
+        },
+        {
+          "progress": 7040,
+          "name": "Apollo Global M...",
+          "percentage": 71.00353000504288,
+          "id": "5f0c1381faabae14decd67a5"
+        },
+        {
+          "progress": 6802,
+          "name": "Harris Academy ...",
+          "percentage": 68.60312657589512,
+          "id": "5f0c137afaabae14decd645c"
+        },
+        {
+          "progress": 6794,
+          "name": "Data Respons",
+          "percentage": 68.52244074634393,
+          "id": "5f0c137afaabae14decd649f"
+        },
+        {
+          "progress": 6645,
+          "name": "St. Gerard Cath...",
+          "percentage": 67.0196671709531,
+          "id": "5f0c1374faabae14decd618a"
+        },
+        {
+          "progress": 6582,
+          "name": "Apollo Global M...",
+          "percentage": 66.38426626323752,
+          "id": "5f0c1381faabae14decd67a3"
+        }
+      ];
+      this.ShowAffiliations=this.TopAffiliations.slice(0,10)
+      for(let i=0;i<this.TopAffiliations.length;i++){
+        if(this.TopAffiliations[i].name.length>15){
+          this.TopAffiliations[i].name=this.TopAffiliations[i].name.slice(0,15)+"..."
+        }
+      }
+      // let data=new FormData();
+      // let i=0
+      // data.append('count','40')
+      //  request('POST', "/api/PortalManager/getTopAffiliation/",data)
+      //   .then(response => {
+      //     console.log("affil", response)
+      //     this.TopAffiliations=[
+      //       {
+      //         "progress": 9915,
+      //         "name": "Angelo Rodrigue...",
+      //         "percentage": 100,
+      //         "id": "5f0c137dfaabae14decd659f"
+      //       },
+      //       {
+      //         "progress": 9865,
+      //         "name": "Oblate School o...",
+      //         "percentage": 99.4957135653051,
+      //         "id": "5f0c1374faabae14decd618d"
+      //       },
+      //       {
+      //         "progress": 9836,
+      //         "name": "FHB Mortgage Ba...",
+      //         "percentage": 99.20322743318205,
+      //         "id": "5f0c1374faabae14decd6194"
+      //       },
+      //       {
+      //         "progress": 9758,
+      //         "name": "ING Bank Śląski",
+      //         "percentage": 98.416540595058,
+      //         "id": "5f0c1372faabae14decd614d"
+      //       },
+      //       {
+      //         "progress": 9710,
+      //         "name": "China Hualu Gro...",
+      //         "percentage": 97.93242561775088,
+      //         "id": "5f0c137dfaabae14decd6593"
+      //       },
+      //       {
+      //         "progress": 9668,
+      //         "name": "Friends of Wome...",
+      //         "percentage": 97.50882501260716,
+      //         "id": "5f0c1377faabae14decd630e"
+      //       },
+      //       {
+      //         "progress": 9615,
+      //         "name": "Melco",
+      //         "percentage": 96.97428139183056,
+      //         "id": "5f0c1380faabae14decd6740"
+      //       },
+      //       {
+      //         "progress": 9608,
+      //         "name": "Kewego",
+      //         "percentage": 96.90368129097328,
+      //         "id": "5f0c1358faabae14decd608d"
+      //       },
+      //       {
+      //         "progress": 9532,
+      //         "name": "Alberni Distric...",
+      //         "percentage": 96.13716591023702,
+      //         "id": "5f0c1376faabae14decd62c3"
+      //       },
+      //       {
+      //         "progress": 9438,
+      //         "name": "BOSCO-Uganda",
+      //         "percentage": 95.18910741301059,
+      //         "id": "5f0c1374faabae14decd61d0"
+      //       },
+      //       {
+      //         "progress": 9070,
+      //         "name": "Miramichi Valle...",
+      //         "percentage": 91.47755925365607,
+      //         "id": "5f0c1372faabae14decd60e7"
+      //       },
+      //       {
+      //         "progress": 8961,
+      //         "name": "InterOil Explor...",
+      //         "percentage": 90.37821482602118,
+      //         "id": "5f0c1374faabae14decd61bd"
+      //       },
+      //       {
+      //         "progress": 8839,
+      //         "name": "Scandinavian Bu...",
+      //         "percentage": 89.14775592536562,
+      //         "id": "5f0c137dfaabae14decd65ac"
+      //       },
+      //       {
+      //         "progress": 8733,
+      //         "name": "Bergenshalvøens...",
+      //         "percentage": 88.0786686838124,
+      //         "id": "5f0c1378faabae14decd637a"
+      //       },
+      //       {
+      //         "progress": 8725,
+      //         "name": "Base One Intern...",
+      //         "percentage": 87.99798285426122,
+      //         "id": "5f0c1374faabae14decd61a7"
+      //       },
+      //       {
+      //         "progress": 8655,
+      //         "name": "Intermountain I...",
+      //         "percentage": 87.29198184568835,
+      //         "id": "5f0c1376faabae14decd62e9"
+      //       },
+      //       {
+      //         "progress": 8631,
+      //         "name": "Behr GmbH & Co....",
+      //         "percentage": 87.0499243570348,
+      //         "id": "5f0c1372faabae14decd60e3"
+      //       },
+      //       {
+      //         "progress": 8532,
+      //         "name": "CERGE-EI",
+      //         "percentage": 86.05143721633888,
+      //         "id": "5f0c1381faabae14decd6795"
+      //       },
+      //       {
+      //         "progress": 8494,
+      //         "name": "CASA de Marylan...",
+      //         "percentage": 85.66817952597076,
+      //         "id": "5f0c1375faabae14decd6209"
+      //       },
+      //       {
+      //         "progress": 8144,
+      //         "name": "Verso Corporati...",
+      //         "percentage": 82.13817448310641,
+      //         "id": "5f0c137efaabae14decd6670"
+      //       },
+      //       {
+      //         "progress": 8100,
+      //         "name": "Madeira Brewery",
+      //         "percentage": 81.69440242057489,
+      //         "id": "5f0c1380faabae14decd672e"
+      //       },
+      //       {
+      //         "progress": 8099,
+      //         "name": "CIB Bank",
+      //         "percentage": 81.68431669188098,
+      //         "id": "5f0c1374faabae14decd61c0"
+      //       },
+      //       {
+      //         "progress": 8093,
+      //         "name": "Little Chute Hi...",
+      //         "percentage": 81.6238023197176,
+      //         "id": "5f0c1374faabae14decd6192"
+      //       },
+      //       {
+      //         "progress": 8072,
+      //         "name": "Tealeaf",
+      //         "percentage": 81.41200201714574,
+      //         "id": "5f0c1378faabae14decd63af"
+      //       },
+      //       {
+      //         "progress": 8047,
+      //         "name": "Assuranceforeni...",
+      //         "percentage": 81.15985879979829,
+      //         "id": "5f0c137bfaabae14decd6519"
+      //       },
+      //       {
+      //         "progress": 8011,
+      //         "name": "Lucile Packard ...",
+      //         "percentage": 80.79677256681795,
+      //         "id": "5f0c1372faabae14decd6112"
+      //       },
+      //       {
+      //         "progress": 7992,
+      //         "name": "Johnston Senior...",
+      //         "percentage": 80.6051437216339,
+      //         "id": "5f0c137efaabae14decd664c"
+      //       },
+      //       {
+      //         "progress": 7988,
+      //         "name": "Good Times Burg...",
+      //         "percentage": 80.5648008068583,
+      //         "id": "5f0c137dfaabae14decd65c4"
+      //       },
+      //       {
+      //         "progress": 7887,
+      //         "name": "Sherman High Sc...",
+      //         "percentage": 79.54614220877458,
+      //         "id": "5f0c1372faabae14decd60de"
+      //       },
+      //       {
+      //         "progress": 7706,
+      //         "name": "Smart & Final",
+      //         "percentage": 77.72062531517902,
+      //         "id": "5f0c1373faabae14decd6176"
+      //       },
+      //       {
+      //         "progress": 7577,
+      //         "name": "Smorgon Steel",
+      //         "percentage": 76.41956631366617,
+      //         "id": "5f0c1380faabae14decd670d"
+      //       },
+      //       {
+      //         "progress": 7566,
+      //         "name": "Faktor Eiendom",
+      //         "percentage": 76.30862329803328,
+      //         "id": "5f0c137afaabae14decd648c"
+      //       },
+      //       {
+      //         "progress": 7337,
+      //         "name": "Prestonsburg Hi...",
+      //         "percentage": 73.9989914271306,
+      //         "id": "5f0c137efaabae14decd6671"
+      //       },
+      //       {
+      //         "progress": 7250,
+      //         "name": "Bath Local Scho...",
+      //         "percentage": 73.12153303076147,
+      //         "id": "5f0c1372faabae14decd616c"
+      //       },
+      //       {
+      //         "progress": 7119,
+      //         "name": "Larry Flynt Pub...",
+      //         "percentage": 71.80030257186083,
+      //         "id": "5f0c1372faabae14decd60fb"
+      //       },
+      //       {
+      //         "progress": 7040,
+      //         "name": "Apollo Global M...",
+      //         "percentage": 71.00353000504288,
+      //         "id": "5f0c1381faabae14decd67a5"
+      //       },
+      //       {
+      //         "progress": 6802,
+      //         "name": "Harris Academy ...",
+      //         "percentage": 68.60312657589512,
+      //         "id": "5f0c137afaabae14decd645c"
+      //       },
+      //       {
+      //         "progress": 6794,
+      //         "name": "Data Respons",
+      //         "percentage": 68.52244074634393,
+      //         "id": "5f0c137afaabae14decd649f"
+      //       },
+      //       {
+      //         "progress": 6645,
+      //         "name": "St. Gerard Cath...",
+      //         "percentage": 67.0196671709531,
+      //         "id": "5f0c1374faabae14decd618a"
+      //       },
+      //       {
+      //         "progress": 6582,
+      //         "name": "Apollo Global M...",
+      //         "percentage": 66.38426626323752,
+      //         "id": "5f0c1381faabae14decd67a3"
+      //       }
+      //     ];
+      //     this.ShowAffiliations=this.TopAffiliations.slice(0,10)
+      //     for(i=0;i<this.TopAffiliations.length;i++){
+      //       if(this.TopAffiliations[i].name.length>15){
+      //         this.TopAffiliations[i].name=this.TopAffiliations[i].name.slice(0,15)+"..."
+      //       }
+      //     }
+      //
+      //   })
+      //   .catch(error => {
+      //     console.error(error);
+      //   });
     },
     getJournals(){
-      let data=new FormData();
-      let i=0
-      data.append('count','40')
-       request('POST', "/api/PaperBrowser/getTopVenue/",data)
-        .then(response => {
-          console.log(response)
-          this.TopJournals=response.TopJournals;
-          this.ShowJournals=this.TopJournals.slice(0,10)
-          for(i=0;i<this.TopJournals.length;i++){
-            if(this.TopJournals[i].name.length>15){
-              this.TopJournals[i].name=this.TopJournals[i].name.slice(0,15)+"..."
-            }
-          }
-
-        })
-        .catch(error => {
-          console.error(error);
-        });
+      this.TopJournals=[
+        {
+          "progress": 49999,
+          "name": "Yugoslav Journa...",
+          "percentage": 100,
+          "id": "5451a5cae0cf0b02b5f3c669"
+        },
+        {
+          "progress": 49030,
+          "name": "Facta Universit...",
+          "percentage": 98.06196123922479,
+          "id": "5451a5cae0cf0b02b5f3c66a"
+        },
+        {
+          "progress": 47871,
+          "name": "Journal of Agri...",
+          "percentage": 95.74391487829756,
+          "id": "5451a5cae0cf0b02b5f3c61a"
+        },
+        {
+          "progress": 47378,
+          "name": "Quarterly Journ...",
+          "percentage": 94.75789515790316,
+          "id": "5451a5cae0cf0b02b5f3c644"
+        },
+        {
+          "progress": 47173,
+          "name": "Teion Kogaku (j...",
+          "percentage": 94.34788695773916,
+          "id": "5451a5cae0cf0b02b5f3c660"
+        },
+        {
+          "progress": 46972,
+          "name": "California Jour...",
+          "percentage": 93.94587891757836,
+          "id": "5451a5cae0cf0b02b5f3c632"
+        },
+        {
+          "progress": 46779,
+          "name": "Archive of Onco...",
+          "percentage": 93.55987119742394,
+          "id": "5451a5cae0cf0b02b5f3c662"
+        },
+        {
+          "progress": 46514,
+          "name": "Doboku Gakkai R...",
+          "percentage": 93.02986059721195,
+          "id": "5451a5cae0cf0b02b5f3c64a"
+        },
+        {
+          "progress": 46460,
+          "name": "Interventional ...",
+          "percentage": 92.92185843716875,
+          "id": "5451a5cae0cf0b02b5f3c65d"
+        },
+        {
+          "progress": 46366,
+          "name": "Zbornik Institu...",
+          "percentage": 92.73385467709355,
+          "id": "5451a5cae0cf0b02b5f3c664"
+        },
+        {
+          "progress": 45891,
+          "name": "International J...",
+          "percentage": 91.78383567671354,
+          "id": "5451a5cae0cf0b02b5f3c60c"
+        },
+        {
+          "progress": 45661,
+          "name": "Future Hiv Ther...",
+          "percentage": 91.32382647652953,
+          "id": "5451a5cae0cf0b02b5f3c657"
+        },
+        {
+          "progress": 45285,
+          "name": "Women's Health",
+          "percentage": 90.57181143622873,
+          "id": "5451a5cae0cf0b02b5f3c656"
+        },
+        {
+          "progress": 44961,
+          "name": "Future Cardiolo...",
+          "percentage": 89.92379847596952,
+          "id": "5451a5cae0cf0b02b5f3c652"
+        },
+        {
+          "progress": 44772,
+          "name": "Hiv Therapy",
+          "percentage": 89.54579091581832,
+          "id": "5451a5cae0cf0b02b5f3c659"
+        },
+        {
+          "progress": 44578,
+          "name": "Epigenomics",
+          "percentage": 89.15778315566311,
+          "id": "5451a5cae0cf0b02b5f3c65b"
+        },
+        {
+          "progress": 44381,
+          "name": "Therapy",
+          "percentage": 88.76377527550551,
+          "id": "5451a5cae0cf0b02b5f3c651"
+        },
+        {
+          "progress": 43874,
+          "name": "Global Jurist",
+          "percentage": 87.7497549950999,
+          "id": "5451a5cae0cf0b02b5f3c627"
+        },
+        {
+          "progress": 43768,
+          "name": "World Political...",
+          "percentage": 87.5377507550151,
+          "id": "5451a5cae0cf0b02b5f3c62b"
+        },
+        {
+          "progress": 43725,
+          "name": "Doboku Gakkai R...",
+          "percentage": 87.4517490349807,
+          "id": "5451a5cae0cf0b02b5f3c649"
+        },
+        {
+          "progress": 43620,
+          "name": "Contributions i...",
+          "percentage": 87.24174483489669,
+          "id": "5451a5cae0cf0b02b5f3c613"
+        },
+        {
+          "progress": 42904,
+          "name": "Frontiers in Ma...",
+          "percentage": 85.80971619432388,
+          "id": "5451a5cae0cf0b02b5f3c614"
+        },
+        {
+          "progress": 42756,
+          "name": "Topics in Macro...",
+          "percentage": 85.51371027420548,
+          "id": "5451a5cae0cf0b02b5f3c615"
+        },
+        {
+          "progress": 42141,
+          "name": "Journal of Drug...",
+          "percentage": 84.28368567371348,
+          "id": "5451a5cae0cf0b02b5f3c630"
+        },
+        {
+          "progress": 41912,
+          "name": "Studies in Ethi...",
+          "percentage": 83.82567651353027,
+          "id": "5451a5cae0cf0b02b5f3c62d"
+        },
+        {
+          "progress": 41407,
+          "name": "Uirusu",
+          "percentage": 82.81565631312627,
+          "id": "5451a5cae0cf0b02b5f3c661"
+        },
+        {
+          "progress": 41407,
+          "name": "Ekonomski Anali",
+          "percentage": 82.81565631312627,
+          "id": "5451a5cae0cf0b02b5f3c667"
+        },
+        {
+          "progress": 41017,
+          "name": "Peace Economics...",
+          "percentage": 82.03564071281426,
+          "id": "5451a5cae0cf0b02b5f3c626"
+        },
+        {
+          "progress": 40952,
+          "name": "Global Economy ...",
+          "percentage": 81.90563811276226,
+          "id": "5451a5cae0cf0b02b5f3c61c"
+        },
+        {
+          "progress": 40852,
+          "name": "World Medical &...",
+          "percentage": 81.70563411268226,
+          "id": "5451a5cae0cf0b02b5f3c639"
+        },
+        {
+          "progress": 40712,
+          "name": "Poverty & Publi...",
+          "percentage": 81.42562851257024,
+          "id": "5451a5cae0cf0b02b5f3c634"
+        },
+        {
+          "progress": 40553,
+          "name": "Doboku Gakkai R...",
+          "percentage": 81.10762215244304,
+          "id": "5451a5cae0cf0b02b5f3c648"
+        },
+        {
+          "progress": 39814,
+          "name": "Doboku Gakkai R...",
+          "percentage": 79.62959259185183,
+          "id": "5451a5cae0cf0b02b5f3c64c"
+        },
+        {
+          "progress": 38710,
+          "name": "The Bulletin of...",
+          "percentage": 77.42154843096863,
+          "id": "5451a5cae0cf0b02b5f3c64e"
+        },
+        {
+          "progress": 38514,
+          "name": "Medicinski Preg...",
+          "percentage": 77.02954059081182,
+          "id": "5451a5cae0cf0b02b5f3c668"
+        },
+        {
+          "progress": 38316,
+          "name": "Asia-pacific Jo...",
+          "percentage": 76.63353267065341,
+          "id": "5451a5cae0cf0b02b5f3c637"
+        },
+        {
+          "progress": 37518,
+          "name": "The Forum",
+          "percentage": 75.037500750015,
+          "id": "5451a5cae0cf0b02b5f3c621"
+        },
+        {
+          "progress": 36876,
+          "name": "Global Jurist T...",
+          "percentage": 73.75347506950139,
+          "id": "5451a5cae0cf0b02b5f3c60f"
+        },
+        {
+          "progress": 36801,
+          "name": "Statistical Com...",
+          "percentage": 73.6034720694414,
+          "id": "5451a5cae0cf0b02b5f3c636"
+        },
+        {
+          "progress": 36779,
+          "name": "The Economists'...",
+          "percentage": 73.55947118942379,
+          "id": "5451a5cae0cf0b02b5f3c61d"
+        }
+      ];
+      this.ShowJournals=this.TopJournals.slice(0,10)
+      for(let i=0;i<this.TopJournals.length;i++){
+        if(this.TopJournals[i].name.length>15){
+          this.TopJournals[i].name=this.TopJournals[i].name.slice(0,15)+"..."
+        }
+      }
+      // let data=new FormData();
+      // let i=0
+      // data.append('count','40')
+      //  request('POST', "/api/PaperBrowser/getTopVenue/",data)
+      //   .then(response => {
+      //     console.log("journal", response)
+      //
+      //     this.TopJournals=[
+      //       {
+      //         "progress": 49999,
+      //         "name": "Yugoslav Journa...",
+      //         "percentage": 100,
+      //         "id": "5451a5cae0cf0b02b5f3c669"
+      //       },
+      //       {
+      //         "progress": 49030,
+      //         "name": "Facta Universit...",
+      //         "percentage": 98.06196123922479,
+      //         "id": "5451a5cae0cf0b02b5f3c66a"
+      //       },
+      //       {
+      //         "progress": 47871,
+      //         "name": "Journal of Agri...",
+      //         "percentage": 95.74391487829756,
+      //         "id": "5451a5cae0cf0b02b5f3c61a"
+      //       },
+      //       {
+      //         "progress": 47378,
+      //         "name": "Quarterly Journ...",
+      //         "percentage": 94.75789515790316,
+      //         "id": "5451a5cae0cf0b02b5f3c644"
+      //       },
+      //       {
+      //         "progress": 47173,
+      //         "name": "Teion Kogaku (j...",
+      //         "percentage": 94.34788695773916,
+      //         "id": "5451a5cae0cf0b02b5f3c660"
+      //       },
+      //       {
+      //         "progress": 46972,
+      //         "name": "California Jour...",
+      //         "percentage": 93.94587891757836,
+      //         "id": "5451a5cae0cf0b02b5f3c632"
+      //       },
+      //       {
+      //         "progress": 46779,
+      //         "name": "Archive of Onco...",
+      //         "percentage": 93.55987119742394,
+      //         "id": "5451a5cae0cf0b02b5f3c662"
+      //       },
+      //       {
+      //         "progress": 46514,
+      //         "name": "Doboku Gakkai R...",
+      //         "percentage": 93.02986059721195,
+      //         "id": "5451a5cae0cf0b02b5f3c64a"
+      //       },
+      //       {
+      //         "progress": 46460,
+      //         "name": "Interventional ...",
+      //         "percentage": 92.92185843716875,
+      //         "id": "5451a5cae0cf0b02b5f3c65d"
+      //       },
+      //       {
+      //         "progress": 46366,
+      //         "name": "Zbornik Institu...",
+      //         "percentage": 92.73385467709355,
+      //         "id": "5451a5cae0cf0b02b5f3c664"
+      //       },
+      //       {
+      //         "progress": 45891,
+      //         "name": "International J...",
+      //         "percentage": 91.78383567671354,
+      //         "id": "5451a5cae0cf0b02b5f3c60c"
+      //       },
+      //       {
+      //         "progress": 45661,
+      //         "name": "Future Hiv Ther...",
+      //         "percentage": 91.32382647652953,
+      //         "id": "5451a5cae0cf0b02b5f3c657"
+      //       },
+      //       {
+      //         "progress": 45285,
+      //         "name": "Women's Health",
+      //         "percentage": 90.57181143622873,
+      //         "id": "5451a5cae0cf0b02b5f3c656"
+      //       },
+      //       {
+      //         "progress": 44961,
+      //         "name": "Future Cardiolo...",
+      //         "percentage": 89.92379847596952,
+      //         "id": "5451a5cae0cf0b02b5f3c652"
+      //       },
+      //       {
+      //         "progress": 44772,
+      //         "name": "Hiv Therapy",
+      //         "percentage": 89.54579091581832,
+      //         "id": "5451a5cae0cf0b02b5f3c659"
+      //       },
+      //       {
+      //         "progress": 44578,
+      //         "name": "Epigenomics",
+      //         "percentage": 89.15778315566311,
+      //         "id": "5451a5cae0cf0b02b5f3c65b"
+      //       },
+      //       {
+      //         "progress": 44381,
+      //         "name": "Therapy",
+      //         "percentage": 88.76377527550551,
+      //         "id": "5451a5cae0cf0b02b5f3c651"
+      //       },
+      //       {
+      //         "progress": 43874,
+      //         "name": "Global Jurist",
+      //         "percentage": 87.7497549950999,
+      //         "id": "5451a5cae0cf0b02b5f3c627"
+      //       },
+      //       {
+      //         "progress": 43768,
+      //         "name": "World Political...",
+      //         "percentage": 87.5377507550151,
+      //         "id": "5451a5cae0cf0b02b5f3c62b"
+      //       },
+      //       {
+      //         "progress": 43725,
+      //         "name": "Doboku Gakkai R...",
+      //         "percentage": 87.4517490349807,
+      //         "id": "5451a5cae0cf0b02b5f3c649"
+      //       },
+      //       {
+      //         "progress": 43620,
+      //         "name": "Contributions i...",
+      //         "percentage": 87.24174483489669,
+      //         "id": "5451a5cae0cf0b02b5f3c613"
+      //       },
+      //       {
+      //         "progress": 42904,
+      //         "name": "Frontiers in Ma...",
+      //         "percentage": 85.80971619432388,
+      //         "id": "5451a5cae0cf0b02b5f3c614"
+      //       },
+      //       {
+      //         "progress": 42756,
+      //         "name": "Topics in Macro...",
+      //         "percentage": 85.51371027420548,
+      //         "id": "5451a5cae0cf0b02b5f3c615"
+      //       },
+      //       {
+      //         "progress": 42141,
+      //         "name": "Journal of Drug...",
+      //         "percentage": 84.28368567371348,
+      //         "id": "5451a5cae0cf0b02b5f3c630"
+      //       },
+      //       {
+      //         "progress": 41912,
+      //         "name": "Studies in Ethi...",
+      //         "percentage": 83.82567651353027,
+      //         "id": "5451a5cae0cf0b02b5f3c62d"
+      //       },
+      //       {
+      //         "progress": 41407,
+      //         "name": "Uirusu",
+      //         "percentage": 82.81565631312627,
+      //         "id": "5451a5cae0cf0b02b5f3c661"
+      //       },
+      //       {
+      //         "progress": 41407,
+      //         "name": "Ekonomski Anali",
+      //         "percentage": 82.81565631312627,
+      //         "id": "5451a5cae0cf0b02b5f3c667"
+      //       },
+      //       {
+      //         "progress": 41017,
+      //         "name": "Peace Economics...",
+      //         "percentage": 82.03564071281426,
+      //         "id": "5451a5cae0cf0b02b5f3c626"
+      //       },
+      //       {
+      //         "progress": 40952,
+      //         "name": "Global Economy ...",
+      //         "percentage": 81.90563811276226,
+      //         "id": "5451a5cae0cf0b02b5f3c61c"
+      //       },
+      //       {
+      //         "progress": 40852,
+      //         "name": "World Medical &...",
+      //         "percentage": 81.70563411268226,
+      //         "id": "5451a5cae0cf0b02b5f3c639"
+      //       },
+      //       {
+      //         "progress": 40712,
+      //         "name": "Poverty & Publi...",
+      //         "percentage": 81.42562851257024,
+      //         "id": "5451a5cae0cf0b02b5f3c634"
+      //       },
+      //       {
+      //         "progress": 40553,
+      //         "name": "Doboku Gakkai R...",
+      //         "percentage": 81.10762215244304,
+      //         "id": "5451a5cae0cf0b02b5f3c648"
+      //       },
+      //       {
+      //         "progress": 39814,
+      //         "name": "Doboku Gakkai R...",
+      //         "percentage": 79.62959259185183,
+      //         "id": "5451a5cae0cf0b02b5f3c64c"
+      //       },
+      //       {
+      //         "progress": 38710,
+      //         "name": "The Bulletin of...",
+      //         "percentage": 77.42154843096863,
+      //         "id": "5451a5cae0cf0b02b5f3c64e"
+      //       },
+      //       {
+      //         "progress": 38514,
+      //         "name": "Medicinski Preg...",
+      //         "percentage": 77.02954059081182,
+      //         "id": "5451a5cae0cf0b02b5f3c668"
+      //       },
+      //       {
+      //         "progress": 38316,
+      //         "name": "Asia-pacific Jo...",
+      //         "percentage": 76.63353267065341,
+      //         "id": "5451a5cae0cf0b02b5f3c637"
+      //       },
+      //       {
+      //         "progress": 37518,
+      //         "name": "The Forum",
+      //         "percentage": 75.037500750015,
+      //         "id": "5451a5cae0cf0b02b5f3c621"
+      //       },
+      //       {
+      //         "progress": 36876,
+      //         "name": "Global Jurist T...",
+      //         "percentage": 73.75347506950139,
+      //         "id": "5451a5cae0cf0b02b5f3c60f"
+      //       },
+      //       {
+      //         "progress": 36801,
+      //         "name": "Statistical Com...",
+      //         "percentage": 73.6034720694414,
+      //         "id": "5451a5cae0cf0b02b5f3c636"
+      //       },
+      //       {
+      //         "progress": 36779,
+      //         "name": "The Economists'...",
+      //         "percentage": 73.55947118942379,
+      //         "id": "5451a5cae0cf0b02b5f3c61d"
+      //       }
+      //     ];
+      //     this.ShowJournals=this.TopJournals.slice(0,10)
+      //     for(i=0;i<this.TopJournals.length;i++){
+      //       if(this.TopJournals[i].name.length>15){
+      //         this.TopJournals[i].name=this.TopJournals[i].name.slice(0,15)+"..."
+      //       }
+      //     }
+      //
+      //   })
+      //   .catch(error => {
+      //     console.error(error);
+      //   });
     },
     
     changeShowAuthor(page1){

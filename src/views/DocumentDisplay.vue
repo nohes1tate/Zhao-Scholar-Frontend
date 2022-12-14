@@ -466,6 +466,19 @@
             this_keyword[0] = new_keywords[j]
             this.keywords[j] = this_keyword
           }
+          // for(i=0;i<this.CurrentPageData.length;i++){
+          //               let Author = this.CurrentPageData[i].authors
+          //               let j=0;
+          //               let str="作者："
+          //               if(Author.length!==0){
+          //                 str=Author[0].name
+          //                 for(j=1;j<Author.length;j++){
+          //                   str =  str+", "+Author[j].name
+
+          //                 }
+          //               }
+          //               this.CurrentPageData[i].author = str
+          //             }
           let cite = []
             if("venue" in data.articles_list[0]){
               let GBT = this.GBTgenerateCitation(data.articles_list[0].title, data.articles_list[0].authors, data.articles_list[0].year, data.articles_list[0].venue.name)
@@ -549,7 +562,7 @@
             // 使用字符串拼接函数将论文信息组合成BIBTEX引用格式
             var citation = "@article{key,\n"
                         + "  title = {" + paper.title + "},\n"
-                        + "  author = {" + paper.author + "},\n"
+                        + "  author = {" + paper.authors[0].name + "},\n"
 
             if("volume" in paper){
                 citation +=  "  volume = {" + paper.volume + "},\n"
