@@ -48,7 +48,7 @@
                     @keyup.enter="searchTag(search)"
                     hide-details
                     solo
-                    label="Search something"
+                    label="点击搜索"
                     v-model="search"
                     v-on="on"
                   >
@@ -83,7 +83,7 @@
                   <v-col cols="12" md="9" sm="12" :style="{padding:'0px'}">
                     <v-row>
                   <v-col cols="12" md="12" sm="6" :style="{'padding-bottom':'5px'}">
-                    <h3 :style="{color:'#CCCCCC','margin-top':'5px'}">Authors</h3>
+                    <h3 :style="{color:'#CCCCCC','margin-top':'5px'}">作者</h3>
                   </v-col>
                   <v-col cols="12" md="12" sm="6" :style="{'padding-top':'0px'}">
                     <h1>{{general.authors}}</h1>
@@ -100,7 +100,7 @@
                   <v-col cols="12" md="9" sm="12" :style="{padding:'0px'}">
                     <v-row>
                   <v-col cols="12" md="12" sm="6" :style="{'padding-bottom':'5px'}">
-                    <h3 :style="{color:'#CCCCCC','margin-top':'5px'}">Papers</h3>
+                    <h3 :style="{color:'#CCCCCC','margin-top':'5px'}">论文</h3>
                   </v-col>
                   <v-col cols="12" md="12" sm="6" :style="{'padding-top':'0px'}">
                     <h1>{{general.papers}}</h1>
@@ -117,7 +117,7 @@
                   <v-col cols="12" md="9" sm="12" :style="{padding:'0px'}">
                     <v-row>
                   <v-col cols="12" md="12" sm="6" :style="{'padding-bottom':'5px'}">
-                    <h3 :style="{color:'#CCCCCC','margin-top':'5px'}">Affiliations</h3>
+                    <h3 :style="{color:'#CCCCCC','margin-top':'5px'}">机构</h3>
                   </v-col>
                   <v-col cols="12" md="12" sm="6" :style="{'padding-top':'0px'}">
                     <h1>{{general.affiliations}}</h1>
@@ -134,7 +134,7 @@
                   <v-col cols="12" md="9" sm="12" :style="{padding:'0px'}">
                     <v-row>
                   <v-col cols="12" md="12" sm="6" :style="{'padding-bottom':'5px'}">
-                    <h3 :style="{color:'#CCCCCC','margin-top':'5px'}">Venues</h3>
+                    <h3 :style="{color:'#CCCCCC','margin-top':'5px'}">会议</h3>
                   </v-col>
                   <v-col cols="12" md="12" sm="6" :style="{'padding-top':'0px'}">
                     <h1>{{general.venues}}</h1>
@@ -151,7 +151,7 @@
                   <v-col cols="12" md="9" sm="12" :style="{padding:'0px'}">
                     <v-row>
                   <v-col cols="12" md="12" sm="6" :style="{'padding-bottom':'5px'}">
-                    <h3 :style="{color:'#CCCCCC','margin-top':'5px'}">Field</h3>
+                    <h3 :style="{color:'#CCCCCC','margin-top':'5px'}">领域</h3>
                   </v-col>
                   <v-col cols="12" md="12" sm="6" :style="{'padding-top':'0px'}">
                     <h1>{{general.fields}}</h1>
@@ -197,7 +197,7 @@
                 </v-col>
                 <v-col cols="12" md="9" sm="12">
             <v-card-title :style="{'color':'black'}">
-              Top Author</v-card-title>
+              最高作者</v-card-title>
                 </v-col>
               </v-row>
             </v-card>
@@ -220,7 +220,7 @@
                         {{ item.name }}
                       </div>
                       <div class="d-flex justify-end">
-                        {{ item.progress }} papers
+                        {{ item.progress }} 篇
                       </div>
                     </v-col>
 
@@ -266,7 +266,7 @@
                 </v-col>
                 <v-col cols="12" md="9" sm="12">
             <v-card-title :style="{'color':'black'}">
-              Top Affiliations</v-card-title>
+              最高机构</v-card-title>
                 </v-col>
               </v-row>
             </v-card>
@@ -289,7 +289,7 @@
                         {{ item.name }}
                       </div>
                       <div class="d-flex justify-end">
-                        {{ item.progress }} papers
+                        {{ item.progress }} 篇论文
                       </div>
                     </v-col>
 
@@ -336,7 +336,7 @@
                 </v-col>
                 <v-col cols="12" md="9" sm="12">
             <v-card-title :style="{'color':'black'}">
-              Top Journals</v-card-title>
+              最高期刊</v-card-title>
                 </v-col>
               </v-row>
             </v-card>
@@ -359,7 +359,7 @@
                         {{ item.name }}
                       </div>
                       <div class="d-flex justify-end">
-                        {{ item.progress }} papers
+                        {{ item.progress }} 篇论文
                       </div>
                     </v-col>
 
@@ -500,18 +500,18 @@ export default {
 
           for(i=0;i<temporary.length;i++){
             if(temporary[i].type==="Affiliation"){
-              this.items.push({name:temporary[i].name, type:temporary[i].type, id:temporary[i].id})
+              this.items.push({name:temporary[i].name, type:'机构', id:temporary[i].id})
             }
           }
           for(i=0;i<temporary.length;i++){
             if(temporary[i].type==="Author"){
-              this.items.push({name:temporary[i].name, type:temporary[i].type, id:temporary[i].id})
+              this.items.push({name:temporary[i].name, type:'作者', id:temporary[i].id})
             }
           }
           i=0
           while(this.items.length<10){
               if(temporary[i].type==="Paper")
-              this.items.push({name:temporary[i].name, type:temporary[i].type, id:temporary[i].id})
+              this.items.push({name:temporary[i].name, type:'论文', id:temporary[i].id})
               i++
           }
           this.items=this.items.slice(0,10)

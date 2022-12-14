@@ -59,7 +59,7 @@
                     >
                       <v-text-field
                         v-model="form1.name"
-                        placeholder="Name"
+                        placeholder="姓名"
                         outlined
                         clearable
                         dense
@@ -81,7 +81,7 @@
                     >
                       <v-text-field
                         v-model="form1.workplace"
-                        placeholder="Workplace"
+                        placeholder="工作单位"
                         outlined
                         clearable
                         dense
@@ -103,7 +103,7 @@
                     >
                       <v-text-field
                         v-model="form1.email"
-                        placeholder="email"
+                        placeholder="电子邮箱"
                         outlined
                         clearable
                         dense
@@ -125,7 +125,7 @@
                     >
                       <v-text-field
                         v-model="form1.field"
-                        placeholder="Field"
+                        placeholder="研究领域"
                         outlined
                         clearable
                         dense
@@ -147,7 +147,7 @@
                     >
                       <v-text-field
                         v-model="form1.homepage"
-                        placeholder="Homepage"
+                        placeholder="个人首页（可选）"
                         outlined
                         clearable
                         dense
@@ -284,11 +284,11 @@ export default {
         return;
       }
       if(this.form1.workplace.trim()==''){
-        this.$message.error("请填写工作地址");
+        this.$message.error("请填写工作单位");
         return;
       }
       if(this.form1.email.trim()==''){
-        this.$message.error("请填写邮箱");
+        this.$message.error("请填写电子邮箱");
         return;
       }
       if(this.form1.field.trim()==''){
