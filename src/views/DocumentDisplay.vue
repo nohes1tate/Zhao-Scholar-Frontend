@@ -160,35 +160,6 @@
       >
         <!-- <v-card-text> -->
 
-          <v-tabs v-model="tabpointer" height="50px">
-            <v-tab
-              v-for="i in tabs"
-              :key="i.tab"
-            >
-            <p class="card-tab"> {{ i.tab }}</p>
-
-            </v-tab>
-          </v-tabs>
-
-          <v-tabs-items v-model="tabpointer">
-            <v-tab-item
-              v-for="i in tabs"
-              :key="i.tab"
-            >
-              <v-card
-                flat
-                tile
-              >
-                <v-card-text>
-                  <!-- <div class="text--primary"> -->
-                    <p class="cite">
-                  {{i.content}}
-                    </p>
-                  <!-- </div> -->
-                </v-card-text>
-              </v-card>
-            </v-tab-item>
-          </v-tabs-items>
 
 
         <!-- </v-card-text> -->
