@@ -49,7 +49,7 @@
                           v-on="on"
                       >
                         <v-icon class="material-symbols-outlined" size="17px" style="left: -2px">add</v-icon>
-                        New Tag
+                        新建标签
                       </v-chip>
                     </template>
                     <template v-slot:default="dialog">
