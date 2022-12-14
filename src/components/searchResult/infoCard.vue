@@ -27,21 +27,19 @@
        
         ></v-select>
     <v-divider></v-divider>
-    <v-subheader>作者</v-subheader>
-    <v-list-item
-                v-for="item in authorList"
-                :key=item.name
-               
-            >
-            <v-list-item-content>
-                  <v-list-item-title >
-                    <span @click="ChooseAuthor(item.name, item.status, item.id)" class="clickchange">{{item.name}} </span> </v-list-item-title>
-                </v-list-item-content>
-               
-        </v-list-item>
-      <v-divider></v-divider>
+    
     <v-subheader>期刊</v-subheader>
-  
+    <v-text-field
+          class="material-symbols-outlined"
+          append-icon="search"
+          @click:append="choosejournal"
+        
+          hide-details
+        
+          v-model="pickjournal"
+          style="width: 200px;margin-left: 20px;"
+      >
+      </v-text-field>
     <v-list-item
                 v-for="item in journalList"
                 :key=item.name
@@ -64,7 +62,24 @@
             </v-list-item-action>
     </v-list-item> -->
     <v-divider></v-divider>
-    
+    <v-subheader>作者</v-subheader>
+
+
+
+      
+ 
+    <v-list-item
+                v-for="item in authorList"
+                :key=item.name
+               
+            >
+            <v-list-item-content>
+                  <v-list-item-title >
+                    <span @click="ChooseAuthor(item.name, item.status, item.id)" class="clickchange">{{item.name}} </span> </v-list-item-title>
+                </v-list-item-content>
+               
+        </v-list-item>
+      <v-divider></v-divider>
 
 
     </v-card>
@@ -312,6 +327,9 @@ import Vue from 'vue'
             minyear:"",
             maxyear:"",
             year:[],
+            pickauthor:"",
+            pickjournal:"",
+            
 
         }),
         methods:{
@@ -379,6 +397,21 @@ import Vue from 'vue'
         ChooseConference(name, status){
             console.log("选择会议："+name)
             console.log('状态：'+status)//每点击一次 该item的status会发生改变
+        },
+        choosejournal(){
+          // window.alert(this.pickjournal)
+          var has=0
+          for(var i=0;i<this.formdata.keyword.length;i++){{
+            if("journal" in this.formdata.keyword[i]){
+              has=1
+              this.formdata.keyword[i].keyword=this.pickjournal
+            }
+          }
+        }
+        if(has==0){
+          this.formdata.keyword.push({keyword:this.pickjournal, op:"and", method:"term", type:"venue.name",journal:true})        
+        }
+        this.getCurrentPageData()
         },
         //类型选择----变更为期刊选择
         ChooseType(name, status){
