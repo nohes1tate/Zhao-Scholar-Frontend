@@ -20,7 +20,7 @@
             v-model="selected"
             :headers="applyHeaders"
             :items="applications"
-            item-key="name"
+            item-key="submitID"
             show-select
             class="elevation-1"
         >
@@ -48,7 +48,7 @@ import axios from "axios";
 
 export default {
   name: "AdminView",
-  created() {
+  mounted() {
     let data = new FormData();
     request("GET", "/api/PortalManager/getExamineList/", data).then(res => {
       this.applications = res.scholars;
@@ -69,6 +69,7 @@ export default {
         { text: '所在机构', sortable: false, value: 'institution' },
         { text: '领域', sortable: false, value: 'field' },
         { text: '个人主页', sortable: false, value: 'homepage' },
+        { text: '申请号', sortable: false, value: 'submitID' },
         // { text: '申请时间', sortable: false, value: 'time' },
         // { text: '通过', sortable: false, value: `pass` },
         // { text: '拒绝', sortable: false, value: 'reject' },
@@ -111,12 +112,13 @@ export default {
     pass(yes) {
       let arr = [];
       for (let i = 0; i < this.selected.length; i++) {
-        arr.push(this.selected[i].scholarID)
+        arr.push(this.selected[i].submitID)
       }
       let obj = {
         "idList": arr,
         "pass": yes
       };
+      //console.log(obj);
       axios({
         method: "POST",
         url: "/api/PortalManager/examineSubmit/",
