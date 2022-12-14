@@ -1,6 +1,6 @@
 <template>
   <div>
-    <page-header :show-search="false" style="z-index: 50"></page-header>
+    <page-header :show-search="true" style="z-index: 50"></page-header>
     <div class="institution-top">
       <div class="top-left">
         <v-card class="institution-info-card" elevation="2">
@@ -14,7 +14,7 @@
                 </v-col>
                 <div class="institution-name" @click="toWebsite">
                   {{ institutionName }}
-                  <v-btn @click="toWebsite" color="primary" style="margin-left: 3vw;width: 10vw;height: 6vh">官方网站</v-btn>
+                  <v-btn color="primary" style="margin-left: 3vw;width: 10vw;height: 6vh">官方网站</v-btn>
                 </div>
               </v-row>
               <v-row>
