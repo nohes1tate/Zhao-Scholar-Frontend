@@ -349,7 +349,7 @@ export default {
         .then(response => {
           this.now = this.now+1;
           console.log(response)
-          this.$message.success("添加成功");
+          this.$message.success("申请成功，请等待管理员审核");
         })
         .catch(error => {
           console.error(error);
