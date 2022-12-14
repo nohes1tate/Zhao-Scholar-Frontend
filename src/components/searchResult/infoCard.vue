@@ -551,8 +551,7 @@ import Vue from 'vue'
                 // this.formdata.append("orderby", "citation");
                 this.formdata.keyword=[]
                 this.formdata.keyword.push({keyword:this.$route.query.keyword, method:"match", op:"and",type:"title"})
-                this.formdata.minyear=0
-                this.formdata.maxyear=2022
+         
                 this.posturl="/api/PaperBrowser/superSearch/"
                 }else if("formdata" in this.$route.query && this.new==0){
                   console.log("高级检索")
@@ -735,6 +734,7 @@ import Vue from 'vue'
             },
             minyear(){
               this.formdata.minyear = this.minyear
+              // window.alert(this.formdata.minyear)
               this.getCurrentPageData()
             },
             maxyear(){
